@@ -1,7 +1,4 @@
 # Calisthenic Leveling
-<p align="center">
-  ![Logo](public/logo.png)
-</p>
 
 Calisthenic Leveling é uma aplicação web interativa que combina **treino de calistenia** com um sistema de **progressão gamificado** inspirado em games. Complete quests de exercícios, suba de nível e veja notificações de conquistas com efeitos visuais neon.
 
