@@ -1,6 +1,6 @@
 export default function StartButton({ onClick }) {
     const handleClick = () => {
-        const audio = new Audio("/sounds/Jinwoo vs Igris The Bloodred.mp3");
+        const audio = new Audio("%PUBLIC_URL%/sounds/Jinwoo vs Igris The Bloodred.mp3");
         audio.loop = true;
         audio.volume = 0.3;
 
