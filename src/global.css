@@ -42,7 +42,7 @@
 /* BODY */
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #000, #1a1a1a);
+    background: linear-gradient(to bottom, #000 0%, #1a1a1a 100%);
     color: var(--text);
     display: flex;
     justify-content: center;
@@ -73,6 +73,7 @@ body {
 
 /* HEADER */
 header h1 {
+    width: 300px;
     position: relative;
     left: 20px;
     font-family: 'Orbitron', sans-serif;
@@ -117,10 +118,17 @@ header h1 {
     .user-sidebar {
         position: fixed;
         top: 0;
-        left: -100%;
-        width: 100vw;
+        left: -105%;
+        width: 101vw;
         height: 100vh;
-        background: #111;
+        background: linear-gradient(to bottom,
+                #080808 5%,
+                #2b2b2b 20%,
+                #4a4a4a 45%,
+                #4a4a4a 45%,
+                #4a4a4a 45%,
+                #3a3a3a 70%,
+                #0d0d0d 100%);
         z-index: 1000;
         transition: left 0.3s ease;
         border-radius: 0;

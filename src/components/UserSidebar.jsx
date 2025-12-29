@@ -30,13 +30,13 @@ export default function UserSidebar({ user, onLogout }) {
                         alt="Perfil"
                         className="avatar"
                     />
-                    <span className="user-name">{user.displayName}</span>
+                    <span className="user-name"><p className="welcome-name">Bem-Vindo</p>{user.displayName}</span>
                 </div>
 
                 <button className="logout-btn" onClick={onLogout}>
                     Sair
                 </button>
-            </div>
+            </div >
         </>
     );
 }

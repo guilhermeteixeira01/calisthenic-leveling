@@ -4,12 +4,50 @@
     top: 0;
     width: 250px;
     height: 100vh;
-    background: #111;
+    background: linear-gradient(to bottom,
+            #080808 5%,
+            #2b2b2b 20%,
+            #4a4a4a 45%,
+            #4a4a4a 45%,
+            #4a4a4a 45%,
+            #3a3a3a 70%,
+            #0d0d0d 100%);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    box-shadow: 2px 0 10px #7f5af0;
+    animation: Boxshadow 5s ease infinite;
+}
+
+@keyframes Boxshadow {
+    0% {
+        border-right: 2px solid #7f5af0;
+        box-shadow: 2px 0 10px #7f5af0;
+    }
+
+    50% {
+        border-right: 2px solid #22c55e;
+        box-shadow: 2px 0 10px #22c55e;
+    }
+
+    100% {
+        border-right: 2px solid #7f5af0;
+        box-shadow: 2px 0 10px #7f5af0;
+    }
+}
+
+@keyframes borders {
+    0% {
+        border: 3px solid #7f5af0;
+    }
+
+    50% {
+        border: 3px solid #22c55e;
+    }
+
+    100% {
+        border: 3px solid #7f5af0;
+    }
 }
 
 .user-profile {
@@ -23,37 +61,25 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 3px solid #7f5af0;
-    box-shadow: 0 0 15px #7f5af0;
+    animation: Boxshadow 5s ease infinite, borders 5s ease infinite;
     object-fit: cover;
+}
+
+.welcome-name {
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    color: #22c55e;
+    text-shadow: 0 0 20px #22c55e;
 }
 
 .user-name {
     font-weight: bold;
     font-size: 1rem;
     text-align: center;
-    background: linear-gradient(270deg, #7f5af0, #22c55e, #7f5af0);
-    background-size: 600% 600%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientAnimation 10s ease infinite;
+    color: #7f5af0;
+    text-shadow: 0 0 20px #7f5af0;
 }
-
-@keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
 
 .logout-btn {
     position: relative;
@@ -69,6 +95,8 @@
 }
 
 .logout-btn:hover {
-    background: #00ffff;
-    box-shadow: 0 0 20px #00ffff;
+    color: black;
+    font-weight: bold;
+    background: #22c55e;
+    box-shadow: 0 0 20px #22c55e;
 }

@@ -54,11 +54,11 @@ export default function Notification() {
 
             setNotifications(prev => [...prev, { id, message, rank }]);
 
-            // Remove após 4 segundos
+            // Remove após 8 segundos
             setTimeout(() => {
                 setNotifications(prev => prev.filter(n => n.id !== id));
-            }, 6000);
-        }, 10000); // a cada 10 segundos
+            }, 8000);
+        }, 12000); // a cada 12 segundos
 
         return () => clearInterval(interval);
     }, []);
