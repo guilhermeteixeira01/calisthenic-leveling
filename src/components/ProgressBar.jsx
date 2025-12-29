@@ -1,11 +1,11 @@
 export default function ProgressBar({ tasks }) {
-    const completed = tasks.filter(t => t.done).length
-    const total = tasks.length
-    const percent = total === 0 ? 0 : Math.round((completed / total) * 100)
+    const completed = tasks.filter(t => t.done).length;
+    const total = tasks.length;
+    const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
 
     return (
         <div className="progress">
-            <span>HUNTER PROGRESS: {percent}%</span>
+            <span className="progress-text">HUNTER PROGRESS: {percent}%</span>
             <div className="progress-bar">
                 <div
                     className="progress-fill"
@@ -13,5 +13,5 @@ export default function ProgressBar({ tasks }) {
                 />
             </div>
         </div>
-    )
+    );
 }

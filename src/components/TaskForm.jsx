@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-export default function TaskForm({ setTasks }) {
+export default function TaskForm({ addTask }) {
     const [exercise, setExercise] = useState("");
     const [series, setSeries] = useState("");
     const [reps, setReps] = useState("");
 
-    // Lista de exercícios de calistenia
     const exercises = [
         "Pull-ups (Barra Fixa)",
         "Chin-ups (Barra Fixa Supinada)",
@@ -42,58 +41,29 @@ export default function TaskForm({ setTasks }) {
         "Clap Push-ups"
     ];
 
-    // Opções de séries
     const seriesOptions = [
-        "1x10",
-        "2x12",
-        "3x15",
-        "4x12",
-        "5x10",
-        "3x8",
-        "4x8",
-        "5x5",
-        "6x12",
-        "7x10",
-        "8x8",
-        "10x5",
-        "12x3",
-        "15x2"
+        "1x10", "2x12", "3x15", "4x12", "5x10",
+        "3x8", "4x8", "5x5", "6x12", "7x10",
+        "8x8", "10x5", "12x3", "15x2"
     ];
 
-    // Opções de reps/tempo
     const repsOptions = [
-        "8 reps",
-        "10 reps",
-        "12 reps",
-        "15 reps",
-        "20 reps",
-        "25 reps",
-        "30 reps",
-        "45 reps",
-        "60 reps",
-        "30 seg",
-        "45 seg",
-        "60 seg",
-        "90 seg",
-        "2 min",
-        "3 min"
+        "8 reps", "10 reps", "12 reps", "15 reps", "20 reps",
+        "25 reps", "30 reps", "45 reps", "60 reps",
+        "30 seg", "45 seg", "60 seg", "90 seg", "2 min", "3 min"
     ];
 
-
-    const addTask = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!exercise || !series || !reps) return;
 
-        setTasks(prev => [
-            ...prev,
-            {
-                id: Date.now(),
-                name: exercise,
-                series,
-                reps,
-                done: false
-            }
-        ]);
+        addTask({
+            name: exercise,
+            series,
+            reps,
+            done: false,
+            createdAt: Date.now() // ✅ adiciona timestamp
+        });
 
         setExercise("");
         setSeries("");
@@ -101,44 +71,29 @@ export default function TaskForm({ setTasks }) {
     };
 
     return (
-        <form className="form" onSubmit={addTask}>
-            {/* Exercício */}
-            <select
-                value={exercise}
-                onChange={e => setExercise(e.target.value)}
-                required
-            >
+        <form className="form" onSubmit={handleSubmit}>
+            <select value={exercise} onChange={e => setExercise(e.target.value)} required>
                 <option value="">Selecione um exercício</option>
                 {exercises.map((ex, i) => (
                     <option key={i} value={ex}>{ex}</option>
                 ))}
             </select>
 
-            {/* Séries */}
-            <select
-                value={series}
-                onChange={e => setSeries(e.target.value)}
-                required
-            >
+            <select value={series} onChange={e => setSeries(e.target.value)} required>
                 <option value="">Selecione as séries</option>
                 {seriesOptions.map((s, i) => (
                     <option key={i} value={s}>{s}</option>
                 ))}
             </select>
 
-            {/* Reps / Tempo */}
-            <select
-                value={reps}
-                onChange={e => setReps(e.target.value)}
-                required
-            >
+            <select value={reps} onChange={e => setReps(e.target.value)} required>
                 <option value="">Selecione reps/tempo</option>
                 {repsOptions.map((r, i) => (
                     <option key={i} value={r}>{r}</option>
                 ))}
             </select>
 
-            <button>ADD QUEST</button>
+            <button type="submit">ADD QUEST</button>
         </form>
     );
 }

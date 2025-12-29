@@ -1,27 +1,25 @@
-export default function TaskItem({ task, setTasks }) {
-    const toggleDone = () => {
-        setTasks(prev =>
-            prev.map(t =>
-                t.id === task.id ? { ...t, done: !t.done } : t
-            )
-        )
-    }
-
-    const removeTask = () => {
-        setTasks(prev => prev.filter(t => t.id !== task.id))
-    }
-
+export default function TaskItem({ task, toggleDone, removeTask }) {
     return (
         <div className={`card ${task.done ? "done" : ""}`}>
-            <h2>{task.name}</h2>
-            <p>{task.series} séries • {task.reps}</p>
+            <div className="card-content">
+                <h2>{task.name}</h2>
+                <p>{task.series} séries • {task.reps}</p>
+            </div>
 
             <div className="actions">
-                <button className="complete" onClick={toggleDone}>
+                <button
+                    className={`complete ${task.done ? "done-btn" : ""}`}
+                    onClick={() => toggleDone(task.id)}
+                >
                     {task.done ? "QUEST COMPLETE" : "COMPLETE QUEST"}
                 </button>
-                <button className="delete" onClick={removeTask}>✖</button>
+                <button
+                    className="delete"
+                    onClick={() => removeTask(task.id)}
+                >
+                    ✖
+                </button>
             </div>
         </div>
-    )
+    );
 }
