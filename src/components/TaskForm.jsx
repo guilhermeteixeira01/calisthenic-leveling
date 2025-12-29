@@ -7,23 +7,65 @@ export default function TaskForm({ addTask, diasSemana }) {
     const [day, setDay] = useState("");
 
     const exercises = [
-        "Pull-ups (Barra Fixa)", "Chin-ups (Barra Fixa Supinada)", "Push-ups (Flexão)",
-        "Diamond Push-ups", "Wide Push-ups", "Dips (Paralela)", "Bench Dips",
-        "Squats", "Jump Squats", "Lunges", "Pistol Squats", "Calf Raises",
-        "Leg Raises", "Hanging Knee Raises", "Plank", "Side Plank", "Mountain Climbers",
-        "Burpees", "Handstand", "Handstand Push-ups", "Muscle-ups", "Front Lever",
-        "Back Lever", "Skin the Cat", "Dragon Flags", "Human Flag", "Planche",
-        "Tuck Planche", "L-sit", "V-sit", "Archer Pull-ups", "One Arm Push-ups", "Clap Push-ups"
+        // Pull / Barra
+        "Pull-ups (Barra Fixa)",
+        "Chin-ups (Barra Fixa Supinada)",
+        "Australian Pull-ups (Barra Baixa)",
+        "Archer Pull-ups",
+        "One Arm Pull-ups",
+
+        // Push / Flexão
+        "Push-ups (Flexão)",
+        "Diamond Push-ups",
+        "Wide Push-ups",
+        "Clap Push-ups",
+        "One Arm Push-ups",
+        "Handstand Push-ups",
+        "Dips (Paralela)",
+        "Bench Dips",
+
+        // Core / Abdominais
+        "Plank (Prancha)",
+        "Side Plank",
+        "Hollow Body",
+        "L-sit",
+        "V-sit",
+        "Leg Raises",
+        "Hanging Knee Raises",
+        "Dragon Flags",
+        "Canoe Row (Canoa)",
+        "Front Lever",
+        "Back Lever",
+        "Skin the Cat",
+
+        // Pernas
+        "Squats",
+        "Jump Squats",
+        "Lunges",
+        "Pistol Squats",
+        "Calf Raises",
+
+        // Full body / Combos
+        "Burpees",
+        "Muscle-ups",
+        "Human Flag",
+        "Planche",
+        "Tuck Planche",
+        "Handstand"
     ];
 
     const seriesOptions = [
-        "1x10", "2x12", "3x15", "4x12", "5x10", "3x8", "4x8", "5x5",
-        "6x12", "7x10", "8x8", "10x5", "12x3", "15x2"
+        "1x10", "1x12", "1x15", "1x20",
+        "2x10", "2x12", "2x15", "2x20",
+        "3x10", "3x12", "3x15", "3x20",
+        "4x10", "4x12", "4x15", "4x20",
+        "5x10", "5x12", "5x15", "5x20"
     ];
 
     const repsOptions = [
-        "8 reps", "10 reps", "12 reps", "15 reps", "20 reps", "25 reps", "30 reps",
-        "45 reps", "60 reps", "30 seg", "45 seg", "60 seg", "90 seg", "2 min", "3 min"
+        "30 seg", "45 seg", "60 seg",
+        "90 seg", "1 min", "2 min",
+        "3 min", "5 min", "10 min"
     ];
 
     const handleSubmit = (e) => {
@@ -71,7 +113,7 @@ export default function TaskForm({ addTask, diasSemana }) {
             </select>
 
             <select value={reps} onChange={e => setReps(e.target.value)} required>
-                <option value="">Selecione reps/tempo</option>
+                <option value="">Selecione Tempo de descanso</option>
                 {repsOptions.map((r, i) => (
                     <option key={i} value={r}>{r}</option>
                 ))}
