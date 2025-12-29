@@ -5,7 +5,7 @@ export default function ProgressBar({ tasks }) {
 
     return (
         <div className="progress">
-            <span className="progress-text">HUNTER PROGRESS: {percent}%</span>
+            <span className="progress-text">Hunter's Day progress: {percent}%</span>
             <div className="progress-bar">
                 <div
                     className="progress-fill"

@@ -1,0 +1,79 @@
+/* TASK ITEM */
+.task-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.card {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--bg-card, #11162a);
+    border-left: 6px solid var(--purple, #7f5af0);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    color: var(--text, #eaeaea);
+    box-shadow: 0 0 8px rgba(127, 90, 240, 0.6);
+    transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+}
+
+.card.done {
+    border-left: 6px solid var(--success);
+    opacity: 0.8;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    text-decoration: line-through;
+    color: #a0a0a0;
+}
+
+.card h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.0rem;
+    margin-bottom: 0.3rem;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+}
+
+.complete {
+    background: transparent;
+    border: 2px solid var(--purple, #7f5af0);
+    color: var(--purple, #7f5af0);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.complete:hover {
+    background-color: var(--purple, #7f5af0);
+    color: #fff;
+    box-shadow: 0 0 10px var(--purple, #7f5af0);
+}
+
+.delete {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.delete:hover {
+    transform: scale(1.2);
+}

@@ -1,0 +1,75 @@
+.user-sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 2px 0 10px #7f5af0;
+    border-radius: 0px 0px 20px;
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #7f5af0;
+    box-shadow: 0 0 15px #7f5af0;
+    object-fit: cover;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    background: linear-gradient(270deg, #7f5af0, #22c55e, #7f5af0);
+    background-size: 600% 600%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientAnimation 10s ease infinite;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+.logout-btn {
+    position: relative;
+    background: #7f5af0;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px #7f5af0;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #00ffff;
+    box-shadow: 0 0 20px #00ffff;
+}

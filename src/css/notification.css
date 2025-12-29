@@ -1,0 +1,32 @@
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #7f5af0, #a855f7);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: snow;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    text-shadow: 0 0 5px #a855f7, 0 0 10px #7f5af0;
+    box-shadow: 0 0 10px #7f5af0, 0 0 20px #a855f7;
+    animation: slideIn 0.5s forwards, neonPulse 1.5s infinite alternate;
+    z-index: 999;
+}
+
+@keyframes slideIn {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes neonPulse {
+    from {
+        box-shadow: 0 0 8px #7f5af0, 0 0 15px #a855f7, 0 0 20px #7f5af0;
+    }
+
+    to {
+        box-shadow: 0 0 12px #7f5af0, 0 0 20px #a855f7, 0 0 25px #7f5af0;
+    }
+}

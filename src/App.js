@@ -5,21 +5,22 @@ import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase
 import { auth, db } from "./firebase";
 
 import UserSidebar from './components/UserSidebar';
-import Header from "./components/Header";
-import TaskForm from "./components/TaskForm";
-import TaskList from "./components/TaskList";
+import TaskForm from './components/TaskForm';
+import TaskItem from './components/TaskItem';
 import ProgressBar from "./components/ProgressBar";
 import StartButton from './components/StartButton';
 import Notification from "./components/Notification";
 
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [started, setStarted] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
   // 🔐 Verifica login
   useEffect(() => {
@@ -33,47 +34,60 @@ function App() {
 
   // 📥 Carregar tasks do Firestore e ordenar
   async function carregarTasks(uid) {
-    const querySnapshot = await getDocs(
-      collection(db, "usuarios", uid, "tasks")
-    );
+    try {
+      const querySnapshot = await getDocs(collection(db, "usuarios", uid, "tasks"));
+      const lista = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-    const lista = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-
-    // Ordena pelo createdAt (mais recente primeiro)
-    lista.sort((a, b) => a.createdAt - b.createdAt);
-
-    setTasks(lista);
+      lista.sort((a, b) => a.createdAt - b.createdAt);
+      setTasks(lista);
+    } catch (error) {
+      console.error("Erro ao carregar tasks:", error);
+    }
   }
 
-  // ➕ Adicionar task
-  async function addTask(task) {
+  // ➕ Adicionar task com dia
+  async function addTask(day, task) {
     if (!user) return;
 
-    const docRef = await addDoc(
-      collection(db, "usuarios", user.uid, "tasks"),
-      task
-    );
+    const taskToSave = {
+      ...task,
+      day,
+      createdAt: task.createdAt || Date.now()
+    };
 
-    // Adiciona a task na lista e mantém a ordem
-    const updatedTasks = [...tasks, { ...task, id: docRef.id }];
-    updatedTasks.sort((a, b) => a.createdAt - b.createdAt);
-    setTasks(updatedTasks);
+    try {
+      const docRef = await addDoc(
+        collection(db, "usuarios", user.uid, "tasks"),
+        taskToSave
+      );
+
+      // Atualiza state com o id gerado pelo Firestore
+      const updatedTasks = [...tasks, { ...taskToSave, id: docRef.id }];
+      updatedTasks.sort((a, b) => a.createdAt - b.createdAt);
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error("Erro ao adicionar task:", error);
+    }
   }
 
   // ❌ Remover task
   async function removeTask(id) {
-    if (!user) return;
+    if (!user || !id) return;
 
-    await deleteDoc(doc(db, "usuarios", user.uid, "tasks", id));
-    setTasks(tasks.filter(task => task.id !== id));
+    try {
+      await deleteDoc(doc(db, "usuarios", user.uid, "tasks", id));
+      setTasks(tasks.filter(task => task.id !== id));
+    } catch (error) {
+      console.error("Erro ao remover task:", error);
+    }
   }
 
   // ✅ Alternar status de concluído
   async function toggleDone(id) {
-    if (!user) return;
+    if (!user || !id) return;
 
     const task = tasks.find(t => t.id === id);
     if (!task) return;
@@ -83,8 +97,12 @@ function App() {
     );
     setTasks(updatedTasks);
 
-    const taskRef = doc(db, "usuarios", user.uid, "tasks", id);
-    await updateDoc(taskRef, { done: !task.done });
+    try {
+      const taskRef = doc(db, "usuarios", user.uid, "tasks", id);
+      await updateDoc(taskRef, { done: !task.done });
+    } catch (error) {
+      console.error("Erro ao atualizar task no Firestore:", error);
+    }
   }
 
   const handleStart = () => setStarted(true);
@@ -102,12 +120,9 @@ function App() {
         {showRegister ? (
           <>
             <Register />
-            <p style={{ color: '#aaa', marginTop: '10px' }}>
+            <p className="login-switch-text">
               Já tem conta?{' '}
-              <button
-                style={{ background: 'none', border: 'none', color: '#00ffff', cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => setShowRegister(false)}
-              >
+              <button className="login-switch-button" onClick={() => setShowRegister(false)}>
                 Faça login
               </button>
             </p>
@@ -115,12 +130,9 @@ function App() {
         ) : (
           <>
             <Login />
-            <p style={{ color: '#aaa', marginTop: '10px' }}>
+            <p className="login-switch-text">
               Não tem conta?{' '}
-              <button
-                style={{ background: 'none', border: 'none', color: '#00ffff', cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => setShowRegister(true)}
-              >
+              <button className="login-switch-button" onClick={() => setShowRegister(true)}>
                 Crie uma aqui
               </button>
             </p>
@@ -144,14 +156,38 @@ function App() {
           <UserSidebar user={user} onLogout={logout} />
 
           <div className="container-conteudo">
-            <Header tasks={tasks} />
+            <header>
+              <h1>Calisthenic Braz</h1>
+            </header>
+
+            <TaskForm addTask={addTask} diasSemana={diasSemana} />
             <ProgressBar tasks={tasks} />
-            <TaskForm addTask={addTask} />
-            <TaskList
-              tasks={tasks}
-              toggleDone={toggleDone}
-              removeTask={removeTask}
-            />
+
+            <div className="week">
+              {diasSemana.map(day => {
+                const dayTasks = tasks.filter(t => t.day === day);
+                const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
+
+                return (
+                  <div
+                    key={day}
+                    className={`day ${allDone ? "day-complete" : ""}`}
+                  >
+                    <h2>{day}</h2>
+                    {dayTasks.length === 0 && <p>Nenhum exercício</p>}
+                    {dayTasks.map(task => (
+                      <TaskItem
+                        key={task.id}
+                        task={task}
+                        toggleDone={toggleDone}
+                        removeTask={removeTask}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+
             <Notification />
           </div>
         </div>

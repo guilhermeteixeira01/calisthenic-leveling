@@ -1,0 +1,42 @@
+.rank-E span {
+    color: #9ca3af;
+}
+
+.rank-D span {
+    color: #60a5fa;
+}
+
+.rank-C span {
+    color: #34d399;
+}
+
+.rank-B span {
+    color: #facc15;
+}
+
+.rank-A span {
+    color: #fb923c;
+}
+
+.rank-S span {
+    color: #a855f7;
+    text-shadow: 0 0 15px #a855f7;
+}
+
+.level-up {
+    animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

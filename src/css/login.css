@@ -1,0 +1,189 @@
+.container-login-register {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Registerdiv {
+    background: linear-gradient(280deg, #7f5af0, #11162a);
+    padding: 40px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glow animado */
+.Registerdiv::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    backdrop-filter: blur(50px);
+    animation: rotate 6s linear infinite;
+    z-index: 0;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Heading */
+.Registerdiv h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #00ffff;
+    text-shadow: 0 0 50px #00ffff;
+    position: relative;
+    z-index: 1;
+}
+
+/* Inputs */
+.Registerdiv input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    background: #1a1a1a;
+    color: #fff;
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.Registerdiv input:focus {
+    box-shadow: 0 0 10px #00ffff;
+}
+
+/* Botão */
+.Registerdiv button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00ffff, #0077ff);
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.Registerdiv button:hover {
+    box-shadow: 0 0 20px #00ffff;
+    transform: translateY(-2px);
+}
+
+.Logindiv {
+    background: linear-gradient(280deg, #7f5af0, #11162a);
+    padding: 40px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glow animado */
+.Logindiv::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    backdrop-filter: blur(50px);
+    animation: rotate 6s linear infinite;
+    z-index: 0;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Heading */
+.Logindiv h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #00ffff;
+    text-shadow: 0 0 50px #00ffff;
+    position: relative;
+    z-index: 1;
+}
+
+/* Inputs */
+.Logindiv input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+    background: #1a1a1a;
+    color: #fff;
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.Logindiv input:focus {
+    box-shadow: 0 0 10px #00ffff;
+}
+
+/* Botão */
+.Logindiv button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00ffff, #0077ff);
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.Logindiv button:hover {
+    box-shadow: 0 0 20px #00ffff;
+    transform: translateY(-2px);
+}
+
+.login-switch-button {
+    font-size: 0.9rem;
+    font-weight: bolder;
+    color: #00ffff;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+}
