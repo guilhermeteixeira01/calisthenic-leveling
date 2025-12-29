@@ -8,50 +8,49 @@ export default function TaskForm({ addTask, diasSemana }) {
 
     const exercises = [
         // Pull / Barra
-        "Pull-ups (Barra Fixa)",
-        "Chin-ups (Barra Fixa Supinada)",
-        "Australian Pull-ups (Barra Baixa)",
-        "Australian Chin-ups (Barra Baixa)",
-        "Archer Pull-ups",
-        "One Arm Pull-ups",
+        "Barra Fixa (Pull-ups)",
+        "Barra Fixa Supinada (Chin-ups)",
+        "Barra Baixa (Australian Pull-ups)",
+        "Barra Baixa Supinada (Australian Chin-ups)",
+        "Pull-ups Arqueiro (Archer Pull-ups)",
+        "Pull-ups com um braço (One Arm Pull-ups)",
 
         // Push / Flexão
-        "Push-ups (Flexão)",
-        "Diamond Push-ups",
-        "Wide Push-ups",
-        "Clap Push-ups",
-        "One Arm Push-ups",
-        "Handstand Push-ups",
-        "Dips (Paralela)",
-        "Bench Dips",
+        "Flexão Tradicional (Push-ups)",
+        "Flexão Diamante (Diamond Push-ups)",
+        "Flexão Larga (Wide Push-ups)",
+        "Flexão com Palmas (Clap Push-ups)",
+        "Flexão com um braço (One Arm Push-ups)",
+        "Flexão de Handstand (Handstand Push-ups)",
+        "Mergulho em paralelas (Dips)",
+        "Mergulho no banco (Bench Dips)",
 
         // Core / Abdominais
-        "Plank (Prancha)",
-        "Side Plank",
-        "Hollow Body",
+        "Prancha (Plank)",
+        "Prancha Lateral (Side Plank)",
+        "Hollow Body (Canoa )",
         "L-sit",
         "V-sit",
-        "Leg Raises",
-        "Hanging Knee Raises",
+        "Elevação de Pernas (Leg Raises)",
+        "Elevação de Joelhos (Barra)",
         "Dragon Flags",
-        "Canoe Row (Canoa)",
         "Front Lever",
         "Back Lever",
         "Skin the Cat",
 
         // Pernas
-        "Squats",
-        "Jump Squats",
-        "Lunges",
-        "Pistol Squats",
-        "Calf Raises",
+        "Agachamento (Squats)",
+        "Agachamento com Salto (Jump Squats)",
+        "Avanço (Lunges)",
+        "Agachamento Pistola (Pistol Squats)",
+        "Elevação de Panturrilha (Calf Raises)",
 
         // Full body / Combos
         "Burpees",
         "Muscle-ups",
-        "Human Flag",
+        "Bandeira Humana (Human Flag)",
         "Planche",
-        "Tuck Planche",
+        "Planche Tuck (Tuck Planche)",
         "Handstand"
     ];
 
