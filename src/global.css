@@ -651,7 +651,11 @@ header h1 {
         transition: left 0.3s ease;
         border-radius: 0;
         display: flex;
-        /* ⚠️ importante */
+    }
+
+    .logout-btn {
+        position: relative;
+        bottom: 25px;
     }
 
     .user-sidebar.active {
