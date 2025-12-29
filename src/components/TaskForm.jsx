@@ -11,6 +11,7 @@ export default function TaskForm({ addTask, diasSemana }) {
         "Pull-ups (Barra Fixa)",
         "Chin-ups (Barra Fixa Supinada)",
         "Australian Pull-ups (Barra Baixa)",
+        "Australian Chin-ups (Barra Baixa)",
         "Archer Pull-ups",
         "One Arm Pull-ups",
 
