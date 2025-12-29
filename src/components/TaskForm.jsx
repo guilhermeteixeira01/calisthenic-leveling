@@ -8,27 +8,27 @@ export default function TaskForm({ addTask, diasSemana }) {
 
     const exercises = [
         // Pull / Barra
-        "Barra Fixa (Pull-ups)",
-        "Barra Fixa Supinada (Chin-ups)",
-        "Barra Baixa (Australian Pull-ups)",
-        "Barra Baixa Supinada (Australian Chin-ups)",
-        "Pull-ups Arqueiro (Archer Pull-ups)",
-        "Pull-ups com um braço (One Arm Pull-ups)",
+        "Barra Fixa",
+        "Barra Fixa Supinada",
+        "Australian Pull-ups",
+        "Australian Chin-ups",
+        "Pull-ups Arqueiro",
+        "Pull-ups com um braço",
 
         // Push / Flexão
-        "Flexão Tradicional (Push-ups)",
-        "Flexão Diamante (Diamond Push-ups)",
-        "Flexão Larga (Wide Push-ups)",
-        "Flexão com Palmas (Clap Push-ups)",
-        "Flexão com um braço (One Arm Push-ups)",
-        "Flexão de Handstand (Handstand Push-ups)",
-        "Mergulho em paralelas (Dips)",
-        "Mergulho no banco (Bench Dips)",
+        "Flexão Tradicional",
+        "Flexão Diamante",
+        "Flexão Larga",
+        "Flexão com Palmas",
+        "Flexão com um braço",
+        "Flexão de Handstand",
+        "Paralelas",
+        "Paralelas no banco",
 
         // Core / Abdominais
         "Prancha (Plank)",
         "Prancha Lateral (Side Plank)",
-        "Hollow Body (Canoa )",
+        "Canoa (Hollow Body)",
         "L-sit",
         "V-sit",
         "Elevação de Pernas (Leg Raises)",
@@ -40,17 +40,17 @@ export default function TaskForm({ addTask, diasSemana }) {
 
         // Pernas
         "Agachamento (Squats)",
-        "Agachamento com Salto (Jump Squats)",
+        "Agachamento com Salto",
         "Avanço (Lunges)",
-        "Agachamento Pistola (Pistol Squats)",
-        "Elevação de Panturrilha (Calf Raises)",
+        "Agachamento Pistola",
+        "Elevação de Panturrilha",
 
         // Full body / Combos
         "Burpees",
         "Muscle-ups",
-        "Bandeira Humana (Human Flag)",
-        "Planche",
-        "Planche Tuck (Tuck Planche)",
+        "Bandeira Humana",
+        "Prancha",
+        "Prancha Tuck",
         "Handstand"
     ];
 
