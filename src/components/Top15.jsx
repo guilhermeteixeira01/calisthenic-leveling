@@ -21,6 +21,13 @@ const medals = {
     ),
 };
 
+// Cores para os nomes dos 3 primeiros
+const nameColors = {
+    1: "#FFD700", // ouro
+    2: "#C0C0C0", // prata
+    3: "#CD7F32", // bronze
+};
+
 export default function Top15() {
     const [usuarios, setUsuarios] = useState([]);
 
@@ -36,7 +43,7 @@ export default function Top15() {
                 const user = docSnap.data();
                 return {
                     id: docSnap.id,
-                    displayName: user.displayName || "Usuário", // pega o nome salvo no Firestore
+                    displayName: user.displayName || "Usuário",
                     photoURL:
                         user.photoURL ||
                         "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg",
@@ -88,7 +95,14 @@ export default function Top15() {
                             />
 
                             {/* Nome e XP */}
-                            <span className="name" style={{ marginRight: "10px" }}>
+                            <span
+                                className="name"
+                                style={{
+                                    marginRight: "10px",
+                                    fontWeight: rank <= 3 ? "bold" : "normal",
+                                    color: nameColors[rank] || "#000", // aplica cor nos 3 primeiros
+                                }}
+                            >
                                 {displayName}
                             </span>
                             <span className="xp">{xp} XP</span>

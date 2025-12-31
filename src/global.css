@@ -147,6 +147,7 @@ header h1 {
 
     .user-sidebar.active {
         left: 0;
+        overflow-x: hidden;
     }
 
     .container-conteudo {
