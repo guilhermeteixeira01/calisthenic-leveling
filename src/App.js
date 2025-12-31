@@ -34,6 +34,12 @@ function App() {
 
   // 🔥 CONTROLE DE TELAS
   const [telaAtiva, setTelaAtiva] = useState("treino");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  function abrirTela(tela) {
+    setTelaAtiva(tela);
+    setMenuOpen(false); // fecha o menu ao clicar
+  }
 
   const diasSemana = [
     "Segunda",
@@ -54,6 +60,7 @@ function App() {
       }
     });
   }, []);
+
 
   // 📥 Carregar tasks
   async function carregarTasks(uid) {
@@ -214,10 +221,12 @@ function App() {
           <UserSidebar
             user={user}
             onLogout={logout}
-            onOpenTreino={() => setTelaAtiva("treino")}
-            onOpenMissoes={() => setTelaAtiva("missoes")}
-            onOpenUpgrades={() => setTelaAtiva("upgrades")}
-            onOpenTop15={() => setTelaAtiva("top15")}
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            onOpenTreino={() => abrirTela("treino")}
+            onOpenMissoes={() => abrirTela("missoes")}
+            onOpenUpgrades={() => abrirTela("upgrades")}
+            onOpenTop15={() => abrirTela("top15")}
           />
 
           <div className="container-conteudo">

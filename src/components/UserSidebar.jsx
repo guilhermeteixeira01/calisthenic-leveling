@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
+
 /* =========================
    CONFIGURAÇÃO GLOBAL
 ========================= */
@@ -20,18 +21,19 @@ const RANKS = Object.entries(XP_POR_RANK);
 export default function UserSidebar({
     user,
     onLogout,
+    menuOpen,
+    setMenuOpen,
     onOpenTreino,
     onOpenMissoes,
     onOpenUpgrades,
-    onOpenTop15,
+    onOpenTop15
 }) {
-    const [open, setOpen] = useState(false);
     const [userData, setUserData] = useState(null);
 
     /* ===== Controla scroll ===== */
     useEffect(() => {
-        document.body.classList.toggle("menu-open", open);
-    }, [open]);
+        document.body.classList.toggle("menu-open", menuOpen);
+    }, [menuOpen]);
 
     /* ===== Carrega / cria usuário ===== */
     useEffect(() => {
@@ -79,12 +81,12 @@ export default function UserSidebar({
     return (
         <>
             {/* Botão mobile */}
-            <button className="menu-toggle" onClick={() => setOpen(!open)}>
-                {open ? "✕" : "☰"}
+            <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? "✕" : "☰"}
             </button>
 
             {/* Sidebar */}
-            <aside className={`user-sidebar ${open ? "active" : ""}`}>
+            <aside className={`user-sidebar ${menuOpen ? "active" : ""}`}>
                 <div className="user-profile">
                     {/* Avatar clicável */}
                     <img
