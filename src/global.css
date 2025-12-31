@@ -234,4 +234,34 @@ header h1 {
         font-size: 0.8rem;
         padding: 0.6rem 0.8rem;
     }
+
+    .top15-item {
+        flex-direction: column;
+        /* organiza em coluna */
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .top15-item .avatar {
+        margin-bottom: 5px;
+    }
+
+    .top15-item .name,
+    .top15-item .xp,
+    .top15-item .rank {
+        margin-right: 0;
+        margin-top: 2px;
+    }
+
+    .top15-item .name {
+        font-size: 16px;
+    }
+
+    .top15-item .xp {
+        font-size: 14px;
+    }
+
+    .top15-item .rank {
+        font-size: 18px;
+    }
 }

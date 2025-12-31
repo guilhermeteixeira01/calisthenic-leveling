@@ -32,6 +32,8 @@
     padding: 12px 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.3s;
+    flex-wrap: wrap;
+    /* permite quebrar linha no mobile */
 }
 
 .top15-item:hover {
@@ -43,6 +45,7 @@
     font-weight: bold;
     font-size: 20px;
     width: 30px;
+    flex-shrink: 0;
 }
 
 .top15-item .avatar {
@@ -58,6 +61,9 @@
     flex: 1;
     font-weight: 500;
     font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .top15-item .xp {
@@ -67,6 +73,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    flex-shrink: 0;
 }
 
 /* SVG medalas para os 3 primeiros */

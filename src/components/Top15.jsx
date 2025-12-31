@@ -23,10 +23,30 @@ const medals = {
 
 // Cores para os nomes dos 3 primeiros
 const nameColors = {
-    1: "#FFD700", // ouro
-    2: "#C0C0C0", // prata
-    3: "#CD7F32", // bronze
+    1: "#FFD700",
+    2: "#C0C0C0",
+    3: "#CD7F32",
 };
+
+// XP necessário por rank
+const XP_POR_RANK = {
+    E: 150,
+    D: 300,
+    C: 500,
+    B: 800,
+    A: 1200,
+    S: 1800,
+};
+
+// Ordem dos ranks
+const RANKS = [
+    ["E", XP_POR_RANK.E],
+    ["D", XP_POR_RANK.D],
+    ["C", XP_POR_RANK.C],
+    ["B", XP_POR_RANK.B],
+    ["A", XP_POR_RANK.A],
+    ["S", XP_POR_RANK.S],
+];
 
 export default function Top15() {
     const [usuarios, setUsuarios] = useState([]);
@@ -57,6 +77,44 @@ export default function Top15() {
         return () => unsub();
     }, []);
 
+    // Funções de Rank e Level
+    function calcularRankPorXp(xpTotal) {
+        let acumulado = 0;
+        for (const [rank, xpRank] of RANKS) {
+            acumulado += xpRank;
+            if (xpTotal < acumulado) return rank;
+        }
+        return "S";
+    }
+
+    function calcularProgressoXp(xpTotal) {
+        let acumulado = 0;
+        let nivel = 1;
+        let rankAtual = "E";
+
+        for (const [rank, xpRank] of RANKS) {
+            if (xpTotal < acumulado + xpRank) {
+                rankAtual = rank;
+                break;
+            }
+            acumulado += xpRank;
+            nivel++;
+        }
+
+        if (rankAtual === "S") {
+            const xpS = XP_POR_RANK.S;
+            const xpExtra = xpTotal - acumulado;
+            const niveisExtras = Math.floor(xpExtra / xpS);
+            nivel += niveisExtras;
+            acumulado += niveisExtras * xpS;
+        }
+
+        const xpMax = XP_POR_RANK[rankAtual];
+        const xpAtual = xpTotal - acumulado;
+
+        return { xpAtual, xpMax, nivel, rankAtual };
+    }
+
     return (
         <div className="top15-container">
             <h2>Top 15 Usuários</h2>
@@ -64,6 +122,9 @@ export default function Top15() {
                 {usuarios.map((user, index) => {
                     const { xp, displayName, photoURL } = user;
                     const rank = index + 1;
+
+                    const rankPorXp = calcularRankPorXp(xp);
+                    const { nivel } = calcularProgressoXp(xp);
 
                     return (
                         <li
@@ -94,17 +155,22 @@ export default function Top15() {
                                 }}
                             />
 
-                            {/* Nome e XP */}
+                            {/* Nome e Rank/Level */}
                             <span
                                 className="name"
                                 style={{
                                     marginRight: "10px",
                                     fontWeight: rank <= 3 ? "bold" : "normal",
-                                    color: nameColors[rank] || "#000", // aplica cor nos 3 primeiros
+                                    color: nameColors[rank] || "#000",
                                 }}
                             >
                                 {displayName}
                             </span>
+                            <span style={{ marginRight: "10px" }}>
+                                Rank: {rankPorXp} | Level: {nivel}
+                            </span>
+
+                            {/* XP */}
                             <span className="xp">{xp} XP</span>
                         </li>
                     );
