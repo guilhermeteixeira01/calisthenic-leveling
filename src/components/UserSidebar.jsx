@@ -80,7 +80,7 @@ export default function UserSidebar({
         <>
             {/* Botão mobile */}
             <button className="menu-toggle" onClick={() => setOpen(!open)}>
-                ☰
+                {open ? "✕" : "☰"}
             </button>
 
             {/* Sidebar */}
