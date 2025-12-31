@@ -6,11 +6,13 @@ Calisthenic Leveling é uma aplicação web interativa que combina **treino de c
 
 ## 🌟 Recursos
 
-- **Sistema de Quests:** Crie e complete exercícios como Pull-ups, Push-ups, Squats, e muito mais.  
-- **Gamificação:** Suba de nível com ranks S, A, B, C, D e E, cada rank com cores distintas.  
-- **Notificações Aleatórias:** Jogadores ganhando XP aparecem na tela com efeitos neon pulsantes.  
-- **Áudio Ambiente:** Música de treino tocando em loop ao iniciar a sessão.  
-- **Design Futurista:** Botões e notificações com efeitos neon, sombras e animações pulsantes.  
+- **Sistema de Quests:** Crie e complete exercícios como Pull-ups, Push-ups, Squats, e muito mais.
+- **Top 15 Missões:** Complete as missões mais desafiadoras da semana e veja seu ranking entre os melhores jogadores.
+- **Upgrades de Habilidades:** Melhore suas habilidades com bônus especiais conforme você evolui e completa desafios.
+- **Gamificação:** Suba de nível com ranks S, A, B, C, D e E, cada rank com cores distintas.
+- **Notificações Aleatórias:** Jogadores ganhando XP aparecem na tela com efeitos neon pulsantes.
+- **Áudio Ambiente:** Música de treino tocando em loop ao iniciar a sessão.
+- **Design Futurista:** Botões e notificações com efeitos neon, sombras e animações pulsantes.
 - **Responsivo:** Compatível com desktop e dispositivos móveis.
 
 ---
