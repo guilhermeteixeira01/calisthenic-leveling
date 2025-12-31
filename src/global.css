@@ -97,6 +97,10 @@ header h1 {
         overflow-x: hidden;
     }
 
+    /* .nivel-text {
+        margin-right: 70%;
+    } */
+
     .menu-toggle {
         display: flex;
         align-items: center;

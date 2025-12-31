@@ -14,7 +14,7 @@
             #0d0d0d 100%);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 20px;
     animation: Boxshadow 5s ease infinite;
 }
@@ -22,31 +22,31 @@
 @keyframes Boxshadow {
     0% {
         border-right: 2px solid #7f5af0;
-        box-shadow: 2px 0 10px #7f5af0;
+        box-shadow: 2px 0 6px #7f5af0;
     }
 
     50% {
         border-right: 2px solid #22c55e;
-        box-shadow: 2px 0 10px #22c55e;
+        box-shadow: 2px 0 6px #22c55e;
     }
 
     100% {
         border-right: 2px solid #7f5af0;
-        box-shadow: 2px 0 10px #7f5af0;
+        box-shadow: 2px 0 6px #7f5af0;
     }
 }
 
 @keyframes borders {
     0% {
-        border: 3px solid #7f5af0;
+        border: 2px solid #7f5af0;
     }
 
     50% {
-        border: 3px solid #22c55e;
+        border: 2px solid #22c55e;
     }
 
     100% {
-        border: 3px solid #7f5af0;
+        border: 2px solid #7f5af0;
     }
 }
 
@@ -54,16 +54,47 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     animation: Boxshadow 5s ease infinite, borders 5s ease infinite;
     object-fit: cover;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.avatar:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.avatar-wrapper::after {
+    content: '✏️';
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 1px;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.avatar-wrapper:hover::after {
+    opacity: 1;
+}
+
 
 .welcome-name {
     font-weight: bold;
@@ -82,7 +113,8 @@
 }
 
 .logout-btn {
-    position: relative;
+    margin-top: auto;
+    /* 👈 empurra para o final da sidebar */
     background: #7f5af0;
     color: #fff;
     padding: 10px 15px;
@@ -94,9 +126,89 @@
     transition: all 0.3s ease;
 }
 
+
 .logout-btn:hover {
     color: black;
     font-weight: bold;
     background: #22c55e;
     box-shadow: 0 0 20px #22c55e;
+}
+
+.xp-container {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.xp-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.nivel-text {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.xp-text {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.xp-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg,
+            #00e5ff,
+            #2979ff);
+    width: 0%;
+    transition: width 0.6s ease;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(41, 121, 255, 0.8);
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.sidebar-actions button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1f1f1f;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.25s, transform 0.15s;
+}
+
+.sidebar-actions button:hover {
+    background: #2c2c2c;
+    transform: scale(1.03);
+}
+
+.sidebar-actions .icon {
+    width: 26px;
+    height: 26px;
+    fill: #7f5af0;
+    transition: fill 0.25s;
+}
+
+.sidebar-actions button:hover .icon {
+    fill: #22c55e;
 }

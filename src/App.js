@@ -1,15 +1,25 @@
 import './global.css';
 import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  increment,
+  getDoc,
+  setDoc
+} from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 import UserSidebar from './components/UserSidebar';
 import TaskForm from './components/TaskForm';
 import TaskItem from './components/TaskItem';
-import ProgressBar from "./components/ProgressBar";
+import ProgressBar from './components/ProgressBar';
 import StartButton from './components/StartButton';
-import Notification from "./components/Notification";
+import Notification from './components/Notification';
 
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -20,7 +30,18 @@ function App() {
   const [started, setStarted] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
-  const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+  // 🔥 CONTROLE DE TELAS
+  const [telaAtiva, setTelaAtiva] = useState("treino");
+
+  const diasSemana = [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+    "Domingo"
+  ];
 
   // 🔐 Verifica login
   useEffect(() => {
@@ -32,10 +53,13 @@ function App() {
     });
   }, []);
 
-  // 📥 Carregar tasks do Firestore e ordenar
+  // 📥 Carregar tasks
   async function carregarTasks(uid) {
     try {
-      const querySnapshot = await getDocs(collection(db, "usuarios", uid, "tasks"));
+      const querySnapshot = await getDocs(
+        collection(db, "usuarios", uid, "tasks")
+      );
+
       const lista = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -48,14 +72,15 @@ function App() {
     }
   }
 
-  // ➕ Adicionar task com dia
+  // ➕ Adicionar task
   async function addTask(day, task) {
     if (!user) return;
 
     const taskToSave = {
       ...task,
       day,
-      createdAt: task.createdAt || Date.now()
+      createdAt: task.createdAt || Date.now(),
+      done: false
     };
 
     try {
@@ -64,7 +89,6 @@ function App() {
         taskToSave
       );
 
-      // Atualiza state com o id gerado pelo Firestore
       const updatedTasks = [...tasks, { ...taskToSave, id: docRef.id }];
       updatedTasks.sort((a, b) => a.createdAt - b.createdAt);
       setTasks(updatedTasks);
@@ -85,7 +109,36 @@ function App() {
     }
   }
 
-  // ✅ Alternar status de concluído
+  // 🔥 Verifica se o dia foi concluído (ANTI-BURLA)
+  async function verificarDiaConcluido(dia, updatedTasks) {
+    if (!user) return;
+
+    const dayTasks = updatedTasks.filter(t => t.day === dia);
+    if (dayTasks.length === 0) return;
+
+    const allDone = dayTasks.every(t => t.done);
+    if (!allDone) return;
+
+    const diaRef = doc(db, "usuarios", user.uid, "diasConcluidos", dia);
+    const diaSnap = await getDoc(diaRef);
+
+    if (diaSnap.exists() && diaSnap.data().xpRecebido) return;
+
+    await setDoc(diaRef, {
+      concluido: true,
+      xpRecebido: true,
+      data: new Date()
+    });
+
+    const userRef = doc(db, "usuarios", user.uid);
+    await updateDoc(userRef, {
+      xp: increment(2)
+    });
+
+    console.log(`+2 XP concedido pelo dia ${dia}`);
+  }
+
+  // ✅ Alternar status
   async function toggleDone(id) {
     if (!user || !id) return;
 
@@ -95,13 +148,16 @@ function App() {
     const updatedTasks = tasks.map(t =>
       t.id === id ? { ...t, done: !t.done } : t
     );
+
     setTasks(updatedTasks);
 
     try {
       const taskRef = doc(db, "usuarios", user.uid, "tasks", id);
       await updateDoc(taskRef, { done: !task.done });
+
+      await verificarDiaConcluido(task.day, updatedTasks);
     } catch (error) {
-      console.error("Erro ao atualizar task no Firestore:", error);
+      console.error("Erro ao atualizar task:", error);
     }
   }
 
@@ -113,7 +169,7 @@ function App() {
     setStarted(false);
   }
 
-  // 🔐 Tela de login ou registro
+  // 🔐 Login / Registro
   if (!user) {
     return (
       <div className="container-login-register">
@@ -121,8 +177,8 @@ function App() {
           <>
             <Register />
             <p className="login-switch-text">
-              Já tem conta?{' '}
-              <button className="login-switch-button" onClick={() => setShowRegister(false)}>
+              Já tem conta?{" "}
+              <button onClick={() => setShowRegister(false)}>
                 Faça login
               </button>
             </p>
@@ -131,8 +187,8 @@ function App() {
           <>
             <Login />
             <p className="login-switch-text">
-              Não tem conta?{' '}
-              <button className="login-switch-button" onClick={() => setShowRegister(true)}>
+              Não tem conta?{" "}
+              <button onClick={() => setShowRegister(true)}>
                 Crie uma aqui
               </button>
             </p>
@@ -142,7 +198,7 @@ function App() {
     );
   }
 
-  // 🌟 Tela principal do app
+  // 🌟 APP
   return (
     <div className="App">
       {!started && (
@@ -153,40 +209,63 @@ function App() {
 
       {started && (
         <div className="container">
-          <UserSidebar user={user} onLogout={logout} />
+          <UserSidebar
+            user={user}
+            onLogout={logout}
+            onOpenTreino={() => setTelaAtiva("treino")}
+            onOpenMissoes={() => setTelaAtiva("missoes")}
+            onOpenUpgrades={() => setTelaAtiva("upgrades")}
+            onOpenTop15={() => setTelaAtiva("top15")}
+          />
 
           <div className="container-conteudo">
             <header>
               <h1>Calisthenic Braz</h1>
             </header>
 
-            <TaskForm addTask={addTask} diasSemana={diasSemana} />
-            <ProgressBar tasks={tasks} />
+            {/* 🏋️ TREINO SEMANAL */}
+            {telaAtiva === "treino" && (
+              <>
+                <TaskForm addTask={addTask} diasSemana={diasSemana} />
+                <ProgressBar tasks={tasks} />
 
-            <div className="week">
-              {diasSemana.map(day => {
-                const dayTasks = tasks.filter(t => t.day === day);
-                const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
+                <div className="week">
+                  {diasSemana.map(day => {
+                    const dayTasks = tasks.filter(t => t.day === day);
+                    const allDone =
+                      dayTasks.length > 0 &&
+                      dayTasks.every(t => t.done);
 
-                return (
-                  <div
-                    key={day}
-                    className={`day ${allDone ? "day-complete" : ""}`}
-                  >
-                    <h2>{day}</h2>
-                    {dayTasks.length === 0 && <p>Nenhum exercício</p>}
-                    {dayTasks.map(task => (
-                      <TaskItem
-                        key={task.id}
-                        task={task}
-                        toggleDone={toggleDone}
-                        removeTask={removeTask}
-                      />
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
+                    return (
+                      <div
+                        key={day}
+                        className={`day ${allDone ? "day-complete" : ""}`}
+                      >
+                        <h2>{day}</h2>
+                        {dayTasks.length === 0 && <p>Nenhum exercício</p>}
+                        {dayTasks.map(task => (
+                          <TaskItem
+                            key={task.id}
+                            task={task}
+                            toggleDone={toggleDone}
+                            removeTask={removeTask}
+                          />
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {/* 📜 MISSÕES */}
+            {telaAtiva === "missoes" && <h2>📜 Missões (em breve)</h2>}
+
+            {/* ⚡ UPGRADES */}
+            {telaAtiva === "upgrades" && <h2>⚡ Upgrades (em breve)</h2>}
+
+            {/* 🏆 TOP 15 */}
+            {telaAtiva === "top15" && <h2>🏆 Top 15 (em breve)</h2>}
 
             <Notification />
           </div>

@@ -19,7 +19,7 @@ export default function ProgressBar({ tasks }) {
 
     return (
         <div className="progress">
-            <span className="progress-text">Hunter's Day progress: {percent}%</span>
+            <span className="progress-text">Progresso Semanal: {percent}%</span>
             <div className="progress-bar">
                 <div
                     className="progress-fill"
