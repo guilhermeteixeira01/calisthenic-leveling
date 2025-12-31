@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { auth, db } from "../firebase"; // importando db
+import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; // importar funções do Firestore
+import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -10,21 +10,37 @@ export default function Register() {
 
     const handleRegister = async () => {
         try {
+            // Verifica se tem pelo menos Nome e Sobrenome
+            if (!name.includes(" ")) {
+                alert("Digite Nome e Sobrenome corretamente.");
+                return;
+            }
+
+            // Verifica se o displayName já existe no Firestore
+            const q = query(collection(db, "usuarios"), where("displayName", "==", name));
+            const snapshot = await getDocs(q);
+
+            if (!snapshot.empty) {
+                alert("Nome já utilizado. Escolha outro.");
+                return;
+            }
+
+            // Cria usuário no Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-            // Atualiza o displayName no Auth
+            // Atualiza displayName no Auth
             await updateProfile(userCredential.user, { displayName: name });
 
-            // Salva os dados do usuário no Firestore
+            // Salva usuário no Firestore
             await setDoc(doc(db, "usuarios", userCredential.user.uid), {
                 displayName: name,
                 email: email,
-                xp: 0, // inicia com 0 XP
+                xp: 0,
                 photoURL: userCredential.user.photoURL || null,
             });
 
-            console.log("Usuário registrado:", userCredential.user);
             alert("Registrado com sucesso!");
+            console.log("Usuário registrado:", userCredential.user);
         } catch (error) {
             console.error(error);
             alert(error.message);
@@ -36,7 +52,7 @@ export default function Register() {
             <h2>Registrar</h2>
             <input
                 type="text"
-                placeholder="Nome"
+                placeholder="Nome e Sobrenome"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />

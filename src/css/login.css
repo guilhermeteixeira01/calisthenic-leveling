@@ -187,3 +187,32 @@
     cursor: pointer;
     background-color: transparent;
 }
+
+.mensagem {
+    position: relative;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+    z-index: 999;
+}
+
+.mensagem.erro {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

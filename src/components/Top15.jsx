@@ -161,7 +161,7 @@ export default function Top15() {
                                 style={{
                                     marginRight: "10px",
                                     fontWeight: rank <= 3 ? "bold" : "normal",
-                                    color: nameColors[rank] || "#000",
+                                    color: nameColors[rank] || "#22c55e",
                                 }}
                             >
                                 {displayName}
