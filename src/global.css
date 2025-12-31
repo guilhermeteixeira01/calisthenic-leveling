@@ -43,13 +43,23 @@
 /* BODY */
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #000 0%, #1a1a1a 100%);
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9)),
+        url(assets/img/wallpaper.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: var(--text);
     display: flex;
     justify-content: center;
     min-height: 100vh;
     padding: 2rem 0;
     overflow-x: hidden;
+}
+
+.logo {
+    width: 350px;
+    filter: drop-shadow(2px 2px 5px var(--purple));
 }
 
 .container {

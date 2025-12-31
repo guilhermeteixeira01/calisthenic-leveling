@@ -9,6 +9,10 @@
 }
 
 .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     box-sizing: border-box;
     background-color: var(--bg-card, #11162a);
