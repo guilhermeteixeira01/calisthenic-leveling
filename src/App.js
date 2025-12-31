@@ -26,8 +26,6 @@ import Top15 from './components/Top15';
 import Login from "./components/Login";
 import Register from "./components/Register";
 
-import logo from "./assets/img/logocb.png";
-
 function App() {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -224,7 +222,7 @@ function App() {
 
           <div className="container-conteudo">
             <header>
-              <img className="logo" src={logo}></img>
+              <h1>CALISTHENTIC BRAZ</h1>
             </header>
 
             {/* 🏋️ TREINO SEMANAL */}
