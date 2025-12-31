@@ -1,0 +1,91 @@
+/* Top15.css */
+
+.top15-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1e1e2f;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.top15-container h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #ffd700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.top15-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top15-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.3s;
+}
+
+.top15-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.top15-item .rank {
+    font-weight: bold;
+    font-size: 20px;
+    width: 30px;
+}
+
+.top15-item .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.top15-item .name {
+    flex: 1;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.top15-item .xp {
+    font-weight: bold;
+    font-size: 16px;
+    color: #00ffea;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* SVG medalas para os 3 primeiros */
+.top15-item .medal {
+    width: 24px;
+    height: 24px;
+}
+
+.top15-item.rank-1 .medal svg path {
+    fill: #ffd700;
+    /* ouro */
+}
+
+.top15-item.rank-2 .medal svg path {
+    fill: #c0c0c0;
+    /* prata */
+}
+
+.top15-item.rank-3 .medal svg path {
+    fill: #cd7f32;
+    /* bronze */
+}

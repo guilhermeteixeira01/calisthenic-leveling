@@ -21,6 +21,8 @@ import ProgressBar from './components/ProgressBar';
 import StartButton from './components/StartButton';
 import Notification from './components/Notification';
 
+import Top15 from './components/Top15';
+
 import Login from "./components/Login";
 import Register from "./components/Register";
 
@@ -265,7 +267,7 @@ function App() {
             {telaAtiva === "upgrades" && <h2>⚡ Upgrades (em breve)</h2>}
 
             {/* 🏆 TOP 15 */}
-            {telaAtiva === "top15" && <h2>🏆 Top 15 (em breve)</h2>}
+            {telaAtiva === "top15" && <Top15 />}
 
             <Notification />
           </div>
