@@ -180,7 +180,7 @@ function App() {
             <Register />
             <p className="login-switch-text">
               Já tem conta?{" "}
-              <button onClick={() => setShowRegister(false)}>
+              <button className="login-switch-button" onClick={() => setShowRegister(false)}>
                 Faça login
               </button>
             </p>
@@ -190,7 +190,7 @@ function App() {
             <Login />
             <p className="login-switch-text">
               Não tem conta?{" "}
-              <button onClick={() => setShowRegister(true)}>
+              <button className="login-switch-button" onClick={() => setShowRegister(true)}>
                 Crie uma aqui
               </button>
             </p>
