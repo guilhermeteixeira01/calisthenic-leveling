@@ -157,6 +157,17 @@ export default function UserSidebar({
                 <button className="logout-btn" onClick={onLogout}>
                     Sair
                 </button>
+                {/* Copyright */}
+                <div
+                    style={{
+                        marginTop: "20px",
+                        textAlign: "center",
+                        fontSize: "12px",
+                        color: "#888",
+                    }}
+                >
+                    © Desenvolvido por Guilherme Teixeira
+                </div>
             </aside>
         </>
     );
