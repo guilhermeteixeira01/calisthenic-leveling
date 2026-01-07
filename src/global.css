@@ -127,6 +127,17 @@ header h1 {
     .task-list {
         grid-template-columns: repeat(5, 1fr);
     }
+
+    .sidebar-actions button {
+        padding: 10px;
+        font-size: 13px;
+        gap: 10px;
+    }
+
+    .sidebar-actions .icon {
+        width: 22px;
+        height: 22px;
+    }
 }
 
 /* RESPONSIVIDADE CELULAR */
@@ -136,11 +147,9 @@ header h1 {
         display: block;
         padding: 0;
         overflow-x: hidden;
+        background-image:
+            linear-gradient(to bottom, rgb(0, 0, 0), rgb(27, 27, 27) 50%, rgba(46, 46, 46, 0.9));
     }
-
-    /* .nivel-text {
-        margin-right: 70%;
-    } */
 
     .menu-toggle {
         display: flex;
@@ -178,6 +187,7 @@ header h1 {
         transition: left 0.3s ease;
         border-radius: 0;
         display: flex;
+        animation: none;
     }
 
     .logout-btn {
@@ -188,6 +198,18 @@ header h1 {
     .user-sidebar.active {
         left: 0;
         overflow-x: hidden;
+    }
+
+    .sidebar-actions button {
+        padding: 8px;
+        font-size: 12px;
+        gap: 8px;
+        border-radius: 8px;
+    }
+
+    .sidebar-actions .icon {
+        width: 20px;
+        height: 20px;
     }
 
     .container-conteudo {
@@ -208,6 +230,13 @@ header h1 {
 
     header h1 {
         font-size: 1.4rem;
+        text-shadow: none;
+        animation: none;
+    }
+
+    .avatar {
+        animation: none;
+        border: 2px solid #22c55e;
     }
 
     .task-list {
@@ -246,6 +275,13 @@ header h1 {
 @media (max-width: 480px) {
     header h1 {
         font-size: 1.2rem;
+        text-shadow: none;
+        animation: none;
+    }
+
+    .avatar {
+        animation: none;
+        border: 2px solid #22c55e;
     }
 
     .start-button {
@@ -303,5 +339,16 @@ header h1 {
 
     .top15-item .rank {
         font-size: 18px;
+    }
+
+    .sidebar-actions button {
+        padding: 12px;
+        font-size: 15px;
+        gap: 6px;
+    }
+
+    .sidebar-actions .icon {
+        width: 18px;
+        height: 18px;
     }
 }
