@@ -167,8 +167,16 @@ export default function Top15() {
                                 {displayName}
                             </span>
                             <span style={{ marginRight: "10px" }}>
-                                Rank: {rankPorXp} | Level: {nivel}
+                                <strong className={`rank-${rankPorXp}`}>
+                                    Rank: {rankPorXp}
+                                </strong>
+                                {" "} |
+                                <strong className={`rank-${rankPorXp}`}>
+                                    {" "} Level: {nivel}
+                                </strong>
+                                {" "} |
                             </span>
+
 
                             {/* XP */}
                             <span className="xp">{xp} XP</span>
