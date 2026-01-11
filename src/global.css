@@ -43,23 +43,18 @@
 /* BODY */
 body {
     font-family: 'Inter', sans-serif;
-    background-image:
-        linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9)),
-        url(assets/img/wallpaper.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: linear-gradient(to top,
+            #3b1d5a 0%,
+            #1c102c 25%,
+            #0d0d0d 55%,
+            #050505 100%);
+    box-shadow: inset 0 0 300px rgba(120, 60, 255, 0.15);
     color: var(--text);
     display: flex;
     justify-content: center;
     min-height: 100vh;
     padding: 2rem 0;
     overflow-x: hidden;
-}
-
-.logo {
-    width: 350px;
-    filter: drop-shadow(2px 2px 5px var(--purple));
 }
 
 .container {
@@ -87,40 +82,54 @@ header h1 {
     font-family: 'Orbitron', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--success);
+    color: snow;
 
     text-shadow:
-        0 0 5px var(--purple),
-        0 0 10px var(--purple),
-        0 0 20px var(--purple),
-        0 0 40px rgb(128, 0, 255);
+        0 0 6px var(--purple),
+        0 0 12px var(--purple),
+        0 0 24px rgba(128, 0, 255, 0.8);
 
     position: relative;
     left: 20px;
 
     margin-bottom: 2rem;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
 
-    animation: neonGlow 1.5s ease-in-out infinite alternate;
+    animation: neonGlow 1.6s ease-in-out infinite alternate;
 }
+
+header h1::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    color: var(--purple);
+    filter: blur(8px);
+    opacity: 0.5;
+
+    pointer-events: none;
+    white-space: nowrap;
+}
+
 
 @keyframes neonGlow {
     from {
         text-shadow:
-            0 0 5px var(--purple),
+            0 0 4px var(--purple),
             0 0 10px var(--purple),
-            0 0 20px var(--purple),
-            0 0 40px rgb(128, 0, 255);
+            0 0 18px rgba(128, 0, 255, 0.6);
     }
 
     to {
         text-shadow:
-            0 0 10px var(--purple),
-            0 0 20px var(--purple),
-            0 0 30px var(--purple),
-            0 0 50px rgb(128, 0, 255);
+            0 0 8px var(--purple),
+            0 0 18px var(--purple),
+            0 0 32px rgba(128, 0, 255, 0.9);
     }
 }
+
+
 
 
 @media (min-width: 1000px) {
@@ -236,7 +245,7 @@ header h1 {
 
     .avatar {
         animation: none;
-        border: 2px solid #22c55e;
+        border: 2px solid #7f5af0;
     }
 
     .task-list {
@@ -281,7 +290,7 @@ header h1 {
 
     .avatar {
         animation: none;
-        border: 2px solid #22c55e;
+        border: 2px solid #7f5af0;
     }
 
     .start-button {

@@ -29,6 +29,7 @@ export default function UserSidebar({
     onOpenTop15
 }) {
     const [userData, setUserData] = useState(null);
+    const [showNovidades, setShowNovidades] = useState(false);
 
     /* ===== Controla scroll ===== */
     useEffect(() => {
@@ -87,25 +88,35 @@ export default function UserSidebar({
 
             {/* Sidebar */}
             <aside className={`user-sidebar ${menuOpen ? "active" : ""}`}>
+                {/* UPDATE */}
+
+                <button
+                    className="btn-novidades"
+                    onClick={() => setShowNovidades(true)}
+                >
+                    NEW
+                </button>
+
                 <div className="user-profile">
                     {/* Avatar clicável */}
-                    <img
-                        src={
-                            userData?.photoURL ||
-                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                        }
-                        alt="Perfil"
-                        className="avatar"
+                    <div
+                        className="avatar-wrapper"
                         onClick={handleChangePhotoURL}
                         title="Clique para mudar a foto"
                         style={{
                             width: "180px",
                             height: "180px",
-                            borderRadius: "50%",
-                            cursor: "pointer",
-                            objectFit: "cover",
                         }}
-                    />
+                    >
+                        <img
+                            src={
+                                userData?.photoURL ||
+                                "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                            }
+                            alt="Perfil"
+                            className="avatar"
+                        />
+                    </div>
 
                     <span className="user-name">{user.displayName || "Usuário"}</span>
                     <span className={`user-rank rank-${rank}`}>Rank {rank}</span>
@@ -171,6 +182,36 @@ export default function UserSidebar({
                     © Desenvolvido por Guilherme Teixeira
                 </div>
             </aside>
+            {showNovidades && (
+                <div className="novidades-overlay" onClick={() => setShowNovidades(false)}>
+                    <div
+                        className="novidades-card"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            className="novidades-close"
+                            onClick={() => setShowNovidades(false)}
+                        >
+                            ✕
+                        </button>
+
+                        <h2>🔥 Novidades</h2>
+
+                        <p>
+                            Bem-vindo à nova atualização!
+                        </p>
+
+                        <ul>
+                            <li>✨ Novo sistema de XP</li>
+                            <li>🏆 Ranking Top 15</li>
+                        </ul>
+
+                        <p>1. Mega Update, foi alterado todo visual do site para ficar mas fiel ao tema.</p>
+                        <p>2. está sendo desenvolvido os sistemas de (missões) e (upgrade).</p>
+                        <p>3. foi otimizado o css para mobile e desktop</p>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
