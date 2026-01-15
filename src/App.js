@@ -25,6 +25,7 @@ import Top15 from './components/Top15';
 
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Missoes from './components/Missoes';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,6 +36,22 @@ function App() {
   // 🔥 CONTROLE DE TELAS
   const [telaAtiva, setTelaAtiva] = useState("treino");
   const [menuOpen, setMenuOpen] = useState(false);
+
+  async function handleMissaoCompleta(xp, idMissao) {
+    if (!user) return;
+
+    try {
+      const userRef = doc(db, "usuarios", user.uid);
+
+      await updateDoc(userRef, {
+        xp: increment(xp)
+      });
+
+      console.log(`🎯 Missão ${idMissao} concluída: +${xp} XP`);
+    } catch (error) {
+      console.error("Erro ao resgatar XP da missão:", error);
+    }
+  }
 
   function abrirTela(tela) {
     setTelaAtiva(tela);
@@ -141,10 +158,10 @@ function App() {
 
     const userRef = doc(db, "usuarios", user.uid);
     await updateDoc(userRef, {
-      xp: increment(2)
+      xp: increment(25)
     });
 
-    console.log(`+2 XP concedido pelo dia ${dia}`);
+    console.log(`+25 XP concedido pelo dia ${dia}`);
   }
 
   // ✅ Alternar status
@@ -270,7 +287,12 @@ function App() {
             )}
 
             {/* 📜 MISSÕES */}
-            {telaAtiva === "missoes" && <h2>📜 Missões (em breve)</h2>}
+            {telaAtiva === "missoes" && (
+              <Missoes
+                tasks={tasks}
+                onComplete={handleMissaoCompleta}
+              />
+            )}
 
             {/* ⚡ UPGRADES */}
             {telaAtiva === "upgrades" && <h2>⚡ Upgrades (em breve)</h2>}

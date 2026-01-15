@@ -1,13 +1,3 @@
-/* TASK ITEM */
-.task-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
 .card {
     display: flex;
     flex-direction: column;
@@ -35,7 +25,7 @@
 
 .card h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.0rem;
+    font-size: 0.2rem;
     margin-bottom: 0.3rem;
 }
 

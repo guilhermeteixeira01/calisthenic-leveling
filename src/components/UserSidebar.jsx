@@ -198,17 +198,35 @@ export default function UserSidebar({
                         <h2>🔥 Novidades</h2>
 
                         <p>
-                            Bem-vindo à nova atualização!
+                            Bem-vindo à nova atualização do <strong>Calisthentic Braz</strong>!
                         </p>
 
                         <ul>
-                            <li>✨ Novo sistema de XP</li>
-                            <li>🏆 Ranking Top 15</li>
+                            <li>✨ Novo sistema de XP com progressão automática</li>
+                            <li>🎯 Sistema de Missões Diárias <strong>já disponível</strong></li>
+                            <li>🏆 Ranking Top 15 dos atletas</li>
                         </ul>
 
-                        <p>1. Mega Update, foi alterado todo visual do site para ficar mas fiel ao tema.</p>
-                        <p>2. está sendo desenvolvido os sistemas de (missões) e (upgrade).</p>
-                        <p>3. foi otimizado o css para mobile e desktop</p>
+                        <p>
+                            <strong>1.</strong> Mega Update: todo o visual do site foi reformulado para ficar
+                            ainda mais fiel ao tema esportivo e gamer.
+                        </p>
+
+                        <p>
+                            <strong>2.</strong> O sistema de <strong>Missões Diárias</strong> já está ativo!
+                            Complete desafios, evolua seu personagem e ganhe XP extra todos os dias.
+                        </p>
+
+                        <p>
+                            <strong>3.</strong> O sistema de <strong>Upgrades</strong> está em desenvolvimento
+                            e permitirá melhorar seu desempenho dentro da plataforma.
+                        </p>
+
+                        <p>
+                            <strong>4.</strong> O CSS foi totalmente otimizado para
+                            <strong>mobile e desktop</strong>, garantindo melhor desempenho e usabilidade.
+                        </p>
+
                     </div>
                 </div>
             )}

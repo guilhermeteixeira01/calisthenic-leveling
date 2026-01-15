@@ -9,6 +9,7 @@
 @import url('css/usersidebar.css');
 @import url('css/weeklyplanner.css');
 @import url('css/top15.css');
+@import url('css/mission.css');
 
 ::-webkit-scrollbar {
     background: linear-gradient(to top, black, rgb(85, 85, 85), black);

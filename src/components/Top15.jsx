@@ -33,9 +33,9 @@ const XP_POR_RANK = {
     E: 150,
     D: 300,
     C: 500,
-    B: 800,
-    A: 1200,
-    S: 1800,
+    B: 1100,
+    A: 2500,
+    S: 3000,
 };
 
 // Ordem dos ranks
@@ -107,6 +107,10 @@ export default function Top15() {
             const niveisExtras = Math.floor(xpExtra / xpS);
             nivel += niveisExtras;
             acumulado += niveisExtras * xpS;
+        }
+
+        if (nivel == 7) {
+            nivel = "Max 🔥";
         }
 
         const xpMax = XP_POR_RANK[rankAtual];
