@@ -1,29 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
+
 .user-rank {
     margin-top: 6px;
     font-weight: bold;
 }
 
+/* 🟨 RANK S – LENDÁRIO */
 .rank-S {
     color: gold;
-    text-shadow: 0 0 6px gold;
+    text-shadow:
+        0 0 2px rgba(255, 215, 0, 0.5),
+        0 0 4px rgba(255, 234, 112, 0.4),
+        0 0 6px rgba(255, 183, 0, 0.3);
 }
 
+/* 🔴 RANK A – ELITE */
 .rank-A {
-    color: #4caf50;
+    color: red;
+    text-shadow:
+        0 0 2px rgba(255, 59, 59, 0.5),
+        0 0 4px rgba(255, 107, 107, 0.4),
+        0 0 6px rgba(255, 0, 0, 0.3);
 }
 
+/* 🔵 RANK B – RARO */
 .rank-B {
-    color: #2196f3;
+    color: cyan;
+    text-shadow:
+        0 0 2px rgba(63, 169, 245, 0.5),
+        0 0 4px rgba(110, 198, 255, 0.4),
+        0 0 6px rgba(30, 136, 229, 0.3);
 }
 
+/* 🟢 RANK C – COMBATENTE */
 .rank-C {
-    color: #9c27b0;
+    color: green;
+    text-shadow:
+        0 0 2px rgba(0, 230, 118, 0.5),
+        0 0 4px rgba(105, 240, 174, 0.4),
+        0 0 6px rgba(0, 200, 83, 0.3);
 }
 
+/* 🟠 RANK D – INICIANTE */
 .rank-D {
-    color: #ff9800;
+    color: orange;
+    text-shadow:
+        0 0 2px rgba(255, 152, 0, 0.5),
+        0 0 4px rgba(255, 201, 71, 0.4),
+        0 0 6px rgba(255, 111, 0, 0.3);
 }
 
+/* ⚪ RANK E – BÁSICO */
 .rank-E {
-    color: #9e9e9e;
+    color: #b0bec5;
+    text-shadow:
+        0 0 2px rgba(176, 190, 197, 0.5),
+        0 0 4px rgba(207, 216, 220, 0.4);
+}
+
+.rank-S,
+.rank-A,
+.rank-B,
+.rank-C,
+.rank-D,
+.rank-E {
+    font-weight: 900;
+    letter-spacing: 0.6px;
+}
+
+.rank-S,
+.rank-A,
+.rank-B,
+.rank-C,
+.rank-D,
+.rank-E,
+.missao-xp,
+h1,
+h2 {
+    font-family: 'Teko', sans-serif;
 }
