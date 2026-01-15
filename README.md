@@ -29,6 +29,6 @@ Calisthenic Leveling é uma aplicação web interativa que combina **treino de c
 ## 🚀 Screenshot
 
 <p align="center">
- <img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/79699760-1ded-4919-8adc-ca9656e906ef" />
- <img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/5c705cc9-f04e-4268-a065-5fc3bbf8c6f2" />
+ <img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/db04e7ca-6731-4323-930c-bffc156273c1" />
+ <img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/9047e733-3161-44e3-8d41-c6faf3084cca" />
 </p>
