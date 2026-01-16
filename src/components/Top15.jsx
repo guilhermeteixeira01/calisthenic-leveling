@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase";
 
+// XP necessário por rank
+import { XP_POR_RANK } from "../constants/xpPorRank";
+// Ordem dos ranks
+import { RANKS } from "../constants/xpPorRank";
+
 // SVGs para medalhas
 const medals = {
     1: (
@@ -27,26 +32,6 @@ const nameColors = {
     2: "#C0C0C0",
     3: "#CD7F32",
 };
-
-// XP necessário por rank
-const XP_POR_RANK = {
-    E: 150,
-    D: 300,
-    C: 500,
-    B: 1100,
-    A: 2500,
-    S: 3000,
-};
-
-// Ordem dos ranks
-const RANKS = [
-    ["E", XP_POR_RANK.E],
-    ["D", XP_POR_RANK.D],
-    ["C", XP_POR_RANK.C],
-    ["B", XP_POR_RANK.B],
-    ["A", XP_POR_RANK.A],
-    ["S", XP_POR_RANK.S],
-];
 
 export default function Top15() {
     const [usuarios, setUsuarios] = useState([]);
