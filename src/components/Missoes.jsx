@@ -1,66 +1,46 @@
 import React, { useEffect, useState } from "react";
 
 /* =========================
-   CONFIGURAÇÃO DE MISSÕES
+   CONFIGURAÇÃO
 ========================= */
 
-const MISSOES_SEMANA = [
+const MISSOES_DIA = [
     { texto: "Conclua pelo menos 1 exercício hoje", tipo: "tasks_dia", valor: 1 },
     { texto: "Conclua 3 exercícios hoje", tipo: "tasks_dia", valor: 3 },
-    { texto: "Conclua todos os exercícios do dia", tipo: "dia_completo", valor: 0 },
+    { texto: "Conclua todos os exercícios do dia", tipo: "dia_completo", valor: 0 }
+];
+
+const MISSOES_SEMANA = [
     { texto: "Conclua 5 exercícios na semana", tipo: "tasks_semana", valor: 5 },
     { texto: "Conclua 10 exercícios na semana", tipo: "tasks_semana", valor: 10 },
     { texto: "Conclua 3 dias completos na semana", tipo: "dias_completos", valor: 3 },
-    { texto: "Conclua todos os dias da semana", tipo: "semana_completa", valor: 0 }
+    { texto: "Conclua todos os dias da semana", tipo: "semana_completa", valor: 7 }
 ];
 
-const XP_MIN = 50;
-const XP_MAX = 250;
+const XP_DIA_MIN = 50;
+const XP_DIA_MAX = 150;
+
+const XP_SEMANA_MIN = 200;
+const XP_SEMANA_MAX = 500;
 
 /* =========================
    COMPONENTE
 ========================= */
 
 export default function Missoes({ tasks = [], onComplete }) {
-    const [missao, setMissao] = useState(null);
-    const [xpMissao, setXpMissao] = useState(0);
-    const [idMissao, setIdMissao] = useState("");
-    const [resgatada, setResgatada] = useState(false);
+    const [missaoDia, setMissaoDia] = useState(null);
+    const [missaoSemana, setMissaoSemana] = useState(null);
 
-    /* ===== missão do dia ===== */
-    useEffect(() => {
-        const hoje = new Date();
+    const [xpDia, setXpDia] = useState(0);
+    const [xpSemana, setXpSemana] = useState(0);
 
-        // Segunda = 0
-        const diaSemana = (hoje.getDay() + 6) % 7;
+    const [resgatadaDia, setResgatadaDia] = useState(false);
+    const [resgatadaSemana, setResgatadaSemana] = useState(false);
 
-        // DATA LOCAL (ANTI BUG DE FUSO)
-        const dataHoje = hoje.toLocaleDateString("sv-SE"); // YYYY-MM-DD
-        const missaoId = `missao-${dataHoje}`;
+    /* =========================
+       DATA
+    ========================= */
 
-        setMissao(MISSOES_SEMANA[diaSemana]);
-        setXpMissao(gerarXpPorDia(dataHoje));
-        setIdMissao(missaoId);
-
-        setResgatada(localStorage.getItem(missaoId) === "true");
-    }, []);
-
-    /* ===== RESET AUTOMÁTICO À MEIA-NOITE ===== */
-    useEffect(() => {
-        const agora = new Date();
-        const amanha = new Date();
-        amanha.setHours(24, 0, 0, 0);
-
-        const tempo = amanha - agora;
-
-        const timer = setTimeout(() => {
-            window.location.reload();
-        }, tempo);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    /* ===== util ===== */
     function diaHoje() {
         const dias = [
             "Domingo",
@@ -78,94 +58,188 @@ export default function Missoes({ tasks = [], onComplete }) {
         return tasks.filter(t => t.day === diaHoje());
     }
 
+    /* =========================
+       CONTADORES
+    ========================= */
+
     function progressoHoje() {
         return tasksHoje().filter(t => t.done).length;
     }
 
-    /* ===== REGRA REAL DE CONCLUSÃO ===== */
-    function missaoConcluida() {
-        if (!missao) return false;
+    function totalHoje() {
+        return tasksHoje().length;
+    }
 
-        switch (missao.tipo) {
+    function progressoSemana() {
+        return tasks.filter(t => t.done).length;
+    }
+
+    function diasCompletosSemana() {
+        const dias = {};
+
+        tasks.forEach(t => {
+            if (!dias[t.day]) dias[t.day] = [];
+            dias[t.day].push(t.done);
+        });
+
+        return Object.values(dias).filter(
+            lista => lista.length > 0 && lista.every(Boolean)
+        ).length;
+    }
+
+    /* =========================
+       INIT (MISSÕES SEMPRE EXISTEM)
+    ========================= */
+
+    useEffect(() => {
+        const hoje = new Date();
+        const dataHoje = hoje.toLocaleDateString("sv-SE");
+        const semana = `${dataHoje.slice(0, 8)}W`;
+
+        // SEMPRE sorteia, mesmo sem exercícios
+        setMissaoDia(
+            MISSOES_DIA[Math.floor(Math.random() * MISSOES_DIA.length)]
+        );
+
+        setMissaoSemana(
+            MISSOES_SEMANA[Math.floor(Math.random() * MISSOES_SEMANA.length)]
+        );
+
+        setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
+        setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
+
+        setResgatadaDia(localStorage.getItem(`missao-dia-${dataHoje}`) === "true");
+        setResgatadaSemana(localStorage.getItem(`missao-semana-${semana}`) === "true");
+    }, []);
+
+    /* =========================
+       RESET À MEIA NOITE
+    ========================= */
+
+    useEffect(() => {
+        const agora = new Date();
+        const amanha = new Date();
+        amanha.setHours(24, 0, 0, 0);
+
+        const tempo = amanha - agora;
+        const timer = setTimeout(() => window.location.reload(), tempo);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    /* =========================
+       CONCLUSÃO (SEGURO)
+    ========================= */
+
+    function concluida(m) {
+        if (!m) return false;
+
+        switch (m.tipo) {
             case "tasks_dia":
-                return progressoHoje() >= missao.valor;
+                return progressoHoje() >= m.valor;
 
-            case "dia_completo": {
-                const hojeTasks = tasksHoje();
-                return (
-                    hojeTasks.length > 0 &&
-                    hojeTasks.every(t => t.done)
-                );
-            }
+            case "dia_completo":
+                return totalHoje() > 0 && progressoHoje() === totalHoje();
 
             case "tasks_semana":
-                return tasks.filter(t => t.done).length >= missao.valor;
+                return progressoSemana() >= m.valor;
 
             case "dias_completos":
-                return tasks.filter(t => t.done).length >= missao.valor;
+                return diasCompletosSemana() >= m.valor;
 
             case "semana_completa":
-                return tasks.filter(t => t.done).length >= 7;
+                return diasCompletosSemana() >= 7;
 
             default:
                 return false;
         }
     }
 
-    function handleResgatar() {
-        if (!missaoConcluida() || resgatada) return;
-        if (typeof onComplete !== "function") return;
+    function resgatar(tipo) {
+        const hoje = new Date().toLocaleDateString("sv-SE");
+        const semana = `${hoje.slice(0, 8)}W`;
 
-        onComplete(xpMissao, idMissao);
+        if (tipo === "dia" && concluida(missaoDia) && !resgatadaDia) {
+            onComplete?.(xpDia);
+            localStorage.setItem(`missao-dia-${hoje}`, "true");
+            setResgatadaDia(true);
+        }
 
-        localStorage.setItem(idMissao, "true");
-        setResgatada(true);
+        if (tipo === "semana" && concluida(missaoSemana) && !resgatadaSemana) {
+            onComplete?.(xpSemana);
+            localStorage.setItem(`missao-semana-${semana}`, "true");
+            setResgatadaSemana(true);
+        }
     }
 
-    if (!missao) return null;
-
-    const concluida = missaoConcluida();
+    /* =========================
+       RENDER
+    ========================= */
 
     return (
-        <div className="missao-card">
-            <h2>🎯 Missão do Dia</h2>
+        <div className="missoes-container">
 
-            <p className="missao-text">{missao.texto}</p>
+            <div className="missao-card">
+                <h2>📅 Missão do Dia</h2>
+                <p>{missaoDia?.texto}</p>
+                <span>+{xpDia} XP</span>
 
-            {missao.valor > 0 && (
-                <p className="missao-progresso">
-                    Progresso: {Math.min(progressoHoje(), missao.valor)} / {missao.valor}
-                </p>
-            )}
+                <button
+                    className={`missao-btn ${resgatadaDia ? "resgatado" : ""}`}
+                    disabled={!concluida(missaoDia) || resgatadaDia}
+                    onClick={() => resgatar("dia")}
+                >
+                    {resgatadaDia
+                        ? "Resgatado"
+                        : concluida(missaoDia)
+                            ? "Resgatar XP"
+                            : "Em progresso"}
+                </button>
 
-            <span className="missao-xp">+{xpMissao} XP</span>
 
-            <button
-                className="missao-btn"
-                disabled={!concluida || resgatada}
-                onClick={handleResgatar}
-            >
-                {resgatada
-                    ? "XP Resgatado ✔"
-                    : concluida
-                        ? "Resgatar XP"
-                        : "Em progresso"}
-            </button>
+                {totalHoje() === 0 && (
+                    <small className="missao-aviso">
+                        Adicione exercícios para completar esta missão
+                    </small>
+                )}
+            </div>
+
+            <div className="missao-card">
+                <h2>📆 Missão da Semana</h2>
+                <p>{missaoSemana?.texto}</p>
+                <span>+{xpSemana} XP</span>
+
+                <button
+                    className={`missao-btn ${resgatadaSemana ? "resgatado" : ""}`}
+                    disabled={!concluida(missaoSemana) || resgatadaSemana}
+                    onClick={() => resgatar("semana")}
+                >
+                    {resgatadaSemana
+                        ? "Resgatado"
+                        : concluida(missaoSemana)
+                            ? "Resgatar XP"
+                            : "Em progresso"}
+                </button>
+
+                {tasks.length === 0 && (
+                    <small className="missao-aviso">
+                        Adicione exercícios na planilha para completar esta missão
+                    </small>
+                )}
+            </div>
+
         </div>
     );
 }
 
 /* =========================
-   FUNÇÕES AUXILIARES
+   XP UTIL
 ========================= */
 
-function gerarXpPorDia(seed) {
+function gerarXp(seed, min, max) {
     let hash = 0;
-
     for (let i = 0; i < seed.length; i++) {
         hash = seed.charCodeAt(i) + ((hash << 5) - hash);
     }
-
-    const random = Math.abs(hash) % (XP_MAX - XP_MIN + 1);
-    return XP_MIN + random;
+    return min + (Math.abs(hash) % (max - min + 1));
 }

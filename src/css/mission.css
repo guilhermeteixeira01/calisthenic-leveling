@@ -1,9 +1,17 @@
+.missoes-container {
+    display: flex;
+    flex-direction: column;
+    padding: 5rem;
+    gap: 20px;
+}
+
 .missao-card {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     background: linear-gradient(160deg, #0b0b0f, #16162a, #0b0b0f);
     border-radius: 20px;
     padding: 26px;
@@ -51,6 +59,10 @@
     letter-spacing: 0.8px;
 }
 
+.missao-card span {
+    color: #22c55e;
+}
+
 /* 📜 texto */
 .missao-text {
     font-size: 15px;
@@ -86,6 +98,8 @@
         0 0 18px rgba(127, 90, 240, 0.6),
         0 0 6px rgba(127, 90, 240, 0.8);
     transition: all 0.25s ease;
+    position: relative;
+    /* necessário pro ::after */
 }
 
 /* hover */
@@ -109,12 +123,30 @@
     box-shadow: none;
 }
 
-/* ✨ quando XP já foi resgatado */
-.missao-btn:disabled::after {
+/* ✅ CHECK QUANDO ATIVO */
+.missao-btn:not(:disabled)::after {
     content: "✔";
     margin-left: 8px;
     color: #22c55e;
+    font-weight: 900;
 }
+
+/* ✅ CHECK QUANDO RESGATADO */
+.missao-btn.resgatado::after {
+    content: "✔";
+    margin-left: 8px;
+    color: #22c55e;
+    font-weight: 900;
+}
+
+/* 🔒 visual de resgatado (opcional mas recomendado) */
+.missao-btn.resgatado {
+    background: linear-gradient(135deg, #1f2933, #111827);
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 
 /* 🎞️ animações */
 @keyframes rotateGlow {
