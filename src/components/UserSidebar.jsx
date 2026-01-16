@@ -2,19 +2,8 @@ import React, { useEffect, useState } from "react";
 import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
-
-/* =========================
-   CONFIGURAÇÃO GLOBAL
-========================= */
-
-const XP_POR_RANK = {
-    E: 150,
-    D: 300,
-    C: 500,
-    B: 800,
-    A: 1200,
-    S: 1800,
-};
+// XP necessário por rank
+import { XP_POR_RANK } from "../constants/xpPorRank";
 
 const RANKS = Object.entries(XP_POR_RANK);
 
