@@ -281,6 +281,16 @@ header h1::after {
         padding: 2rem;
         gap: 20px;
     }
+
+    .avatar {
+        animation: none;
+        border: 2px solid #7f5af0;
+    }
+
+    .avatarusersidebar {
+        animation: none;
+        border: 2px solid #7f5af0;
+    }
 }
 
 

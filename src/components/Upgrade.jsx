@@ -9,7 +9,7 @@ import { ReactComponent as VitalidadeIcon } from "../assets/icons/vitalidade.svg
 import { ReactComponent as CarismaIcon } from "../assets/icons/carisma.svg";
 import { ReactComponent as SabedoriaIcon } from "../assets/icons/sabedoria.svg";
 
-const XP_POR_PONTO = 200;
+const XP_POR_PONTO = 800;
 
 const ATRIBUTOS = [
     { id: "forca", nome: "Força", Icon: ForcaIcon },
