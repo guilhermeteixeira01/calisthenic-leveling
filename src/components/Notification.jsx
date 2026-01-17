@@ -32,10 +32,12 @@ const rankColors = {
     "E": "#9ca3af"
 };
 
+const CountXps = ["50", "150", "200", "500"];
+
 // Templates de mensagens
 const messages = [
     (player, rank) => `${player} Subiu para o Rank ${rank} 🚀`,
-    (player) => `${player} ganhou 120 XP 🔥`,
+    (player, xp) => `${player} ganhou ${xp} XP 🔥`,
     (player) => `${player} completou uma quest 💎`,
     (player) => `${player} desbloqueou uma conquista 🚀`,
     (player) => `${player} ganhou 50 moedas 🧠`
@@ -47,18 +49,22 @@ export default function Notification() {
     useEffect(() => {
         const interval = setInterval(() => {
             const player = players[Math.floor(Math.random() * players.length)];
+            const xp = CountXps[Math.floor(Math.random() * CountXps.length)];
             const rank = RankUp[Math.floor(Math.random() * RankUp.length)];
-            const messageTemplate = messages[Math.floor(Math.random() * messages.length)];
-            const message = messageTemplate(player, rank);
+
+            const messageTemplate =
+                messages[Math.floor(Math.random() * messages.length)];
+
+            const message = messageTemplate(player, xp, rank);
+
             const id = Date.now();
 
             setNotifications(prev => [...prev, { id, message, rank }]);
 
-            // Remove após 8 segundos
             setTimeout(() => {
                 setNotifications(prev => prev.filter(n => n.id !== id));
             }, 8000);
-        }, 12000); // a cada 12 segundos
+        }, 12000);
 
         return () => clearInterval(interval);
     }, []);
