@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../firebase"; // ajuste o caminho se necessário
+import { db } from "../firebase";
 
 /* =========================
    CONFIGURAÇÃO
@@ -21,11 +21,9 @@ const MISSOES_SEMANA = [
 
 const XP_DIA_MIN = 50;
 const XP_DIA_MAX = 150;
-
 const XP_SEMANA_MIN = 200;
 const XP_SEMANA_MAX = 500;
 
-// ⚠️ substitua pelo UID real quando usar Firebase Auth
 const userId = "demo-user";
 
 /* =========================
@@ -35,10 +33,8 @@ const userId = "demo-user";
 export default function Missoes({ tasks = [], onComplete }) {
     const [missaoDia, setMissaoDia] = useState(null);
     const [missaoSemana, setMissaoSemana] = useState(null);
-
     const [xpDia, setXpDia] = useState(0);
     const [xpSemana, setXpSemana] = useState(0);
-
     const [resgatadaDia, setResgatadaDia] = useState(false);
     const [resgatadaSemana, setResgatadaSemana] = useState(false);
 
@@ -47,15 +43,7 @@ export default function Missoes({ tasks = [], onComplete }) {
     ========================= */
 
     function diaHoje() {
-        const dias = [
-            "Domingo",
-            "Segunda",
-            "Terça",
-            "Quarta",
-            "Quinta",
-            "Sexta",
-            "Sábado"
-        ];
+        const dias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
         return dias[new Date().getDay()];
     }
 
@@ -67,48 +55,34 @@ export default function Missoes({ tasks = [], onComplete }) {
        CONTADORES
     ========================= */
 
-    function progressoHoje() {
-        return tasksHoje().filter(t => t.done).length;
-    }
-
-    function totalHoje() {
-        return tasksHoje().length;
-    }
-
-    function progressoSemana() {
-        return tasks.filter(t => t.done).length;
-    }
+    const progressoHoje = () => tasksHoje().filter(t => t.done).length;
+    const totalHoje = () => tasksHoje().length;
+    const progressoSemana = () => tasks.filter(t => t.done).length;
 
     function diasCompletosSemana() {
         const dias = {};
-
         tasks.forEach(t => {
             if (!dias[t.day]) dias[t.day] = [];
             dias[t.day].push(t.done);
         });
-
         return Object.values(dias).filter(
             lista => lista.length > 0 && lista.every(Boolean)
         ).length;
     }
 
     /* =========================
-       INIT (FIREBASE)
+       INIT
     ========================= */
 
     useEffect(() => {
         async function init() {
             const hoje = new Date();
             const dataHoje = hoje.toLocaleDateString("sv-SE");
-            const semana = `${dataHoje.slice(0, 8)}W`;
+            const semana = getSemanaISO(hoje);
 
-            setMissaoDia(
-                MISSOES_DIA[Math.floor(Math.random() * MISSOES_DIA.length)]
-            );
-
-            setMissaoSemana(
-                MISSOES_SEMANA[Math.floor(Math.random() * MISSOES_SEMANA.length)]
-            );
+            // 🔒 missões determinísticas
+            setMissaoDia(seededPick(MISSOES_DIA, dataHoje));
+            setMissaoSemana(seededPick(MISSOES_SEMANA, semana));
 
             setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
             setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
@@ -124,17 +98,14 @@ export default function Missoes({ tasks = [], onComplete }) {
     }, []);
 
     /* =========================
-       RESET À MEIA NOITE
+       RESET DIÁRIO
     ========================= */
 
     useEffect(() => {
         const agora = new Date();
         const amanha = new Date();
         amanha.setHours(24, 0, 0, 0);
-
-        const tempo = amanha - agora;
-        const timer = setTimeout(() => window.location.reload(), tempo);
-
+        const timer = setTimeout(() => window.location.reload(), amanha - agora);
         return () => clearTimeout(timer);
     }, []);
 
@@ -148,54 +119,42 @@ export default function Missoes({ tasks = [], onComplete }) {
         switch (m.tipo) {
             case "tasks_dia":
                 return progressoHoje() >= m.valor;
-
             case "dia_completo":
                 return totalHoje() > 0 && progressoHoje() === totalHoje();
-
             case "tasks_semana":
                 return progressoSemana() >= m.valor;
-
             case "dias_completos":
                 return diasCompletosSemana() >= m.valor;
-
             case "semana_completa":
                 return diasCompletosSemana() >= 7;
-
             default:
                 return false;
         }
     }
 
     /* =========================
-       RESGATAR (FIREBASE)
+       RESGATAR
     ========================= */
 
     async function resgatar(tipo) {
-        const hoje = new Date().toLocaleDateString("sv-SE");
-        const semana = `${hoje.slice(0, 8)}W`;
+        const hoje = new Date();
+        const dataHoje = hoje.toLocaleDateString("sv-SE");
+        const semana = getSemanaISO(hoje);
 
         if (tipo === "dia" && concluida(missaoDia) && !resgatadaDia) {
-            const ref = doc(db, "missoes", userId, "resgates", `dia_${hoje}`);
-
-            await setDoc(ref, {
-                tipo: "dia",
-                xp: xpDia,
-                criadoEm: serverTimestamp()
-            });
-
+            await setDoc(
+                doc(db, "missoes", userId, "resgates", `dia_${dataHoje}`),
+                { tipo: "dia", xp: xpDia, criadoEm: serverTimestamp() }
+            );
             onComplete?.(xpDia);
             setResgatadaDia(true);
         }
 
         if (tipo === "semana" && concluida(missaoSemana) && !resgatadaSemana) {
-            const ref = doc(db, "missoes", userId, "resgates", `semana_${semana}`);
-
-            await setDoc(ref, {
-                tipo: "semana",
-                xp: xpSemana,
-                criadoEm: serverTimestamp()
-            });
-
+            await setDoc(
+                doc(db, "missoes", userId, "resgates", `semana_${semana}`),
+                { tipo: "semana", xp: xpSemana, criadoEm: serverTimestamp() }
+            );
             onComplete?.(xpSemana);
             setResgatadaSemana(true);
         }
@@ -207,62 +166,48 @@ export default function Missoes({ tasks = [], onComplete }) {
 
     return (
         <div className="missoes-container">
+            <Missao
+                titulo="📅 Missão do Dia"
+                missao={missaoDia}
+                xp={xpDia}
+                concluida={concluida(missaoDia)}
+                resgatada={resgatadaDia}
+                onClick={() => resgatar("dia")}
+            />
 
-            <div className="missao-card">
-                <h2>📅 Missão do Dia</h2>
-                <p>{missaoDia?.texto}</p>
-                <span>+{xpDia} XP</span>
-
-                <button
-                    className={`missao-btn ${resgatadaDia ? "resgatado" : ""}`}
-                    disabled={!concluida(missaoDia) || resgatadaDia}
-                    onClick={() => resgatar("dia")}
-                >
-                    {resgatadaDia
-                        ? "Resgatado"
-                        : concluida(missaoDia)
-                            ? "Resgatar XP"
-                            : "Em progresso"}
-                </button>
-
-                {totalHoje() === 0 && (
-                    <small className="missao-aviso">
-                        Adicione exercícios para completar esta missão
-                    </small>
-                )}
-            </div>
-
-            <div className="missao-card">
-                <h2>📆 Missão da Semana</h2>
-                <p>{missaoSemana?.texto}</p>
-                <span>+{xpSemana} XP</span>
-
-                <button
-                    className={`missao-btn ${resgatadaSemana ? "resgatado" : ""}`}
-                    disabled={!concluida(missaoSemana) || resgatadaSemana}
-                    onClick={() => resgatar("semana")}
-                >
-                    {resgatadaSemana
-                        ? "Resgatado"
-                        : concluida(missaoSemana)
-                            ? "Resgatar XP"
-                            : "Em progresso"}
-                </button>
-
-                {tasks.length === 0 && (
-                    <small className="missao-aviso">
-                        Adicione exercícios na planilha para completar esta missão
-                    </small>
-                )}
-            </div>
-
+            <Missao
+                titulo="📆 Missão da Semana"
+                missao={missaoSemana}
+                xp={xpSemana}
+                concluida={concluida(missaoSemana)}
+                resgatada={resgatadaSemana}
+                onClick={() => resgatar("semana")}
+            />
         </div>
     );
 }
 
 /* =========================
-   XP UTIL
+   COMPONENTES / UTILS
 ========================= */
+
+function Missao({ titulo, missao, xp, concluida, resgatada, onClick }) {
+    return (
+        <div className="missao-card">
+            <h2>{titulo}</h2>
+            <p>{missao?.texto}</p>
+            <span>+{xp} XP</span>
+
+            <button
+                className={`missao-btn ${resgatada ? "resgatado" : ""}`}
+                disabled={!concluida || resgatada}
+                onClick={onClick}
+            >
+                {resgatada ? "Resgatado" : concluida ? "Resgatar XP" : "Em progresso"}
+            </button>
+        </div>
+    );
+}
 
 function gerarXp(seed, min, max) {
     let hash = 0;
@@ -270,4 +215,21 @@ function gerarXp(seed, min, max) {
         hash = seed.charCodeAt(i) + ((hash << 5) - hash);
     }
     return min + (Math.abs(hash) % (max - min + 1));
+}
+
+function seededPick(lista, seed) {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return lista[Math.abs(hash) % lista.length];
+}
+
+function getSemanaISO(date) {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return `${d.getUTCFullYear()}-W${weekNo}`;
 }

@@ -1,10 +1,10 @@
-/* Top15.css */
-
 .top15-container {
     max-width: 900px;
     margin: 40px auto;
     padding: 20px;
-    background: #333;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.01));
     border: 1px solid rgba(128, 0, 255, 0.8);
     border-radius: 50px;
     box-shadow: 20px 15px 25px black;
@@ -33,36 +33,54 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 15px;
+    padding: 12px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.3s;
-    flex-wrap: wrap;
-    /* permite quebrar linha no mobile */
+    border-radius: 10px;
+    cursor: pointer;
 }
 
+/* Hover */
 .top15-item:hover {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
 }
 
-.top15-item .rank {
+/* Esquerda: Número + Medalha + Avatar + Nome */
+.top15-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 300px;
+    /* garante alinhamento das colunas */
+}
+
+/* Número da posição */
+.top15-position {
     font-weight: bold;
     font-size: 20px;
     width: 30px;
+    text-align: center;
     flex-shrink: 0;
 }
 
-.top15-item .avatar {
+/* Medalha */
+.top15-item .medal {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+/* Avatar */
+.top15-item img.avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 10px;
     flex-shrink: 0;
 }
 
+/* Nome */
 .top15-item .name {
-    flex: 1;
     font-weight: 500;
     font-size: 18px;
     white-space: nowrap;
@@ -70,33 +88,72 @@
     text-overflow: ellipsis;
 }
 
-.top15-item .xp {
+/* Rank e Nível */
+.top15-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 180px;
+}
+
+.rank-info {
+    display: flex;
+    gap: 5px;
+    font-weight: bold;
+}
+
+/* XP */
+.xp {
     font-weight: bold;
     font-size: 16px;
     color: #00ffea;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex-shrink: 0;
 }
 
-/* SVG medalas para os 3 primeiros */
-.top15-item .medal {
-    width: 24px;
-    height: 24px;
+/* Rank colors */
+.rank-1 {
+    color: #FFD700;
 }
 
-.top15-item.rank-1 .medal svg path {
-    fill: #ffd700;
-    /* ouro */
+.rank-2 {
+    color: #C0C0C0;
 }
 
-.top15-item.rank-2 .medal svg path {
-    fill: #c0c0c0;
-    /* prata */
+.rank-3 {
+    color: #CD7F32;
 }
 
-.top15-item.rank-3 .medal svg path {
-    fill: #cd7f32;
-    /* bronze */
+@media (max-width: 600px) {
+    .top15-container {
+        padding: 15px;
+    }
+
+    .top15-item {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 12px;
+    }
+
+    .top15-left {
+        gap: 8px;
+    }
+
+    .top15-left .name {
+        font-size: 16px;
+    }
+
+    .top15-right {
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .medal {
+        width: 24px;
+        height: 24px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+    }
 }

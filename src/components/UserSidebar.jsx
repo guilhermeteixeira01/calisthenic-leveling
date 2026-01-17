@@ -4,6 +4,7 @@ import { db } from "../firebase";
 
 // XP necessário por rank
 import { XP_POR_RANK } from "../constants/xpPorRank";
+import { calcularProgressoXp } from "../utils/rankUtils";
 
 const RANKS = Object.entries(XP_POR_RANK);
 
@@ -103,7 +104,7 @@ export default function UserSidebar({
                                 "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
                             }
                             alt="Perfil"
-                            className="avatar"
+                            className="avatarusersidebar"
                         />
                     </div>
 
@@ -194,6 +195,7 @@ export default function UserSidebar({
                             <li>✨ Novo sistema de XP com progressão automática</li>
                             <li>🎯 Sistema de Missões Diárias <strong>já disponível</strong></li>
                             <li>🏆 Ranking Top 15 dos atletas</li>
+                            <li>🛠️ Novo Sistema de Upgrades</li>
                         </ul>
 
                         <p>
@@ -207,13 +209,14 @@ export default function UserSidebar({
                         </p>
 
                         <p>
-                            <strong>3.</strong> O sistema de <strong>Upgrades</strong> está em desenvolvimento
-                            e permitirá melhorar seu desempenho dentro da plataforma.
+                            <strong>3.</strong> O novo <strong>Sistema de Upgrades</strong> permite
+                            aprimorar atributos, desbloquear vantagens e evoluir ainda mais seu atleta
+                            dentro da plataforma.
                         </p>
 
                         <p>
                             <strong>4.</strong> O CSS foi totalmente otimizado para
-                            <strong>mobile e desktop</strong>, garantindo melhor desempenho e usabilidade.
+                            <strong> mobile e desktop</strong>, garantindo melhor desempenho e usabilidade.
                         </p>
 
                     </div>
@@ -229,38 +232,13 @@ export default function UserSidebar({
 
 function calcularRankPorXp(xpTotal) {
     let acumulado = 0;
+
     for (const [rank, xpRank] of RANKS) {
         acumulado += xpRank;
-        if (xpTotal < acumulado) return rank;
-    }
-    return "S";
-}
-
-function calcularProgressoXp(xpTotal) {
-    let acumulado = 0;
-    let nivel = 1;
-    let rankAtual = "E";
-
-    for (const [rank, xpRank] of RANKS) {
-        if (xpTotal < acumulado + xpRank) {
-            rankAtual = rank;
-            break;
+        if (xpTotal < acumulado) {
+            return rank;
         }
-        acumulado += xpRank;
-        nivel++;
     }
 
-    if (rankAtual === "S") {
-        const xpS = XP_POR_RANK.S;
-        const xpExtra = xpTotal - acumulado;
-        const niveisExtras = Math.floor(xpExtra / xpS);
-        nivel += niveisExtras;
-        acumulado += niveisExtras * xpS;
-    }
-
-    const xpMax = XP_POR_RANK[rankAtual];
-    const xpAtual = xpTotal - acumulado;
-    const progresso = Math.min((xpAtual / xpMax) * 100, 100);
-
-    return { xpAtual, xpMax, progresso, nivel };
+    return "S";
 }

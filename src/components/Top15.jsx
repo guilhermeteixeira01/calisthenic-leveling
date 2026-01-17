@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase";
+import UserProfileCard from "./UserProfileCard";
+import { calcularProgressoXp } from "../utils/rankUtils";
 
-// XP necessário por rank
-import { XP_POR_RANK } from "../constants/xpPorRank";
-// Ordem dos ranks
-import { RANKS } from "../constants/xpPorRank";
+// Medalhas PNG
+import GoldMedal from '../assets/icons/1.png';
+import SilverMedal from '../assets/icons/2.png';
+import BronzeMedal from '../assets/icons/3.png';
 
-// SVGs para medalhas
 const medals = {
-    1: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFD700">
-            <circle cx="12" cy="12" r="10" />
-        </svg>
-    ),
-    2: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#C0C0C0">
-            <circle cx="12" cy="12" r="10" />
-        </svg>
-    ),
-    3: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#CD7F32">
-            <circle cx="12" cy="12" r="10" />
-        </svg>
-    ),
+    1: GoldMedal,
+    2: SilverMedal,
+    3: BronzeMedal,
 };
 
-// Cores para os nomes dos 3 primeiros
 const nameColors = {
     1: "#FFD700",
     2: "#C0C0C0",
@@ -35,144 +23,94 @@ const nameColors = {
 
 export default function Top15() {
     const [usuarios, setUsuarios] = useState([]);
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
 
     useEffect(() => {
-        const q = query(
-            collection(db, "usuarios"),
-            orderBy("xp", "desc"),
-            limit(15)
-        );
-
-        const unsub = onSnapshot(q, (snapshot) => {
-            const data = snapshot.docs.map((docSnap) => {
+        const q = query(collection(db, "usuarios"), orderBy("xp", "desc"), limit(15));
+        const unsub = onSnapshot(q, snapshot => {
+            const data = snapshot.docs.map(docSnap => {
                 const user = docSnap.data();
                 return {
                     id: docSnap.id,
                     displayName: user.displayName || "Usuário",
-                    photoURL:
-                        user.photoURL ||
-                        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg",
+                    photoURL: user.photoURL || "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg",
                     xp: user.xp || 0,
                 };
             });
-
             setUsuarios(data);
         });
-
         return () => unsub();
     }, []);
 
-    // Funções de Rank e Level
-    function calcularRankPorXp(xpTotal) {
-        let acumulado = 0;
-        for (const [rank, xpRank] of RANKS) {
-            acumulado += xpRank;
-            if (xpTotal < acumulado) return rank;
-        }
-        return "S";
-    }
-
-    function calcularProgressoXp(xpTotal) {
-        let acumulado = 0;
-        let nivel = 1;
-        let rankAtual = "E";
-
-        for (const [rank, xpRank] of RANKS) {
-            if (xpTotal < acumulado + xpRank) {
-                rankAtual = rank;
-                break;
-            }
-            acumulado += xpRank;
-            nivel++;
-        }
-
-        if (rankAtual === "S") {
-            const xpS = XP_POR_RANK.S;
-            const xpExtra = xpTotal - acumulado;
-            const niveisExtras = Math.floor(xpExtra / xpS);
-            nivel += niveisExtras;
-            acumulado += niveisExtras * xpS;
-        }
-
-        if (nivel == 7) {
-            nivel = "Max 🔥";
-        }
-
-        const xpMax = XP_POR_RANK[rankAtual];
-        const xpAtual = xpTotal - acumulado;
-
-        return { xpAtual, xpMax, nivel, rankAtual };
-    }
-
     return (
-        <div className="top15-container">
-            <h2>Top 15 Usuários</h2>
-            <ol className="top15-list">
-                {usuarios.map((user, index) => {
-                    const { xp, displayName, photoURL } = user;
-                    const rank = index + 1;
+        <>
+            <div className="top15-container">
+                <h2>Top 15 Usuários</h2>
 
-                    const rankPorXp = calcularRankPorXp(xp);
-                    const { nivel } = calcularProgressoXp(xp);
+                <ol className="top15-list">
+                    {usuarios.map((user, index) => {
+                        const rankPosicao = index + 1;
+                        const { rankAtual, nivel } = calcularProgressoXp(user.xp);
+                        const medalSrc = medals[rankPosicao];
 
-                    return (
-                        <li
-                            key={user.id}
-                            className="top15-item"
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginBottom: "10px",
-                            }}
-                        >
-                            {/* Medalha ou número */}
-                            <span className="rank" style={{ marginRight: "10px" }}>
-                                {medals[rank] || rank}
-                            </span>
-
-                            {/* Avatar */}
-                            <img
-                                src={photoURL}
-                                alt={displayName}
-                                className="avatar"
-                                style={{
-                                    width: "50px",
-                                    height: "50px",
-                                    borderRadius: "50%",
-                                    objectFit: "cover",
-                                    marginRight: "10px",
-                                }}
-                            />
-
-                            {/* Nome e Rank/Level */}
-                            <span
-                                className="name"
-                                style={{
-                                    marginRight: "10px",
-                                    fontWeight: rank <= 3 ? "bold" : "normal",
-                                    color: nameColors[rank] || "#22c55e",
-                                }}
+                        return (
+                            <li
+                                key={user.id}
+                                className="top15-item"
+                                onClick={() => setUsuarioSelecionado(user.id)}
                             >
-                                {displayName}
-                            </span>
-                            <span style={{ marginRight: "10px" }}>
-                                <strong className={`rank-${rankPorXp}`}>
-                                    Rank: {rankPorXp}
-                                </strong>
-                                {" "} |
-                                <strong className={`rank-${rankPorXp}`}>
-                                    {" "} Level: {nivel}
-                                </strong>
-                                {" "} |
-                            </span>
+                                {/* Esquerda: Número (apenas se não for top 3) + Medalha + Avatar + Nome */}
+                                <div className="top15-left">
+                                    {rankPosicao > 3 && (
+                                        <span className="top15-position">{rankPosicao}</span>
+                                    )}
 
+                                    {medalSrc && (
+                                        <img
+                                            src={medalSrc}
+                                            alt={`Medalha ${rankPosicao}`}
+                                            className="medal"
+                                        />
+                                    )}
 
-                            {/* XP */}
-                            <span className="xp">{xp} XP</span>
-                        </li>
-                    );
-                })}
-            </ol>
-        </div>
+                                    <img
+                                        src={user.photoURL}
+                                        alt={user.displayName}
+                                        className="avatar"
+                                    />
+
+                                    <span
+                                        className="name"
+                                        style={{
+                                            color: nameColors[rankPosicao] || "#22c55e",
+                                            fontWeight: rankPosicao <= 3 ? "bold" : "normal",
+                                        }}
+                                    >
+                                        {user.displayName}
+                                    </span>
+                                </div>
+
+                                {/* Direita: Rank/Nível + XP */}
+                                <div className="top15-right">
+                                    <div className="rank-info">
+                                        <strong className={`rank-${rankAtual}`}>Rank {rankAtual}</strong>
+                                        <span>•</span>
+                                        <strong className={`rank-${rankAtual}`}>Nível {nivel}</strong>
+                                    </div>
+                                    <span className="xp">{user.xp} XP</span>
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ol>
+            </div>
+
+            {usuarioSelecionado && (
+                <UserProfileCard
+                    userId={usuarioSelecionado}
+                    onClose={() => setUsuarioSelecionado(null)}
+                />
+            )}
+        </>
     );
 }

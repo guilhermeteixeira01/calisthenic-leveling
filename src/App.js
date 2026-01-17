@@ -20,6 +20,7 @@ import TaskItem from './components/TaskItem';
 import ProgressBar from './components/ProgressBar';
 import StartButton from './components/StartButton';
 import Notification from './components/Notification';
+import Upgrades from './components/Upgrade';
 
 import Top15 from './components/Top15';
 
@@ -295,7 +296,7 @@ function App() {
             )}
 
             {/* ⚡ UPGRADES */}
-            {telaAtiva === "upgrades" && <h2>⚡ Upgrades (em breve)</h2>}
+            {telaAtiva === "upgrades" && <Upgrades user={user} />}
 
             {/* 🏆 TOP 15 */}
             {telaAtiva === "top15" && <Top15 />}

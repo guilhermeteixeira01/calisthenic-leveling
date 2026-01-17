@@ -8,10 +8,10 @@
 .day {
     flex: 1 1 200px;
     border: 2px solid #7f5af0;
-    border-radius: 5px;
+    border-radius: 20px;
     padding: 10px;
     min-width: 200px;
-    background-color: #1e1e1e;
+    background: var(--bg);
     color: #fff;
     transition: border-color 0.3s;
 }

@@ -14,7 +14,7 @@
     font-size: 1rem;
     border-radius: 8px;
     border: 2px solid #7f5af0;
-    background-color: #11162a;
+    background: var(--bg);
     color: #eaeaea;
     transition: border-color 0.3s, box-shadow 0.3s;
     font-family: 'Inter', sans-serif;

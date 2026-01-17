@@ -55,27 +55,49 @@
 }
 
 /* Wrapper do avatar */
+/* Wrapper do avatar */
 .avatar-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 180px;
-    /* ajuste conforme seu JSX */
     height: 180px;
     cursor: pointer;
     border-radius: 50%;
     overflow: hidden;
-    /* ESSENCIAL para o overlay */
 }
 
 /* Avatar */
 .avatar {
+    display: block;
+    /* IMPORTANTE */
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    animation: Boxshadow 5s ease infinite, borders 5s ease infinite;
     object-fit: cover;
+    animation: Boxshadow 5s ease infinite, borders 5s ease infinite;
     transition: transform 0.3s ease, filter 0.3s ease;
     z-index: 1;
 }
+
+
+.avatarusersidebar {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100%;
+    min-height: 100%;
+    max-width: none;
+    max-height: none;
+
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+
+    animation: Boxshadow 5s ease infinite, borders 5s ease infinite;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
 
 /* Overlay escuro */
 .avatar-wrapper::before {
@@ -427,5 +449,18 @@
     to {
         transform: translateY(0) scale(1);
         opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .avatar-wrapper {
+        margin: 0 auto;
+        width: 120px;
+        height: 120px;
+    }
+
+    .avatar {
+        width: 100%;
+        height: 100%;
     }
 }

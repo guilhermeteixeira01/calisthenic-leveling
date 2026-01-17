@@ -10,6 +10,8 @@
 @import url('css/weeklyplanner.css');
 @import url('css/top15.css');
 @import url('css/mission.css');
+@import url('css/Upgrades.css');
+@import url('css/UserProfileCard.css');
 
 ::-webkit-scrollbar {
     background: linear-gradient(to top, black, rgb(85, 85, 85), black);
@@ -243,11 +245,6 @@ header h1::after {
         animation: none;
     }
 
-    .avatar {
-        animation: none;
-        border: 2px solid #7f5af0;
-    }
-
     .task-list {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         padding: 10px;
@@ -295,11 +292,6 @@ header h1::after {
         animation: none;
     }
 
-    .avatar {
-        animation: none;
-        border: 2px solid #7f5af0;
-    }
-
     .start-button {
         padding: 0.6rem 1.5rem;
         font-size: 0.9rem;
@@ -329,7 +321,6 @@ header h1::after {
 
     .top15-item {
         flex-direction: column;
-        /* organiza em coluna */
         align-items: flex-start;
         padding: 10px;
     }

@@ -1,0 +1,135 @@
+/* =========================
+   OVERLAY
+========================= */
+.profile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+/* =========================
+   CARD PRINCIPAL
+========================= */
+.profile-card {
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 28px 24px;
+    width: 340px;
+    color: #e5e7eb;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 25px rgba(128, 0, 255, 0.5);
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+.profile-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+    border: 2px solid #8122ee;
+    box-shadow: 0 0 16px rgba(129, 34, 238, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 24px rgba(129, 34, 238, 0.9);
+}
+
+/* =========================
+   ATRIBUTOS (GRID)
+========================= */
+.profile-atributos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.atributo {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 16px rgba(129, 34, 238, 0.5);
+    backdrop-filter: blur(6px);
+}
+
+/* =========================
+   NOME DO ATRIBUTO / VALOR
+========================= */
+.atributo span:first-child {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.atributo span:last-child {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+/* =========================
+   BOTÃO DE FECHAR
+========================= */
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #8122ee, #38bdf8);
+    border: none;
+    color: #020617;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(129, 34, 238, 0.6);
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 20px rgba(129, 34, 238, 0.8);
+}
+
+.close-btn:active {
+    transform: scale(0.95);
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+@media (max-width: 480px) {
+    .profile-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .profile-atributos {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+}

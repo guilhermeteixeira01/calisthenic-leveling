@@ -12,7 +12,6 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(160deg, #0b0b0f, #16162a, #0b0b0f);
     border-radius: 20px;
     padding: 26px;
     color: #fff;
@@ -42,7 +41,7 @@
     content: "";
     position: absolute;
     inset: 2px;
-    background: linear-gradient(180deg, #0d0d0d, #1a1a1a);
+    background: var(--bg);
     border-radius: 18px;
     z-index: 1;
 }
