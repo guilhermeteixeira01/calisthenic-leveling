@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase"; // ajuste o caminho se necessário
 
 /* =========================
    CONFIGURAÇÃO
@@ -22,6 +24,9 @@ const XP_DIA_MAX = 150;
 
 const XP_SEMANA_MIN = 200;
 const XP_SEMANA_MAX = 500;
+
+// ⚠️ substitua pelo UID real quando usar Firebase Auth
+const userId = "demo-user";
 
 /* =========================
    COMPONENTE
@@ -88,28 +93,34 @@ export default function Missoes({ tasks = [], onComplete }) {
     }
 
     /* =========================
-       INIT (MISSÕES SEMPRE EXISTEM)
+       INIT (FIREBASE)
     ========================= */
 
     useEffect(() => {
-        const hoje = new Date();
-        const dataHoje = hoje.toLocaleDateString("sv-SE");
-        const semana = `${dataHoje.slice(0, 8)}W`;
+        async function init() {
+            const hoje = new Date();
+            const dataHoje = hoje.toLocaleDateString("sv-SE");
+            const semana = `${dataHoje.slice(0, 8)}W`;
 
-        // SEMPRE sorteia, mesmo sem exercícios
-        setMissaoDia(
-            MISSOES_DIA[Math.floor(Math.random() * MISSOES_DIA.length)]
-        );
+            setMissaoDia(
+                MISSOES_DIA[Math.floor(Math.random() * MISSOES_DIA.length)]
+            );
 
-        setMissaoSemana(
-            MISSOES_SEMANA[Math.floor(Math.random() * MISSOES_SEMANA.length)]
-        );
+            setMissaoSemana(
+                MISSOES_SEMANA[Math.floor(Math.random() * MISSOES_SEMANA.length)]
+            );
 
-        setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
-        setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
+            setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
+            setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
 
-        setResgatadaDia(localStorage.getItem(`missao-dia-${dataHoje}`) === "true");
-        setResgatadaSemana(localStorage.getItem(`missao-semana-${semana}`) === "true");
+            const refDia = doc(db, "missoes", userId, "resgates", `dia_${dataHoje}`);
+            const refSemana = doc(db, "missoes", userId, "resgates", `semana_${semana}`);
+
+            setResgatadaDia((await getDoc(refDia)).exists());
+            setResgatadaSemana((await getDoc(refSemana)).exists());
+        }
+
+        init();
     }, []);
 
     /* =========================
@@ -128,7 +139,7 @@ export default function Missoes({ tasks = [], onComplete }) {
     }, []);
 
     /* =========================
-       CONCLUSÃO (SEGURO)
+       CONCLUSÃO
     ========================= */
 
     function concluida(m) {
@@ -155,19 +166,37 @@ export default function Missoes({ tasks = [], onComplete }) {
         }
     }
 
-    function resgatar(tipo) {
+    /* =========================
+       RESGATAR (FIREBASE)
+    ========================= */
+
+    async function resgatar(tipo) {
         const hoje = new Date().toLocaleDateString("sv-SE");
         const semana = `${hoje.slice(0, 8)}W`;
 
         if (tipo === "dia" && concluida(missaoDia) && !resgatadaDia) {
+            const ref = doc(db, "missoes", userId, "resgates", `dia_${hoje}`);
+
+            await setDoc(ref, {
+                tipo: "dia",
+                xp: xpDia,
+                criadoEm: serverTimestamp()
+            });
+
             onComplete?.(xpDia);
-            localStorage.setItem(`missao-dia-${hoje}`, "true");
             setResgatadaDia(true);
         }
 
         if (tipo === "semana" && concluida(missaoSemana) && !resgatadaSemana) {
+            const ref = doc(db, "missoes", userId, "resgates", `semana_${semana}`);
+
+            await setDoc(ref, {
+                tipo: "semana",
+                xp: xpSemana,
+                criadoEm: serverTimestamp()
+            });
+
             onComplete?.(xpSemana);
-            localStorage.setItem(`missao-semana-${semana}`, "true");
             setResgatadaSemana(true);
         }
     }
@@ -195,7 +224,6 @@ export default function Missoes({ tasks = [], onComplete }) {
                             ? "Resgatar XP"
                             : "Em progresso"}
                 </button>
-
 
                 {totalHoje() === 0 && (
                     <small className="missao-aviso">
