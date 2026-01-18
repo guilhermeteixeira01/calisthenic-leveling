@@ -277,6 +277,10 @@ header h1::after {
         animation: none;
         border: 2px solid #7f5af0;
     }
+    .notification {
+        position: fixed;
+        right: 8px;
+    }
 }
 
 
