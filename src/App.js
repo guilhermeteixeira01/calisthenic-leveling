@@ -21,6 +21,7 @@ import ProgressBar from './components/ProgressBar';
 import StartButton from './components/StartButton';
 import Notification from './components/Notification';
 import Upgrades from './components/Upgrade';
+import UserProfileCard from "./components/UserProfileCard";
 
 import Top15 from './components/Top15';
 
@@ -33,6 +34,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [started, setStarted] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [profileUserId, setProfileUserId] = useState(null);
 
   // 🔥 CONTROLE DE TELAS
   const [telaAtiva, setTelaAtiva] = useState("treino");
@@ -228,85 +230,104 @@ function App() {
   // 🌟 APP
   return (
     <div className="App">
-      {!started && (
-        <div className="start-container">
-          <StartButton onClick={handleStart} />
-        </div>
+      {/* 🔥 MODAL DE PERFIL (PRIORIDADE MÁXIMA) */}
+      {profileUserId && (
+        <UserProfileCard
+          userId={profileUserId}
+          onClose={() => setProfileUserId(null)}
+        />
       )}
 
-      {started && (
-        <div className="container">
-          <UserSidebar
-            user={user}
-            onLogout={logout}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            onOpenTreino={() => abrirTela("treino")}
-            onOpenMissoes={() => abrirTela("missoes")}
-            onOpenUpgrades={() => abrirTela("upgrades")}
-            onOpenTop15={() => abrirTela("top15")}
-          />
+      {/* 🔥 APP NORMAL (SÓ SE NÃO TIVER MODAL) */}
+      {!profileUserId && (
+        <>
+          {!started && (
+            <div className="start-container">
+              <StartButton onClick={handleStart} />
+            </div>
+          )}
 
-          <div className="container-conteudo">
-            <header>
-              <h1>CALISTHENTIC BRAZ</h1>
-            </header>
+          {!started && (
+            <div className="start-container">
+              <StartButton onClick={handleStart} />
+            </div>
+          )}
 
-            {/* 🏋️ TREINO SEMANAL */}
-            {telaAtiva === "treino" && (
-              <>
-                <TaskForm addTask={addTask} diasSemana={diasSemana} />
-                <ProgressBar tasks={tasks} />
-
-                <div className="week">
-                  {diasSemana.map(day => {
-                    const dayTasks = tasks.filter(t => t.day === day);
-                    const allDone =
-                      dayTasks.length > 0 &&
-                      dayTasks.every(t => t.done);
-
-                    return (
-                      <div
-                        key={day}
-                        className={`day ${allDone ? "day-complete" : ""}`}
-                      >
-                        <h2>{day}</h2>
-                        {dayTasks.length === 0 && <p>Nenhum exercício</p>}
-                        {dayTasks.map(task => (
-                          <TaskItem
-                            key={task.id}
-                            task={task}
-                            toggleDone={toggleDone}
-                            removeTask={removeTask}
-                          />
-                        ))}
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-
-            {/* 📜 MISSÕES */}
-            {telaAtiva === "missoes" && (
-              <Missoes
-                tasks={tasks}
-                onComplete={handleMissaoCompleta}
+          {started && (
+            <div className="container">
+              <UserSidebar
+                user={user}
+                onLogout={logout}
+                menuOpen={menuOpen}
+                setMenuOpen={setMenuOpen}
+                onOpenTreino={() => abrirTela("treino")}
+                onOpenMissoes={() => abrirTela("missoes")}
+                onOpenUpgrades={() => abrirTela("upgrades")}
+                onOpenTop15={() => abrirTela("top15")}
               />
-            )}
 
-            {/* ⚡ UPGRADES */}
-            {telaAtiva === "upgrades" && <Upgrades user={user} />}
+              <div className="container-conteudo">
+                <header>
+                  <h1>CALISTHENTIC BRAZ</h1>
+                </header>
 
-            {/* 🏆 TOP 15 */}
-            {telaAtiva === "top15" && <Top15 />}
+                {/* 🏋️ TREINO SEMANAL */}
+                {telaAtiva === "treino" && (
+                  <>
+                    <TaskForm addTask={addTask} diasSemana={diasSemana} />
+                    <ProgressBar tasks={tasks} />
 
-            <Notification />
-          </div>
-        </div>
-      )
-      }
-    </div >
+                    <div className="week">
+                      {diasSemana.map(day => {
+                        const dayTasks = tasks.filter(t => t.day === day);
+                        const allDone =
+                          dayTasks.length > 0 &&
+                          dayTasks.every(t => t.done);
+
+                        return (
+                          <div
+                            key={day}
+                            className={`day ${allDone ? "day-complete" : ""}`}
+                          >
+                            <h2>{day}</h2>
+                            {dayTasks.length === 0 && <p>Nenhum exercício</p>}
+                            {dayTasks.map(task => (
+                              <TaskItem
+                                key={task.id}
+                                task={task}
+                                toggleDone={toggleDone}
+                                removeTask={removeTask}
+                              />
+                            ))}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+
+                {/* 📜 MISSÕES */}
+                {telaAtiva === "missoes" && (
+                  <Missoes
+                    tasks={tasks}
+                    onComplete={handleMissaoCompleta}
+                  />
+                )}
+
+                {/* ⚡ UPGRADES */}
+                {telaAtiva === "upgrades" && <Upgrades user={user} />}
+
+                {/* 🏆 TOP 15 */}
+                {telaAtiva === "top15" && (<Top15 onOpenProfile={setProfileUserId} />)}
+
+
+                <Notification />
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 }
 
