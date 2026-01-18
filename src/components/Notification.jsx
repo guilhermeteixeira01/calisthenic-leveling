@@ -75,10 +75,11 @@ export default function Notification() {
                 <div
                     key={n.id}
                     className="notification"
-                    style={{ borderLeft: `4px solid ${rankColors[n.rank] || "#fff"}` }}
                 >
-                    {n.message}
+                    <span className="notification-dot" />
+                    <span className="notification-text">{n.message}</span>
                 </div>
+
             ))}
         </div>
     );
