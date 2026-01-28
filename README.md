@@ -1,28 +1,28 @@
 # Calisthenic Leveling
 
-Calisthenic Leveling é uma aplicação web interativa que combina **treino de calistenia** com um sistema de **progressão gamificado** inspirado em games. Complete quests de exercícios, suba de nível e veja notificações de conquistas com efeitos visuais neon.
+Calisthenic Leveling is an interactive web application that combines **calisthenics training** with a gamified progression system inspired by games. Complete exercise quests, level up, and see achievement notifications with neon visual effects.
 
 ---
 
-## 🌟 Recursos
+## 🌟 Features
 
-- **Sistema de Quests:** Crie e complete exercícios como Pull-ups, Push-ups, Squats, e muito mais.
-- **Top 15 Missões:** Complete as missões mais desafiadoras da semana e veja seu ranking entre os melhores jogadores.
-- **Upgrades de Habilidades:** Melhore suas habilidades com bônus especiais conforme você evolui e completa desafios.
-- **Gamificação:** Suba de nível com ranks S, A, B, C, D e E, cada rank com cores distintas.
-- **Notificações Aleatórias:** Jogadores ganhando XP aparecem na tela com efeitos neon pulsantes.
-- **Áudio Ambiente:** Música de treino tocando em loop ao iniciar a sessão.
-- **Design Futurista:** Botões e notificações com efeitos neon, sombras e animações pulsantes.
-- **Responsivo:** Compatível com desktop e dispositivos móveis.
+- **Quest System**: Create and complete exercises such as Pull-ups, Push-ups, Squats, and much more.
+- **Top 15 Missions**: Complete the most challenging missions of the week and see your ranking among the top players.
+- **Skill Upgrades**: Improve your abilities with special bonuses as you evolve and complete challenges.
+- **Gamification**: Level up with ranks S, A, B, C, D, and E, each rank with distinct colors.
+- **Random Notifications**: Players gaining XP appear on the screen with pulsating neon effects.
+- **Ambient Audio**: Workout music playing on loop when starting the session.
+- **Futuristic Design**: Buttons and notifications with neon effects, shadows, and pulsating animations.
+- **Responsive**: Compatible with desktop and mobile devices..
 
 ---
 
-## 🎮 Tecnologias Utilizadas
+## 🎮 Technologies Used
 
-- React.js  
-- CSS3 com animações e efeitos neon  
-- `gh-pages` para deploy no GitHub Pages  
-- HTML5 e JavaScript moderno (ES6+)
+- **React.js**
+- **CSS3** with animations and neon effects
+- **gh-pages** for deployment on GitHub Pages
+- **HTML5** and modern **JavaScript (ES6+)**
 
 ---
 
