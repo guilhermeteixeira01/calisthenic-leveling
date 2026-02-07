@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/calisthenic-leveling/static/css/main.00f5a8ef.css",
-    "main.js": "/calisthenic-leveling/static/js/main.155c558e.js",
+    "main.css": "/calisthenic-leveling/static/css/main.025017ab.css",
+    "main.js": "/calisthenic-leveling/static/js/main.de2f6b13.js",
     "static/js/453.1426e88e.chunk.js": "/calisthenic-leveling/static/js/453.1426e88e.chunk.js",
     "static/media/3.png": "/calisthenic-leveling/static/media/3.c74d53aa07975cac33e0.png",
     "static/media/1.png": "/calisthenic-leveling/static/media/1.ca9f7affa15e39e94e8c.png",
@@ -12,12 +12,12 @@
     "static/media/foco.svg": "/calisthenic-leveling/static/media/foco.4db1b0b4ce68daac86c2950b04d18eed.svg",
     "static/media/carisma.svg": "/calisthenic-leveling/static/media/carisma.bd6225ce57cb5f49976e5a2c9d1f2737.svg",
     "static/media/vitalidade.svg": "/calisthenic-leveling/static/media/vitalidade.beed13d35cecf7bbc8a1c4334e2d524f.svg",
-    "main.00f5a8ef.css.map": "/calisthenic-leveling/static/css/main.00f5a8ef.css.map",
-    "main.155c558e.js.map": "/calisthenic-leveling/static/js/main.155c558e.js.map",
+    "main.025017ab.css.map": "/calisthenic-leveling/static/css/main.025017ab.css.map",
+    "main.de2f6b13.js.map": "/calisthenic-leveling/static/js/main.de2f6b13.js.map",
     "453.1426e88e.chunk.js.map": "/calisthenic-leveling/static/js/453.1426e88e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.00f5a8ef.css",
-    "static/js/main.155c558e.js"
+    "static/css/main.025017ab.css",
+    "static/js/main.de2f6b13.js"
   ]
 }
