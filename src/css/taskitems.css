@@ -44,6 +44,11 @@
     justify-content: flex-end;
 }
 
+button.complete.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .complete {
     background: transparent;
     border: 2px solid var(--purple, #7f5af0);

@@ -1,22 +1,14 @@
 export default function TaskItem({ task, toggleDone, removeTask }) {
 
-    // 📅 Dias da semana (índice real do JS)
-    const diasSemana = [
-        "domingo",
-        "segunda",
-        "terca",
-        "quarta",
-        "quinta",
-        "sexta",
-        "sabado"
-    ];
+    const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
-    // 🗓️ Data real de hoje (YYYY-MM-DD)
     const hoje = new Date();
     const hojeData = hoje.toISOString().split("T")[0];
-    const hojeDia = diasSemana[hoje.getDay()];
 
-    // 🧼 Normaliza texto (acentos, feira, case)
+    // Ajusta índice para segunda = 0
+    const hojeDiaIndex = (hoje.getDay() + 6) % 7;
+    const hojeDia = diasSemana[hojeDiaIndex];
+
     function normalizarDia(texto = "") {
         return texto
             .toLowerCase()
@@ -29,14 +21,10 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
     const diaTask = normalizarDia(task.day);
     const diaHoje = normalizarDia(hojeDia);
 
-    // ✅ Dia correto?
     const diaCorreto = diaTask === diaHoje;
+    const jaConcluidaHoje = task.completedAt === hojeData || task.done === true;
 
-    // ⛔ Conclusão (NOVO + LEGADO)
-    const jaConcluidaHoje =
-        task.completedAt === hojeData || task.done === true;
-
-    // 🔓 Pode completar hoje?
+    // 🔓 Botão sempre habilitado, mas visualmente muda se não pode completar
     const podeCompletarHoje = diaCorreto && !jaConcluidaHoje;
 
     function handleToggle() {
@@ -50,7 +38,6 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
             return;
         }
 
-        // 🔥 Marca como concluída HOJE
         toggleDone(task.id, hojeData);
     }
 
@@ -58,16 +45,13 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
         <div className={`card ${jaConcluidaHoje ? "done" : ""}`}>
             <div className="card-content">
                 <h2>{task.name}</h2>
-                <p>
-                    {task.series} séries • {task.reps}
-                </p>
+                <p>{task.series} séries • {task.reps}</p>
             </div>
 
             <div className="actions">
                 <button
-                    className="complete"
+                    className={`complete ${!podeCompletarHoje ? "disabled" : ""}`}
                     onClick={handleToggle}
-                    disabled={!podeCompletarHoje}
                 >
                     {jaConcluidaHoje
                         ? "QUEST COMPLETE"

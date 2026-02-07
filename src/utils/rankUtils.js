@@ -30,7 +30,6 @@ export function calcularProgressoXp(xpTotal = 0) {
     }
 
     // === RANK S (XP ACIMA DO TOTAL DOS RANKS) ===
-    const xpAntesDoS = acumulado - XP_POR_RANK.S;
     const xpExtra = xpTotal - acumulado;
 
     return {

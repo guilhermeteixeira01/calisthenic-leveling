@@ -10,13 +10,18 @@ export default function Register() {
 
     const handleRegister = async () => {
         try {
-            // Verifica se tem pelo menos Nome e Sobrenome
             if (!name.includes(" ")) {
                 alert("Digite Nome e Sobrenome corretamente.");
                 return;
             }
 
-            // Verifica se o displayName já existe no Firestore
+            // Cria usuário no Auth primeiro
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+            // Atualiza displayName
+            await updateProfile(userCredential.user, { displayName: name });
+
+            // Verifica se displayName já existe no Firestore
             const q = query(collection(db, "usuarios"), where("displayName", "==", name));
             const snapshot = await getDocs(q);
 
@@ -25,18 +30,12 @@ export default function Register() {
                 return;
             }
 
-            // Cria usuário no Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-            // Atualiza displayName no Auth
-            await updateProfile(userCredential.user, { displayName: name });
-
             // Salva usuário no Firestore
             await setDoc(doc(db, "usuarios", userCredential.user.uid), {
                 displayName: name,
-                email: email,
+                email,
                 xp: 0,
-                photoURL: userCredential.user.photoURL || null,
+                photoURL: userCredential.user.photoURL || null
             });
 
             alert("Registrado com sucesso!");
