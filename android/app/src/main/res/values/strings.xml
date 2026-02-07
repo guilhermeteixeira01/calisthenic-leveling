@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Calisthenic Leveling</string>
-    <string name="title_activity_main">Calisthenic Leveling</string>
-    <string name="package_name">com.teixeira.calisthenicleveling</string>
-    <string name="custom_url_scheme">com.teixeira.calisthenicleveling</string>
-</resources>
