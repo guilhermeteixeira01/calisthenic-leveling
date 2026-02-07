@@ -1,36 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 
-/* =========================
-   CONFIGURAÇÃO
-========================= */
-
-const MISSOES_DIA = [
-    { texto: "Conclua pelo menos 1 exercício hoje", tipo: "tasks_dia", valor: 1 },
-    { texto: "Conclua 3 exercícios hoje", tipo: "tasks_dia", valor: 3 },
-    { texto: "Conclua todos os exercícios do dia", tipo: "dia_completo", valor: 0 }
-];
-
-const MISSOES_SEMANA = [
-    { texto: "Conclua 5 exercícios na semana", tipo: "tasks_semana", valor: 5 },
-    { texto: "Conclua 10 exercícios na semana", tipo: "tasks_semana", valor: 10 },
-    { texto: "Conclua 3 dias completos na semana", tipo: "dias_completos", valor: 3 },
-    { texto: "Conclua todos os dias da semana", tipo: "semana_completa", valor: 7 }
-];
-
-const XP_DIA_MIN = 50;
-const XP_DIA_MAX = 150;
-const XP_SEMANA_MIN = 200;
-const XP_SEMANA_MAX = 500;
-
-const userId = "demo-user";
-
-/* =========================
-   COMPONENTE
-========================= */
-
-export default function Missoes({ tasks = [], onComplete }) {
+export default function Missoes({ tasks = [], user, onComplete }) {
     const [missaoDia, setMissaoDia] = useState(null);
     const [missaoSemana, setMissaoSemana] = useState(null);
     const [xpDia, setXpDia] = useState(0);
@@ -38,10 +10,25 @@ export default function Missoes({ tasks = [], onComplete }) {
     const [resgatadaDia, setResgatadaDia] = useState(false);
     const [resgatadaSemana, setResgatadaSemana] = useState(false);
 
-    /* =========================
-       DATA
-    ========================= */
+    const MISSOES_DIA = [
+        { texto: "Conclua pelo menos 1 exercício hoje", tipo: "tasks_dia", valor: 1 },
+        { texto: "Conclua 3 exercícios hoje", tipo: "tasks_dia", valor: 3 },
+        { texto: "Conclua todos os exercícios do dia", tipo: "dia_completo", valor: 0 }
+    ];
 
+    const MISSOES_SEMANA = [
+        { texto: "Conclua 5 exercícios na semana", tipo: "tasks_semana", valor: 5 },
+        { texto: "Conclua 10 exercícios na semana", tipo: "tasks_semana", valor: 10 },
+        { texto: "Conclua 3 dias completos na semana", tipo: "dias_completos", valor: 3 },
+        { texto: "Conclua todos os dias da semana", tipo: "semana_completa", valor: 7 }
+    ];
+
+    const XP_DIA_MIN = 50;
+    const XP_DIA_MAX = 150;
+    const XP_SEMANA_MIN = 200;
+    const XP_SEMANA_MAX = 500;
+
+    // ======== DATA ========
     function diaHoje() {
         const dias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
         return dias[new Date().getDay()];
@@ -51,13 +38,17 @@ export default function Missoes({ tasks = [], onComplete }) {
         return tasks.filter(t => t.day === diaHoje());
     }
 
-    /* =========================
-       CONTADORES
-    ========================= */
+    function progressoHoje() {
+        return tasksHoje().filter(t => t.done).length;
+    }
 
-    const progressoHoje = () => tasksHoje().filter(t => t.done).length;
-    const totalHoje = () => tasksHoje().length;
-    const progressoSemana = () => tasks.filter(t => t.done).length;
+    function totalHoje() {
+        return tasksHoje().length;
+    }
+
+    function progressoSemana() {
+        return tasks.filter(t => t.done).length;
+    }
 
     function diasCompletosSemana() {
         const dias = {};
@@ -65,42 +56,38 @@ export default function Missoes({ tasks = [], onComplete }) {
             if (!dias[t.day]) dias[t.day] = [];
             dias[t.day].push(t.done);
         });
-        return Object.values(dias).filter(
-            lista => lista.length > 0 && lista.every(Boolean)
-        ).length;
+        return Object.values(dias).filter(lista => lista.length > 0 && lista.every(Boolean)).length;
     }
 
-    /* =========================
-       INIT
-    ========================= */
-
+    // ======== INIT ========
     useEffect(() => {
+        if (!user) return;
+
         async function init() {
             const hoje = new Date();
             const dataHoje = hoje.toLocaleDateString("sv-SE");
             const semana = getSemanaISO(hoje);
 
-            // 🔒 missões determinísticas
+            // Missões aleatórias determinísticas
             setMissaoDia(seededPick(MISSOES_DIA, dataHoje));
             setMissaoSemana(seededPick(MISSOES_SEMANA, semana));
 
+            // XP aleatório determinístico
             setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
             setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
 
-            const refDia = doc(db, "missoes", userId, "resgates", `dia_${dataHoje}`);
-            const refSemana = doc(db, "missoes", userId, "resgates", `semana_${semana}`);
+            // Verifica se já resgatou
+            const refDia = doc(db, "missoes", user.uid, "resgates", `dia_${dataHoje}`);
+            const refSemana = doc(db, "missoes", user.uid, "resgates", `semana_${semana}`);
 
             setResgatadaDia((await getDoc(refDia)).exists());
             setResgatadaSemana((await getDoc(refSemana)).exists());
         }
 
         init();
-    }, []);
+    }, [tasks, user]);
 
-    /* =========================
-       RESET DIÁRIO
-    ========================= */
-
+    // ======== RESET DIÁRIO ========
     useEffect(() => {
         const agora = new Date();
         const amanha = new Date();
@@ -109,10 +96,7 @@ export default function Missoes({ tasks = [], onComplete }) {
         return () => clearTimeout(timer);
     }, []);
 
-    /* =========================
-       CONCLUSÃO
-    ========================= */
-
+    // ======== CONCLUSAO ========
     function concluida(m) {
         if (!m) return false;
 
@@ -132,38 +116,40 @@ export default function Missoes({ tasks = [], onComplete }) {
         }
     }
 
-    /* =========================
-       RESGATAR
-    ========================= */
-
+    // ======== RESGATAR ========
     async function resgatar(tipo) {
+        if (!user) return;
+
         const hoje = new Date();
         const dataHoje = hoje.toLocaleDateString("sv-SE");
         const semana = getSemanaISO(hoje);
 
+        const userRef = doc(db, "usuarios", user.uid);
+        const userSnap = await getDoc(userRef);
+        const xpAtual = userSnap.data()?.xp || 0;
+
         if (tipo === "dia" && concluida(missaoDia) && !resgatadaDia) {
             await setDoc(
-                doc(db, "missoes", userId, "resgates", `dia_${dataHoje}`),
+                doc(db, "missoes", user.uid, "resgates", `dia_${dataHoje}`),
                 { tipo: "dia", xp: xpDia, criadoEm: serverTimestamp() }
             );
-            onComplete?.(xpDia);
+            await updateDoc(userRef, { xp: xpAtual + xpDia });
             setResgatadaDia(true);
+            onComplete?.(xpDia);
         }
 
         if (tipo === "semana" && concluida(missaoSemana) && !resgatadaSemana) {
             await setDoc(
-                doc(db, "missoes", userId, "resgates", `semana_${semana}`),
+                doc(db, "missoes", user.uid, "resgates", `semana_${semana}`),
                 { tipo: "semana", xp: xpSemana, criadoEm: serverTimestamp() }
             );
-            onComplete?.(xpSemana);
+            await updateDoc(userRef, { xp: xpAtual + xpSemana });
             setResgatadaSemana(true);
+            onComplete?.(xpSemana);
         }
     }
 
-    /* =========================
-       RENDER
-    ========================= */
-
+    // ======== RENDER ========
     return (
         <div className="missoes-container">
             <Missao
@@ -190,12 +176,11 @@ export default function Missoes({ tasks = [], onComplete }) {
 /* =========================
    COMPONENTES / UTILS
 ========================= */
-
 function Missao({ titulo, missao, xp, concluida, resgatada, onClick }) {
     return (
         <div className="missao-card">
             <h2>{titulo}</h2>
-            <p>{missao?.texto}</p>
+            <p>{missao?.texto || "Carregando..."}</p>
             <span>+{xp} XP</span>
 
             <button

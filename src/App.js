@@ -11,7 +11,6 @@ import UserSidebar from './components/UserSidebar';
 import TaskForm from './components/TaskForm';
 import TaskItem from './components/TaskItem';
 import ProgressBar from './components/ProgressBar';
-import StartButton from './components/StartButton';
 import Notification from './components/Notification';
 import Upgrades from './components/Upgrade';
 import UserProfileCard from "./components/UserProfileCard";
@@ -22,6 +21,26 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 
 function App() {
+  // Função para obter o domingo da semana atual
+  function getDomingoAtual() {
+    const hoje = new Date();
+    const dia = hoje.getDay(); // 0 = domingo
+    const diff = hoje.getDate() - dia;
+    const domingo = new Date(hoje.setDate(diff));
+    domingo.setHours(0, 0, 0, 0);
+    return domingo.toISOString().split("T")[0];
+  }
+
+  useEffect(() => {
+    const domingoAtual = getDomingoAtual();
+    const domingoSalvo = localStorage.getItem("domingoAtual");
+
+    if (domingoSalvo !== domingoAtual) {
+      localStorage.setItem("domingoAtual", domingoAtual);
+      window.location.reload();
+    }
+  }, []);
+
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [started, setStarted] = useState(false);
@@ -34,9 +53,13 @@ function App() {
 
   // 🔐 Observa autenticação
   useEffect(() => {
-    onAuthStateChanged(auth, (usuario) => {
+    onAuthStateChanged(auth, async (usuario) => {
+      if (!usuario) return;
+
       setUser(usuario);
-      if (usuario) carregarTasks(usuario.uid);
+
+      await verificarResetSemanal(usuario.uid);
+      carregarTasks(usuario.uid);
     });
   }, []);
 
@@ -72,39 +95,64 @@ function App() {
     }
   }
 
-  async function toggleDone(id) {
+  async function toggleDone(id, hojeData) {
     if (!user || !id) return;
     const task = tasks.find(t => t.id === id);
     if (!task) return;
-    const updatedTasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+    const novoDone = !task.done;
+    const updatedTasks = tasks.map(t => t.id === id ? { ...t, done: novoDone, completedAt: novoDone ? hojeData : null } : t);
     setTasks(updatedTasks);
 
     try {
       const taskRef = doc(db, "usuarios", user.uid, "tasks", id);
-      await updateDoc(taskRef, { done: !task.done });
+      await updateDoc(taskRef, {
+        done: novoDone,
+        completedAt: novoDone ? hojeData : null
+      });
 
-      // Verifica dia concluído
-      const dayTasks = updatedTasks.filter(t => t.day === task.day);
-      if (dayTasks.every(t => t.done)) {
-        const diaRef = doc(db, "usuarios", user.uid, "diasConcluidos", task.day);
-        const diaSnap = await getDoc(diaRef);
-        if (!diaSnap.exists() || !diaSnap.data().xpRecebido) {
-          await setDoc(diaRef, { concluido: true, xpRecebido: true, data: new Date() });
-          const userRef = doc(db, "usuarios", user.uid);
-          await updateDoc(userRef, { xp: increment(25) });
-          console.log(`+25 XP concedido pelo dia ${task.day}`);
-        }
-      }
+      console.log(`Task ${id} atualizada: done=${novoDone}, completedAt=${novoDone ? hojeData : "null"}`);
     } catch (error) {
       console.error("Erro ao atualizar task:", error);
     }
   }
 
+
   const logout = () => {
     signOut(auth);
     setTasks([]);
     setStarted(false);
+    window.location.reload()
   };
+
+  async function verificarResetSemanal(uid) {
+    const userRef = doc(db, "usuarios", uid);
+    const userSnap = await getDoc(userRef);
+
+    const domingoAtual = getDomingoAtual();
+    const lastReset = userSnap.data()?.lastWeeklyReset;
+
+    // Já resetou esta semana
+    if (lastReset === domingoAtual) return;
+
+    console.log("🔄 Reset semanal iniciado");
+
+    const tasksSnap = await getDocs(
+      collection(db, "usuarios", uid, "tasks")
+    );
+
+    for (const task of tasksSnap.docs) {
+      await updateDoc(task.ref, {
+        done: false,
+        completedAt: null,
+      });
+    }
+
+    await updateDoc(userRef, {
+      lastWeeklyReset: domingoAtual,
+    });
+
+    console.log("✅ Reset semanal concluído");
+  }
 
   if (!user) {
     return (
@@ -138,50 +186,47 @@ function App() {
 
       {!profileUserId && (
         <>
-          {!started && <StartButton onClick={() => setStarted(true)} />}
-          {started && (
-            <div className="container">
-              <UserSidebar
-                user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
-                onOpenTreino={() => setTelaAtiva("treino")}
-                onOpenMissoes={() => setTelaAtiva("missoes")}
-                onOpenUpgrades={() => setTelaAtiva("upgrades")}
-                onOpenTop15={() => setTelaAtiva("top15")}
-                onLogout={logout}
-              />
-              <div className="container-conteudo">
-                <header><h1>CALISTHENTIC BRAZ</h1></header>
+          <div className="container">
+            <UserSidebar
+              user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
+              onOpenTreino={() => setTelaAtiva("treino")}
+              onOpenMissoes={() => setTelaAtiva("missoes")}
+              onOpenUpgrades={() => setTelaAtiva("upgrades")}
+              onOpenTop15={() => setTelaAtiva("top15")}
+              onLogout={logout}
+            />
+            <div className="container-conteudo">
+              <header><h1>CALISTHENTIC BRAZ</h1></header>
 
-                {telaAtiva === "treino" && (
-                  <>
-                    <TaskForm addTask={addTask} diasSemana={diasSemana} />
-                    <ProgressBar tasks={tasks} />
-                    <div className="week">
-                      {diasSemana.map(day => {
-                        const dayTasks = tasks.filter(t => t.day === day);
-                        const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
-                        return (
-                          <div key={day} className={`day ${allDone ? "day-complete" : ""}`}>
-                            <h2>{day}</h2>
-                            {dayTasks.length === 0 && <p>Nenhum exercício</p>}
-                            {dayTasks.map(task => (
-                              <TaskItem key={task.id} task={task} toggleDone={toggleDone} removeTask={removeTask} />
-                            ))}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+              {telaAtiva === "treino" && (
+                <>
+                  <TaskForm addTask={addTask} diasSemana={diasSemana} />
+                  <ProgressBar tasks={tasks} />
+                  <div className="week">
+                    {diasSemana.map(day => {
+                      const dayTasks = tasks.filter(t => t.day === day);
+                      const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
+                      return (
+                        <div key={day} className={`day ${allDone ? "day-complete" : ""}`}>
+                          <h2>{day}</h2>
+                          {dayTasks.length === 0 && <p>Nenhum exercício</p>}
+                          {dayTasks.map(task => (
+                            <TaskItem key={task.id} task={task} toggleDone={toggleDone} removeTask={removeTask} />
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
 
-                {telaAtiva === "missoes" && <Missoes tasks={tasks} onComplete={() => { }} />}
-                {telaAtiva === "upgrades" && <Upgrades user={user} />}
-                {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
+              {telaAtiva === "missoes" && <Missoes tasks={tasks} onComplete={() => { }} />}
+              {telaAtiva === "upgrades" && <Upgrades user={user} />}
+              {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
 
-                <Notification />
-              </div>
+              <Notification />
             </div>
-          )}
+          </div>
         </>
       )}
     </div>

@@ -3,7 +3,6 @@
 @import url('css/login.css');
 @import url('css/notification.css');
 @import url('css/ranks.css');
-@import url('css/start.css');
 @import url('css/taskform.css');
 @import url('css/taskitems.css');
 @import url('css/usersidebar.css');
@@ -277,6 +276,7 @@ header h1::after {
         animation: none;
         border: 2px solid #7f5af0;
     }
+
     .notification {
         position: fixed;
         right: 8px;

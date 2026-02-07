@@ -1,5 +1,4 @@
 export default function TaskItem({ task, toggleDone, removeTask }) {
-
     const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
     const hoje = new Date();
@@ -24,7 +23,7 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
     const diaCorreto = diaTask === diaHoje;
     const jaConcluidaHoje = task.completedAt === hojeData || task.done === true;
 
-    // 🔓 Botão sempre habilitado, mas visualmente muda se não pode completar
+    // Botão visualmente muda mas SEM desabilitar para garantir alertas
     const podeCompletarHoje = diaCorreto && !jaConcluidaHoje;
 
     function handleToggle() {
@@ -38,6 +37,7 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
             return;
         }
 
+        // Passa a data para atualizar completedAt no toggleDone
         toggleDone(task.id, hojeData);
     }
 
@@ -52,6 +52,7 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
                 <button
                     className={`complete ${!podeCompletarHoje ? "disabled" : ""}`}
                     onClick={handleToggle}
+                // NÃO desabilitar para garantir alertas, mas pode estilizar
                 >
                     {jaConcluidaHoje
                         ? "QUEST COMPLETE"
