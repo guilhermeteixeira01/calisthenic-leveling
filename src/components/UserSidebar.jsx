@@ -191,7 +191,7 @@ export default function UserSidebar({
                             ✕
                         </button>
 
-                        <h2>🔥 Novidades</h2>
+                        <h2><img src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp" alt="fire" style={{ width: 25 }} /> Novidades</h2>
 
                         <p>
                             Bem-vindo à nova atualização do <strong>Calisthentic Braz</strong>!
