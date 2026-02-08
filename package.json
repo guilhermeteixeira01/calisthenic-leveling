@@ -2,11 +2,14 @@
   "name": "meu-projeto",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://guilhermeteixeira01.github.io/calisthenic-leveling/",
+  "homepage": "./",
   "dependencies": {
     "@capacitor/android": "^8.0.2",
     "@capacitor/cli": "^7.4.5",
     "@capacitor/core": "^8.0.2",
+    "@capacitor/ios": "^8.0.2",
+    "@capacitor/live-updates": "^0.5.0",
+    "@capacitor/status-bar": "^8.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
@@ -44,6 +47,8 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@ionic/cli": "^7.2.1",
     "gh-pages": "^6.3.0"
   }
 }

@@ -7,6 +7,9 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
+import { Capacitor } from '@capacitor/core';
+import { StatusBar } from '@capacitor/status-bar';
+
 import UserSidebar from './components/UserSidebar';
 import TaskForm from './components/TaskForm';
 import TaskItem from './components/TaskItem';
@@ -21,6 +24,14 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 
 function App() {
+  const setupStatusBar = async () => {
+    if (Capacitor.isNativePlatform()) {
+      await StatusBar.setOverlaysWebView({ overlay: false });
+      await StatusBar.setBackgroundColor({ color: '#000000' });
+    }
+  };
+
+  setupStatusBar();
   // Função para obter o domingo da semana atual
   function getDomingoAtual() {
     const hoje = new Date();
