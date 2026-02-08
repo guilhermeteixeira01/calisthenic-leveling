@@ -257,7 +257,8 @@ header h1::after {
     }
 
     header h1 {
-        font-size: 1.4rem;
+        padding: 10px;
+        font-size: 1.1rem;
         text-shadow: none;
         animation: none;
     }
@@ -299,7 +300,6 @@ header h1::after {
 /* PARA TELEFONE PEQUENO */
 @media (max-width: 480px) {
     header h1 {
-        font-size: 1.2rem;
         text-shadow: none;
         animation: none;
     }
