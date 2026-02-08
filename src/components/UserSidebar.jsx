@@ -85,7 +85,6 @@ export default function UserSidebar({
             {/* Sidebar */}
             <aside className={`user-sidebar ${menuOpen ? "active" : ""}`}>
                 {/* UPDATE */}
-
                 <button
                     className="btn-novidades"
                     onClick={() => setShowNovidades(true)}
@@ -169,7 +168,8 @@ export default function UserSidebar({
                 {/* Copyright */}
                 <div
                     style={{
-                        marginTop: "20px",
+                        marginTop: "10px",
+                        paddingBottom: "30px",
                         textAlign: "center",
                         fontSize: "12px",
                         color: "#888",

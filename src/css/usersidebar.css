@@ -452,7 +452,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .avatar-wrapper {
         margin: 0 auto;
         width: 120px;

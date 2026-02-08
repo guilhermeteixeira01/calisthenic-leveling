@@ -207,7 +207,7 @@ function App() {
               onLogout={logout}
             />
             <div className="container-conteudo">
-              <header><h1>CALISTHENTIC BRAZ</h1></header>
+              <header><h1>CALISTHENTIC LEVELING</h1></header>
 
               {telaAtiva === "treino" && (
                 <>
