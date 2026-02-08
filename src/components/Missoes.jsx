@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
-import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { increment } from "firebase/firestore";
+import {
+    doc,
+    setDoc,
+    getDoc,
+    updateDoc,
+    serverTimestamp,
+    onSnapshot
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 export default function Missoes({ tasks = [], user, onComplete }) {
+    const [userReady, setUserReady] = useState(false);
     const [missaoDia, setMissaoDia] = useState(null);
     const [missaoSemana, setMissaoSemana] = useState(null);
     const [xpDia, setXpDia] = useState(0);
@@ -28,10 +37,11 @@ export default function Missoes({ tasks = [], user, onComplete }) {
     const XP_SEMANA_MIN = 200;
     const XP_SEMANA_MAX = 500;
 
-    // ======== DATA ========
+    /* ================= DATA ================= */
     function diaHoje() {
-        const dias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
-        return dias[new Date().getDay()];
+        const dias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+        const jsDay = new Date().getDay();
+        return dias[(jsDay + 6) % 7];
     }
 
     function tasksHoje() {
@@ -56,131 +66,122 @@ export default function Missoes({ tasks = [], user, onComplete }) {
             if (!dias[t.day]) dias[t.day] = [];
             dias[t.day].push(t.done);
         });
-        return Object.values(dias).filter(lista => lista.length > 0 && lista.every(Boolean)).length;
+        return Object.values(dias).filter(lista => lista.length && lista.every(Boolean)).length;
     }
 
-    // ======== INIT ========
+    /* ================= INIT USER ================= */
     useEffect(() => {
-        if (!user) return;
+        if (!user?.uid) return;
 
-        async function init() {
-            const hoje = new Date();
-            const dataHoje = hoje.toLocaleDateString("sv-SE");
-            const semana = getSemanaISO(hoje);
+        const userRef = doc(db, "usuarios", user.uid);
 
-            // Missões aleatórias determinísticas
-            setMissaoDia(seededPick(MISSOES_DIA, dataHoje));
-            setMissaoSemana(seededPick(MISSOES_SEMANA, semana));
+        async function initUser() {
+            try {
+                const snap = await getDoc(userRef);
 
-            // XP aleatório determinístico
-            setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
-            setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
+                if (!snap.exists()) {
+                    await setDoc(userRef, {
+                        xp: 0,
+                        criadoEm: Date.now()
+                    });
+                }
 
-            // Verifica se já resgatou
-            const refDia = doc(db, "missoes", user.uid, "resgates", `dia_${dataHoje}`);
-            const refSemana = doc(db, "missoes", user.uid, "resgates", `semana_${semana}`);
+                // 🔥 Mesmo se der erro de permissão, não trava a UI
+                setUserReady(true);
 
-            setResgatadaDia((await getDoc(refDia)).exists());
-            setResgatadaSemana((await getDoc(refSemana)).exists());
+            } catch (err) {
+                console.error("Erro ao iniciar usuário:", err);
+                setUserReady(true); // evita travamento infinito
+            }
         }
 
-        init();
-    }, [tasks, user]);
+        initUser();
+    }, [user?.uid]);
 
-    // ======== RESET DIÁRIO ========
+    /* ================= MISSÕES ================= */
     useEffect(() => {
-        const agora = new Date();
-        const amanha = new Date();
-        amanha.setHours(24, 0, 0, 0);
-        const timer = setTimeout(() => window.location.reload(), amanha - agora);
-        return () => clearTimeout(timer);
-    }, []);
-
-    // ======== CONCLUSAO ========
-    function concluida(m) {
-        if (!m) return false;
-
-        switch (m.tipo) {
-            case "tasks_dia":
-                return progressoHoje() >= m.valor;
-            case "dia_completo":
-                return totalHoje() > 0 && progressoHoje() === totalHoje();
-            case "tasks_semana":
-                return progressoSemana() >= m.valor;
-            case "dias_completos":
-                return diasCompletosSemana() >= m.valor;
-            case "semana_completa":
-                return diasCompletosSemana() >= 7;
-            default:
-                return false;
-        }
-    }
-
-    // ======== RESGATAR ========
-    async function resgatar(tipo) {
-        if (!user) return;
+        if (!userReady || !user?.uid) return;
 
         const hoje = new Date();
         const dataHoje = hoje.toLocaleDateString("sv-SE");
         const semana = getSemanaISO(hoje);
 
+        setMissaoDia(seededPick(MISSOES_DIA, dataHoje));
+        setMissaoSemana(seededPick(MISSOES_SEMANA, semana));
+        setXpDia(gerarXp(dataHoje, XP_DIA_MIN, XP_DIA_MAX));
+        setXpSemana(gerarXp(semana, XP_SEMANA_MIN, XP_SEMANA_MAX));
+
+        const refDia = doc(db, "missoes", user.uid, "resgates", `dia_${dataHoje}`);
+        const refSemana = doc(db, "missoes", user.uid, "resgates", `semana_${semana}`);
+
+        const unsubDia = onSnapshot(refDia, snap => setResgatadaDia(snap.exists()));
+        const unsubSemana = onSnapshot(refSemana, snap => setResgatadaSemana(snap.exists()));
+
+        return () => {
+            unsubDia();
+            unsubSemana();
+        };
+    }, [userReady, tasks, user?.uid]);
+
+    /* ================= RESGATAR ================= */
+    async function resgatar(tipo) {
+        if (!user?.uid) return;
+
+        const hoje = new Date();
+        const dataHoje = hoje.toLocaleDateString("sv-SE");
+        const semana = getSemanaISO(hoje);
         const userRef = doc(db, "usuarios", user.uid);
-        const userSnap = await getDoc(userRef);
-        const xpAtual = userSnap.data()?.xp || 0;
 
         if (tipo === "dia" && concluida(missaoDia) && !resgatadaDia) {
-            await setDoc(
-                doc(db, "missoes", user.uid, "resgates", `dia_${dataHoje}`),
-                { tipo: "dia", xp: xpDia, criadoEm: serverTimestamp() }
-            );
-            await updateDoc(userRef, { xp: xpAtual + xpDia });
-            setResgatadaDia(true);
+            await setDoc(doc(db, "missoes", user.uid, "resgates", `dia_${dataHoje}`),
+                { tipo: "dia", xp: xpDia, criadoEm: serverTimestamp() });
+            await updateDoc(userRef, { xp: increment(xpDia) });
             onComplete?.(xpDia);
         }
 
         if (tipo === "semana" && concluida(missaoSemana) && !resgatadaSemana) {
-            await setDoc(
-                doc(db, "missoes", user.uid, "resgates", `semana_${semana}`),
-                { tipo: "semana", xp: xpSemana, criadoEm: serverTimestamp() }
-            );
-            await updateDoc(userRef, { xp: xpAtual + xpSemana });
-            setResgatadaSemana(true);
+            await setDoc(doc(db, "missoes", user.uid, "resgates", `semana_${semana}`),
+                { tipo: "semana", xp: xpSemana, criadoEm: serverTimestamp() });
+            await updateDoc(userRef, { xp: increment(xpSemana) });
             onComplete?.(xpSemana);
         }
     }
 
-    // ======== RENDER ========
+    function concluida(m) {
+        if (!m) return false;
+        switch (m.tipo) {
+            case "tasks_dia": return progressoHoje() >= m.valor;
+            case "dia_completo": return totalHoje() > 0 && progressoHoje() === totalHoje();
+            case "tasks_semana": return progressoSemana() >= m.valor;
+            case "dias_completos": return diasCompletosSemana() >= m.valor;
+            case "semana_completa": return diasCompletosSemana() >= 7;
+            default: return false;
+        }
+    }
+
+    if (!userReady) {
+        return <div className="missoes-container">Carregando usuário...</div>;
+    }
+
     return (
         <div className="missoes-container">
-            <Missao
-                titulo="📅 Missão do Dia"
-                missao={missaoDia}
-                xp={xpDia}
-                concluida={concluida(missaoDia)}
-                resgatada={resgatadaDia}
-                onClick={() => resgatar("dia")}
-            />
+            <Missao titulo="📅 Missão do Dia" missao={missaoDia} xp={xpDia}
+                concluida={concluida(missaoDia)} resgatada={resgatadaDia}
+                onClick={() => resgatar("dia")} />
 
-            <Missao
-                titulo="📆 Missão da Semana"
-                missao={missaoSemana}
-                xp={xpSemana}
-                concluida={concluida(missaoSemana)}
-                resgatada={resgatadaSemana}
-                onClick={() => resgatar("semana")}
-            />
+            <Missao titulo="📆 Missão da Semana" missao={missaoSemana} xp={xpSemana}
+                concluida={concluida(missaoSemana)} resgatada={resgatadaSemana}
+                onClick={() => resgatar("semana")} />
         </div>
     );
 }
 
-/* =========================
-   COMPONENTES / UTILS
-========================= */
+/* ================= COMPONENTE MISSÃO ================= */
 function Missao({ titulo, missao, xp, concluida, resgatada, onClick }) {
     return (
         <div className="missao-card">
             <h2>{titulo}</h2>
-            <p>{missao?.texto || "Carregando..."}</p>
+            <p>{missao?.texto ?? "Gerando missão..."}</p>
             <span>+{xp} XP</span>
 
             <button
@@ -194,6 +195,7 @@ function Missao({ titulo, missao, xp, concluida, resgatada, onClick }) {
     );
 }
 
+/* ================= UTILS ================= */
 function gerarXp(seed, min, max) {
     let hash = 0;
     for (let i = 0; i < seed.length; i++) {

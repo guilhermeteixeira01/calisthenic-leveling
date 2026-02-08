@@ -1,27 +1,36 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 
 function Login() {
-    const [loginInput, setLoginInput] = useState(""); // pode ser email ou nome
+    const [loginInput, setLoginInput] = useState("");
     const [senha, setSenha] = useState("");
-    const [mensagem, setMensagem] = useState(""); // mensagem de feedback
-    const [tipoMensagem, setTipoMensagem] = useState(""); // "erro" ou "sucesso"
+    const [mensagem, setMensagem] = useState("");
+    const [tipoMensagem, setTipoMensagem] = useState("");
 
     async function logar(e) {
         e.preventDefault();
 
         try {
-            let email = loginInput;
+            let loginLimpo = loginInput.trim();   // ✅ remove espaços
+            let senhaLimpa = senha.trim();
 
-            // Se o input não contém "@" assumimos que é um nome de usuário
-            if (!loginInput.includes("@")) {
-                // Busca no Firestore pelo displayName
+            if (!loginLimpo || !senhaLimpa) {
+                setMensagem("Preencha todos os campos");
+                setTipoMensagem("erro");
+                return;
+            }
+
+            let email = loginLimpo;
+
+            // Se não tem @ é nome de usuário
+            if (!loginLimpo.includes("@")) {
                 const q = query(
                     collection(db, "usuarios"),
-                    where("displayName", "==", loginInput)
+                    where("displayNameLower", "==", loginLimpo.toLowerCase()) // 🔥 busca case-insensitive
                 );
+
                 const snapshot = await getDocs(q);
 
                 if (snapshot.empty) {
@@ -30,20 +39,14 @@ function Login() {
                     return;
                 }
 
-                // Pega o email do primeiro usuário encontrado
                 email = snapshot.docs[0].data().email;
             }
 
-            // Faz login com email e senha
-            await signInWithEmailAndPassword(auth, email, senha);
-            /* setMensagem("Login feito com sucesso!");
-            setTipoMensagem("sucesso"); */
+            await signInWithEmailAndPassword(auth, email, senhaLimpa);
 
-            // Limpa a mensagem após 3 segundos
-            setTimeout(() => {
-                setMensagem("");
-                setTipoMensagem("");
-            }, 8000);
+            setMensagem("");
+            setTipoMensagem("");
+
         } catch (error) {
             console.error(error);
             setMensagem("Email ou senha inválidos");
@@ -60,15 +63,15 @@ function Login() {
         <form className="Logindiv" onSubmit={logar}>
             <h2>Login</h2>
 
-            {/* Caixa de mensagem */}
             {mensagem && (
                 <div className={`mensagem ${tipoMensagem}`}>
                     {mensagem}
                 </div>
             )}
+
             <input
                 type="text"
-                placeholder="Email ou Nome"
+                placeholder="Email"
                 onChange={(e) => setLoginInput(e.target.value)}
             />
 
@@ -77,7 +80,6 @@ function Login() {
                 placeholder="Senha"
                 onChange={(e) => setSenha(e.target.value)}
             />
-
 
             <button>Entrar</button>
         </form>

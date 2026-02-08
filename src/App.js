@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import {
   collection, getDocs, addDoc, deleteDoc, doc,
-  updateDoc, increment, getDoc, setDoc
+  updateDoc, getDoc
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
@@ -220,7 +220,7 @@ function App() {
                 </>
               )}
 
-              {telaAtiva === "missoes" && <Missoes tasks={tasks} onComplete={() => { }} />}
+              {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
               {telaAtiva === "upgrades" && <Upgrades user={user} />}
               {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
 

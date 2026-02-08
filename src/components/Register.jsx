@@ -32,8 +32,9 @@ export default function Register() {
 
             // Salva usuário no Firestore
             await setDoc(doc(db, "usuarios", userCredential.user.uid), {
-                displayName: name,
-                email,
+                displayName: name.trim(), // nome normal
+                displayNameLower: name.trim().toLowerCase(), // 🔥 nome normalizado pro login
+                email: email.trim().toLowerCase(), // já salva email padronizado também
                 xp: 0,
                 photoURL: userCredential.user.photoURL || null
             });

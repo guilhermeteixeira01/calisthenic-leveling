@@ -21,6 +21,12 @@ export default function UserSidebar({
     const [userData, setUserData] = useState(null);
     const [showNovidades, setShowNovidades] = useState(false);
 
+    const handleMenuClick = (action) => {
+        setMenuOpen(false); // fecha o menu
+        action?.();         // executa a ação do botão
+    };
+
+
     /* ===== Controla scroll ===== */
     useEffect(() => {
         document.body.classList.toggle("menu-open", menuOpen);
@@ -128,28 +134,28 @@ export default function UserSidebar({
 
                 {/* Botões */}
                 <div className="sidebar-actions">
-                    <button onClick={onOpenTreino}>
+                    <button onClick={() => handleMenuClick(onOpenTreino)}>
                         <svg className="icon" viewBox="0 0 24 24">
                             <path d="M4 14v-4h2V7h2v10H6v-3H4zm14-7v3h2v4h-2v3h-2V7h2zm-6-2h-2v14h2V5z" />
                         </svg>
                         Treino Semanal
                     </button>
 
-                    <button onClick={onOpenMissoes}>
+                    <button onClick={() => handleMenuClick(onOpenMissoes)}>
                         <svg className="icon" viewBox="0 0 24 24">
                             <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" />
                         </svg>
                         Missões
                     </button>
 
-                    <button onClick={onOpenUpgrades}>
+                    <button onClick={() => handleMenuClick(onOpenUpgrades)}>
                         <svg className="icon" viewBox="0 0 24 24">
                             <path d="M13 2L3 14h7v8l10-12h-7z" />
                         </svg>
                         Upgrades
                     </button>
 
-                    <button onClick={onOpenTop15}>
+                    <button onClick={() => handleMenuClick(onOpenTop15)}>
                         <svg className="icon" viewBox="0 0 24 24">
                             <path d="M17 3h4v2c0 3.3-2.7 6-6 6h-1a5 5 0 01-10 0H3V3h4V1h16v2zm-2 2H9v2a3 3 0 006 0V5zM6 21h12v-2H6v2z" />
                         </svg>
