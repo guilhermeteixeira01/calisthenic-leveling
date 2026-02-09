@@ -134,13 +134,26 @@
     width: 40px;
 }
 
+.avatar-wrappertop15 {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+.vip-badgetop15 {
+    position: absolute;
+    bottom: 25px;
+    right: -10px;
+    width: 28px;
+}
+
 @media (max-width: 900px) {
     .Logovip {
         width: 35px;
     }
 
     .top15-container {
-        padding: 5px;
+        padding: none;
         box-shadow: none;
     }
 

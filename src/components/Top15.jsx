@@ -83,11 +83,16 @@ export default function Top15({ onOpenProfile }) {
                                     />
                                 )}
 
-                                <img
-                                    src={user.photoURL}
-                                    alt={user.displayName}
-                                    className={isVIP ? "avatarvip" : "avatar"} 
-                                />
+                                <div className="avatar-wrappertop15">
+                                    <img
+                                        src={user.photoURL}
+                                        alt={user.displayName}
+                                        className={isVIP ? "avatarvip" : "avatar"}
+                                    />
+                                    {isVIP && (
+                                        <img src={LOGOVIP} alt="VIP" className="vip-badgetop15" /> // badge opcional
+                                    )}
+                                </div>
 
                                 <span
                                     className="name"
@@ -96,17 +101,7 @@ export default function Top15({ onOpenProfile }) {
                                         fontWeight: rankPosicao <= 3 ? "bold" : "normal",
                                     }}
                                 >
-                                    {isVIP ? (
-                                        <>
-                                            <div className="usernamevip">
-                                                {user.displayName} <img src={LOGOVIP} alt="logovip" className="Logovip" />
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {user.displayName}
-                                        </>
-                                    )}
+                                    {user.displayName}
                                 </span>
                             </div>
 
