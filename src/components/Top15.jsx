@@ -7,6 +7,7 @@ import { calcularProgressoXp } from "../utils/rankUtils";
 import GoldMedal from "../assets/icons/1.png";
 import SilverMedal from "../assets/icons/2.png";
 import BronzeMedal from "../assets/icons/3.png";
+import LOGOVIP from "../assets/img/vip.png"
 
 const medals = {
     1: GoldMedal,
@@ -40,6 +41,7 @@ export default function Top15({ onOpenProfile }) {
                         user.photoURL ||
                         "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg",
                     xp: user.xp || 0,
+                    cargo: user.cargo?.toLowerCase() || "", // ✅ minúscula
                 };
             });
 
@@ -58,6 +60,8 @@ export default function Top15({ onOpenProfile }) {
                     const rankPosicao = index + 1;
                     const { rankAtual, nivel } = calcularProgressoXp(user.xp);
                     const medalSrc = medals[rankPosicao];
+
+                    const isVIP = user.cargo === "vip";
 
                     return (
                         <li
@@ -82,7 +86,7 @@ export default function Top15({ onOpenProfile }) {
                                 <img
                                     src={user.photoURL}
                                     alt={user.displayName}
-                                    className="avatar"
+                                    className={isVIP ? "avatarvip" : "avatar"} 
                                 />
 
                                 <span
@@ -92,7 +96,17 @@ export default function Top15({ onOpenProfile }) {
                                         fontWeight: rankPosicao <= 3 ? "bold" : "normal",
                                     }}
                                 >
-                                    {user.displayName}
+                                    {isVIP ? (
+                                        <>
+                                            <div className="usernamevip">
+                                                {user.displayName} <img src={LOGOVIP} alt="logovip" className="Logovip" />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {user.displayName}
+                                        </>
+                                    )}
                                 </span>
                             </div>
 

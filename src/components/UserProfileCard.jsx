@@ -9,9 +9,11 @@ import { ReactComponent as VitalidadeIcon } from "../assets/icons/vitalidade.svg
 import { ReactComponent as CarismaIcon } from "../assets/icons/carisma.svg";
 import { ReactComponent as SabedoriaIcon } from "../assets/icons/sabedoria.svg";
 
+// LOGO VIP
+import LOGOVIP from "../assets/img/vip.png";
+
 // 🔥 FUNÇÃO UNIFICADA
 import { calcularProgressoXp } from "../utils/rankUtils";
-
 
 const ATRIBUTOS = [
     { id: "forca", nome: "Força", Icon: ForcaIcon },
@@ -37,32 +39,33 @@ export default function UserProfileCard({ userId, onClose }) {
 
     if (!user) return null;
 
+    const isVIP = user.cargo?.toLowerCase() === "vip";
+
     const photoURL =
         user.photoURL ||
         "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg";
 
-    const {
-        rankAtual,
-        nivel,
-        xpAtual,
-        xpMax,
-        progresso
-    } = calcularProgressoXp(user.xp || 0);
+    const { rankAtual, nivel, xpAtual, xpMax, progresso } = calcularProgressoXp(user.xp || 0);
 
     return (
         <div className="profile-overlay" onClick={onClose}>
-            <div className="profile-card" onClick={e => e.stopPropagation()}>
-                <button className="close-btn" onClick={onClose}>✕</button>
+            <div className={isVIP ? "profile-cardvip" : "profile-card"} onClick={e => e.stopPropagation()}>
+                <button className={isVIP ? "close-btnvip" : "close-btn"} onClick={onClose}>✕</button>
 
-                <img
-                    src={photoURL}
-                    alt={user.displayName}
-                    className="profile-avatar"
-                />
+                <div className="avatar-wrapperProfile">
+                    <img
+                        src={photoURL}
+                        alt={user.displayName}
+                        className={isVIP ? "profile-avatarvip" : "profile-avatar"} // ✅ Avatar VIP
+                    />
+                    {isVIP && (
+                        <img src={LOGOVIP} alt="VIP" className="vip-badgeprofile" /> // badge opcional
+                    )}
+                </div>
 
-                <h2>{user.displayName}</h2>
+                <h2 style={{ color: isVIP ? "#FFD700" : "inherit" }}>{user.displayName}</h2> {/* Nome VIP dourado */}
 
-                {/* 🔥 Rank / Nível com cores */}
+                {/* 🔥 Rank / Nível */}
                 <div style={{ marginBottom: "12px" }}>
                     <div>
                         <strong className={`rank-${rankAtual}`}>Rank {rankAtual}</strong>
@@ -77,12 +80,8 @@ export default function UserProfileCard({ userId, onClose }) {
                     <div className="xp-info">
                         <span>{xpAtual} / {xpMax} XP</span>
                     </div>
-
                     <div className="xp-bar">
-                        <div
-                            className="xp-fill"
-                            style={{ width: `${progresso}%` }}
-                        />
+                        <div className="xp-fill" style={{ width: `${progresso}%` }} />
                     </div>
                 </div>
 
@@ -90,7 +89,7 @@ export default function UserProfileCard({ userId, onClose }) {
 
                 <div className="profile-atributos">
                     {ATRIBUTOS.map(a => (
-                        <div key={a.id} className="atributo">
+                        <div key={a.id} className={isVIP ? "atributovip" : "atributo"}>
                             <a.Icon />
                             <span>{a.nome}</span>
                             <b>{user.atributos?.[a.id] || 0}</b>

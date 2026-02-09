@@ -291,6 +291,11 @@ header h1::after {
         border: 2px solid #7f5af0;
     }
 
+    .avatarvip {
+        animation: none;
+        border: 2px solid gold;
+    }
+
     .avatarusersidebarvip {
         animation: none;
         border: 2px solid gold;

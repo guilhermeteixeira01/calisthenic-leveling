@@ -71,7 +71,8 @@
 }
 
 /* Avatar */
-.top15-item img.avatar {
+.top15-item img.avatar,
+.top15-item img.avatarvip {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -122,9 +123,25 @@
     color: #CD7F32;
 }
 
-@media (max-width: 600px) {
+.usernamevip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.Logovip {
+    width: 40px;
+}
+
+@media (max-width: 900px) {
+    .Logovip {
+        width: 35px;
+    }
+
     .top15-container {
-        padding: 15px;
+        padding: 5px;
+        box-shadow: none;
     }
 
     .top15-item {
@@ -152,7 +169,8 @@
         height: 24px;
     }
 
-    .avatar {
+    .avatar,
+    .avatarvip {
         width: 40px;
         height: 40px;
     }

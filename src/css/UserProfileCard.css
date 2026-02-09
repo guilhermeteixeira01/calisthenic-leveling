@@ -12,7 +12,6 @@
     justify-content: center;
 }
 
-
 /* =========================
    CARD PRINCIPAL
 ========================= */
@@ -31,16 +30,36 @@
     box-shadow: 0 0 25px rgba(128, 0, 255, 0.5);
 }
 
+.profile-cardvip {
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 28px 24px;
+    width: 340px;
+    color: #e5e7eb;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 25px gold;
+}
 
 /* =========================
    AVATAR
 ========================= */
+.avatar-wrapperProfile {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+/* Avatar normal */
 .profile-avatar {
     width: 130px;
     height: 130px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 16px;
     border: 2px solid #8122ee;
     box-shadow: 0 0 16px rgba(129, 34, 238, 0.6);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -49,6 +68,70 @@
 .profile-avatar:hover {
     transform: scale(1.05);
     box-shadow: 0 0 24px rgba(129, 34, 238, 0.9);
+}
+
+.profile-avatarvip {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid gold;
+    box-shadow: 0 0 16px rgba(238, 190, 34, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-avatarvip:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 24px rgba(238, 190, 34, 0.6);
+}
+
+/* Badge VIP */
+.vip-badgeprofile {
+    position: absolute;
+    bottom: 90px;
+    right: -5px;
+    width: 38px;
+}
+
+/* =========================
+   NOME DO USUÁRIO
+========================= */
+.profile-card h2 {
+    margin: 8px 0 4px;
+    font-size: 22px;
+}
+
+.profile-card h2.vip {
+    color: gold;
+}
+
+/* =========================
+   XP CONTAINER
+========================= */
+.xp-container {
+    margin-top: 12px;
+    text-align: left;
+}
+
+.xp-info {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.xp-bar {
+    width: 100%;
+    height: 10px;
+    background: #333;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+    background: #22c55e;
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 6px;
 }
 
 /* =========================
@@ -74,9 +157,19 @@
     backdrop-filter: blur(6px);
 }
 
-/* =========================
-   NOME DO ATRIBUTO / VALOR
-========================= */
+.atributovip {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 16px gold;
+    backdrop-filter: blur(6px);
+}
+
 .atributo span:first-child {
     font-size: 14px;
     color: #9ca3af;
@@ -112,22 +205,76 @@
     box-shadow: 0 0 20px rgba(129, 34, 238, 0.8);
 }
 
-.close-btn:active {
+.close-btnvip {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, gold, #38bdf8);
+    border: none;
+    color: #020617;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 12px gold;
+    transition: all 0.2s ease;
+}
+
+.close-btnvip:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 20px gold;
+}
+
+.close-btn:active,
+.close-btnvip:active {
     transform: scale(0.95);
+}
+
+/* =========================
+   RANK COLOR
+========================= */
+.rank-1 {
+    color: #FFD700;
+}
+
+.rank-2 {
+    color: #C0C0C0;
+}
+
+.rank-3 {
+    color: #CD7F32;
+}
+
+.rank-4,
+.rank-5,
+.rank-6,
+.rank-7,
+.rank-8,
+.rank-9,
+.rank-10 {
+    color: #22c55e;
 }
 
 /* =========================
    RESPONSIVO
 ========================= */
-@media (max-width: 480px) {
+@media (max-width: 900px) {
     .profile-card {
         width: 90%;
-        padding: 20px;
+        padding: 16px;
     }
 
     .profile-avatar {
         width: 100px;
         height: 100px;
+    }
+
+    .vip-badgeprofile {
+        position: absolute;
+        bottom: 90px;
+        right: -5px;
+        width: 38px;
     }
 
     .profile-atributos {
