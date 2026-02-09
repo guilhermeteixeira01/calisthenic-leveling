@@ -292,7 +292,27 @@ header h1::after {
 
     .notification {
         position: fixed;
+        bottom: 35px;
         right: 8px;
+
+        min-width: 180px;
+        max-width: 280px;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        padding: 1rem 1.4rem;
+    }
+
+    .notification-dot {
+        width: 5px;
+        height: 5px;
+    }
+
+    .notification-text {
+        line-height: 1.2;
+        font-size: 0.7rem;
     }
 }
 
