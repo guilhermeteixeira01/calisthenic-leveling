@@ -1,5 +1,3 @@
-/*! Capacitor: https://capacitorjs.com/ - MIT License */
-
 /**
           * @license
           * Copyright 2017 Google LLC
