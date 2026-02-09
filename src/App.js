@@ -23,26 +23,6 @@ import Register from "./components/Register";
 import { SITENAME } from "./constants/xpPorRank";
 
 function App() {
-  // Função para obter o domingo da semana atual
-  function getDomingoAtual() {
-    const hoje = new Date();
-    const dia = hoje.getDay(); // 0 = domingo
-    const diff = hoje.getDate() - dia;
-    const domingo = new Date(hoje.setDate(diff));
-    domingo.setHours(0, 0, 0, 0);
-    return domingo.toISOString().split("T")[0];
-  }
-
-  useEffect(() => {
-    const domingoAtual = getDomingoAtual();
-    const domingoSalvo = localStorage.getItem("domingoAtual");
-
-    if (domingoSalvo !== domingoAtual) {
-      localStorage.setItem("domingoAtual", domingoAtual);
-      window.location.reload();
-    }
-  }, []);
-
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [started, setStarted] = useState(false);
@@ -53,7 +33,15 @@ function App() {
 
   const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
-  // 🔐 Observa autenticação
+  function getSegundaAtual() {
+    const hoje = new Date();
+    const dia = hoje.getDay(); // 0 = domingo
+    const diff = hoje.getDate() - dia + (dia === 0 ? -6 : 1);
+    const segunda = new Date(hoje.setDate(diff));
+    segunda.setHours(0, 0, 0, 0);
+    return segunda.toISOString().split("T")[0];
+  }
+
   useEffect(() => {
     onAuthStateChanged(auth, async (usuario) => {
       if (!usuario) return;
@@ -127,33 +115,39 @@ function App() {
   };
 
   async function verificarResetSemanal(uid) {
-    const userRef = doc(db, "usuarios", uid);
-    const userSnap = await getDoc(userRef);
+    try {
+      const userRef = doc(db, "usuarios", uid);
+      const userSnap = await getDoc(userRef);
 
-    const domingoAtual = getDomingoAtual();
-    const lastReset = userSnap.data()?.lastWeeklyReset;
+      const semanaAtual = getSegundaAtual();
+      const lastReset = userSnap.data()?.lastWeeklyReset;
 
-    // Já resetou esta semana
-    if (lastReset === domingoAtual) return;
+      // Já resetou nesta semana
+      if (lastReset === semanaAtual) return;
 
-    console.log("🔄 Reset semanal iniciado");
+      console.log("🔄 Reset semanal iniciado");
 
-    const tasksSnap = await getDocs(
-      collection(db, "usuarios", uid, "tasks")
-    );
+      const tasksSnap = await getDocs(
+        collection(db, "usuarios", uid, "tasks")
+      );
 
-    for (const task of tasksSnap.docs) {
-      await updateDoc(task.ref, {
-        done: false,
-        completedAt: null,
+      const promises = tasksSnap.docs.map(task =>
+        updateDoc(task.ref, {
+          done: false,
+          completedAt: null,
+        })
+      );
+
+      await Promise.all(promises);
+
+      await updateDoc(userRef, {
+        lastWeeklyReset: semanaAtual,
       });
+
+      console.log("✅ Reset semanal concluído");
+    } catch (error) {
+      console.error("Erro no reset semanal:", error);
     }
-
-    await updateDoc(userRef, {
-      lastWeeklyReset: domingoAtual,
-    });
-
-    console.log("✅ Reset semanal concluído");
   }
 
   if (!user) {

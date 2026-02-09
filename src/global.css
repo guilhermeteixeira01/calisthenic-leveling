@@ -292,7 +292,7 @@ header h1::after {
 
     .notification {
         position: fixed;
-        bottom: 35px;
+        bottom: 40px;
         right: 8px;
 
         min-width: 180px;

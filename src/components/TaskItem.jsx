@@ -4,7 +4,6 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
     const hoje = new Date();
     const hojeData = hoje.toISOString().split("T")[0];
 
-    // Ajusta índice para segunda = 0
     const hojeDiaIndex = (hoje.getDay() + 6) % 7;
     const hojeDia = diasSemana[hojeDiaIndex];
 
@@ -23,12 +22,11 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
     const diaCorreto = diaTask === diaHoje;
     const jaConcluidaHoje = task.completedAt === hojeData || task.done === true;
 
-    // Botão visualmente muda mas SEM desabilitar para garantir alertas
     const podeCompletarHoje = diaCorreto && !jaConcluidaHoje;
 
     function handleToggle() {
         if (!diaCorreto) {
-            alert(`❌ Você só pode completar esta quest na ${task.day.toUpperCase()}`);
+            alert(`❌ Você só pode completar esta quest ${task.day.toUpperCase()}`);
             return;
         }
 
@@ -37,7 +35,6 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
             return;
         }
 
-        // Passa a data para atualizar completedAt no toggleDone
         toggleDone(task.id, hojeData);
     }
 
@@ -52,7 +49,6 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
                 <button
                     className={`complete ${!podeCompletarHoje ? "disabled" : ""}`}
                     onClick={handleToggle}
-                // NÃO desabilitar para garantir alertas, mas pode estilizar
                 >
                     {jaConcluidaHoje
                         ? "QUEST COMPLETE"
