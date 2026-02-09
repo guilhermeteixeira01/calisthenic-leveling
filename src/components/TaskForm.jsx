@@ -32,8 +32,6 @@ export default function TaskForm({ addTask, diasSemana }) {
         "Elevação de Pernas (Leg Raises)",
         "Elevação de Joelhos (Barra)",
         "Dragon Flags",
-        "Front Lever",
-        "Back Lever",
         "Skin the Cat",
         "Agachamento (Squats)",
         "Agachamento com Salto",
@@ -45,12 +43,45 @@ export default function TaskForm({ addTask, diasSemana }) {
         "Bandeira Humana",
         "Prancha",
         "Prancha Tuck",
-        "Handstand"
+        "Handstand",
+
+        /* BACK LEVER */
+        "Back lever",
+        "Tuck back lever negativo",
+        "Advanced back lever negativo",
+        "Straddle back lever negativo",
+        "Half back lever negativo",
+        "Back lever negativo",
+        "Tuck back lever",
+        "Advanced back lever",
+        "Straddle back lever",
+        "Half back lever",
+        "Tuck back lever press",
+        "Advanced back lever press",
+        "Straddle back lever press",
+        "Back lever press",
+
+        /* FRONT LEVER */
+        "Front lever",
+        "Tuck front lever negativo",
+        "Advanced front lever negativo",
+        "Straddle front lever negativo",
+        "Half front lever negativo",
+        "Front lever negativo",
+        "Tuck front lever",
+        "Advanced front lever",
+        "Straddle front lever",
+        "Half front lever",
+        "Tuck front lever press",
+        "Advanced front lever press",
+        "Straddle front lever press",
+        "Half front lever press",
+        "Front lever press"
     ];
 
     const seriesOptions = [
-        "1x10", "1x12", "1x15", 
-        "3x10", "3x12", "3x15", 
+        "1x10", "1x12", "1x15",
+        "3x10", "3x12", "3x15",
         "5x10", "5x12", "5x15"
     ];
 
