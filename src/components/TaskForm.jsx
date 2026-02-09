@@ -49,11 +49,9 @@ export default function TaskForm({ addTask, diasSemana }) {
     ];
 
     const seriesOptions = [
-        "1x10", "1x12", "1x15", "1x20",
-        "2x10", "2x12", "2x15", "2x20",
-        "3x10", "3x12", "3x15", "3x20",
-        "4x10", "4x12", "4x15", "4x20",
-        "5x10", "5x12", "5x15", "5x20"
+        "1x10", "1x12", "1x15", 
+        "3x10", "3x12", "3x15", 
+        "5x10", "5x12", "5x15"
     ];
 
     const repsOptions = [
