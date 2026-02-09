@@ -194,7 +194,7 @@ header h1::after {
     }
 
     .btn-novidades {
-        top: 20px;
+        top: 12px;
     }
 
     .user-sidebar {
@@ -257,7 +257,7 @@ header h1::after {
     }
 
     header h1 {
-        padding: 10px;
+        margin: 20px;
         font-size: 1.1rem;
         text-shadow: none;
         animation: none;

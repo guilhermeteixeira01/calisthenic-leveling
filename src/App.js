@@ -7,9 +7,6 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
-import { Capacitor } from '@capacitor/core';
-import { StatusBar } from '@capacitor/status-bar';
-
 import UserSidebar from './components/UserSidebar';
 import TaskForm from './components/TaskForm';
 import TaskItem from './components/TaskItem';
@@ -23,15 +20,9 @@ import Missoes from './components/Missoes';
 import Login from "./components/Login";
 import Register from "./components/Register";
 
-function App() {
-  const setupStatusBar = async () => {
-    if (Capacitor.isNativePlatform()) {
-      await StatusBar.setOverlaysWebView({ overlay: false });
-      await StatusBar.setBackgroundColor({ color: '#000000' });
-    }
-  };
+import { SITENAME } from "./constants/xpPorRank";
 
-  setupStatusBar();
+function App() {
   // Função para obter o domingo da semana atual
   function getDomingoAtual() {
     const hoje = new Date();
@@ -207,7 +198,7 @@ function App() {
               onLogout={logout}
             />
             <div className="container-conteudo">
-              <header><h1>CALISTHENTIC LEVELING</h1></header>
+              <header><h1>{SITENAME}</h1></header>
 
               {telaAtiva === "treino" && (
                 <>

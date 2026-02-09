@@ -3,7 +3,7 @@ import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 // XP necessário por rank
-import { XP_POR_RANK } from "../constants/xpPorRank";
+import { SITENAME, XP_POR_RANK } from "../constants/xpPorRank";
 import { calcularProgressoXp } from "../utils/rankUtils";
 
 const RANKS = Object.entries(XP_POR_RANK);
@@ -194,7 +194,7 @@ export default function UserSidebar({
                         <h2><img src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp" alt="fire" style={{ width: 25 }} /> Novidades</h2>
 
                         <p>
-                            Bem-vindo à nova atualização do <strong>Calisthentic Braz</strong>!
+                            Bem-vindo à nova atualização do <strong>{SITENAME}</strong> !
                         </p>
 
                         <ul>
