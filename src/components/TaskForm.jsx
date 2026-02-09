@@ -6,16 +6,16 @@ export default function TaskForm({ addTask, diasSemana }) {
     const [reps, setReps] = useState("");
     const [day, setDay] = useState("");
 
+    const [customSeries, setCustomSeries] = useState("");
+    const [customReps, setCustomReps] = useState("");
+
     const exercises = [
-        // Pull / Barra
         "Barra Fixa",
         "Barra Fixa Supinada",
         "Australian Pull-ups",
         "Australian Chin-ups",
         "Pull-ups Arqueiro",
         "Pull-ups com um braço",
-
-        // Push / Flexão
         "Flexão Tradicional",
         "Flexão Diamante",
         "Flexão Larga",
@@ -24,8 +24,6 @@ export default function TaskForm({ addTask, diasSemana }) {
         "Flexão de Handstand",
         "Paralelas",
         "Paralelas no banco",
-
-        // Core / Abdominais
         "Prancha (Plank)",
         "Prancha Lateral (Side Plank)",
         "Canoa (Hollow Body)",
@@ -37,15 +35,11 @@ export default function TaskForm({ addTask, diasSemana }) {
         "Front Lever",
         "Back Lever",
         "Skin the Cat",
-
-        // Pernas
         "Agachamento (Squats)",
         "Agachamento com Salto",
         "Avanço (Lunges)",
         "Agachamento Pistola",
         "Elevação de Panturrilha",
-
-        // Full body / Combos
         "Burpees",
         "Muscle-ups",
         "Bandeira Humana",
@@ -71,21 +65,24 @@ export default function TaskForm({ addTask, diasSemana }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!exercise || !series || !reps || !day) return;
+        const finalSeries = series === "custom" ? customSeries : series;
+        const finalReps = reps === "custom" ? customReps : reps;
 
-        // Aqui não adicionamos id, apenas os dados
+        if (!exercise || !finalSeries || !finalReps || !day) return;
+
         addTask(day, {
             name: exercise,
-            series,
-            reps,
+            series: finalSeries,
+            reps: finalReps,
             done: false,
             createdAt: Date.now()
         });
 
-        // Resetar o formulário
         setExercise("");
         setSeries("");
         setReps("");
+        setCustomSeries("");
+        setCustomReps("");
         setDay("");
     };
 
@@ -105,19 +102,43 @@ export default function TaskForm({ addTask, diasSemana }) {
                 ))}
             </select>
 
+            {/* SÉRIES */}
             <select value={series} onChange={e => setSeries(e.target.value)} required>
                 <option value="">Selecione as séries</option>
                 {seriesOptions.map((s, i) => (
                     <option key={i} value={s}>{s}</option>
                 ))}
+                <option value="custom">Outro (personalizado)</option>
             </select>
 
+            {series === "custom" && (
+                <input
+                    type="text"
+                    placeholder="Ex: 4x8 + drop set"
+                    value={customSeries}
+                    onChange={e => setCustomSeries(e.target.value)}
+                    required
+                />
+            )}
+
+            {/* REPETIÇÕES / TEMPO */}
             <select value={reps} onChange={e => setReps(e.target.value)} required>
-                <option value="">Selecione Tempo de descanso</option>
+                <option value="">Selecione repetições / tempo</option>
                 {repsOptions.map((r, i) => (
                     <option key={i} value={r}>{r}</option>
                 ))}
+                <option value="custom">Outro (personalizado)</option>
             </select>
+
+            {reps === "custom" && (
+                <input
+                    type="text"
+                    placeholder="Ex: até falha / 12-10-8"
+                    value={customReps}
+                    onChange={e => setCustomReps(e.target.value)}
+                    required
+                />
+            )}
 
             <button type="submit">Adicionar Exercício</button>
         </form>

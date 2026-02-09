@@ -53,7 +53,7 @@
 }
 
 .form select {
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width='10'%20height='5'%20viewBox='0%200%2010%205'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M0%200l5%205%205-5z'%20fill='%23eaeaea'/%3E%3C/svg%3E");
+    background-color: #11162a;
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 10px 5px;
