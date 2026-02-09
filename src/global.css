@@ -291,6 +291,11 @@ header h1::after {
         border: 2px solid #7f5af0;
     }
 
+    .avatarusersidebarvip {
+        animation: none;
+        border: 2px solid gold;
+    }
+
     .notification {
         position: fixed;
         bottom: 40px;
