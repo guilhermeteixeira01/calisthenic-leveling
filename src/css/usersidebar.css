@@ -305,12 +305,6 @@
 .xp-fill {
     height: 100%;
     width: 0%;
-
-    background: linear-gradient(90deg,
-            #2b0f4d,
-            #5a1fb8,
-            #b18cff);
-
     border-radius: 8px;
     transition: width 0.6s ease;
 }

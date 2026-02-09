@@ -76,6 +76,7 @@ export default function UserSidebar({
     /* ===== XP TOTAL ===== */
     const xpTotal = userData?.xp ?? 0;
     const rank = calcularRankPorXp(xpTotal);
+    console.log(rank);
     const { xpAtual, xpMax, progresso, nivel } = calcularProgressoXp(xpTotal);
 
     return (
@@ -154,7 +155,10 @@ export default function UserSidebar({
                         </div>
 
                         <div className="xp-bar">
-                            <div className="xp-fill" style={{ width: `${progresso}%` }} />
+                            <div
+                                className={`xp-fill rank-${rank}`}
+                                style={{ width: `${progresso}%` }}
+                            />
                         </div>
                     </div>
                 </div>

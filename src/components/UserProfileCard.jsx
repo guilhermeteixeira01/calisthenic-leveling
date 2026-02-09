@@ -81,7 +81,10 @@ export default function UserProfileCard({ userId, onClose }) {
                         <span>{xpAtual} / {xpMax} XP</span>
                     </div>
                     <div className="xp-bar">
-                        <div className="xp-fill" style={{ width: `${progresso}%` }} />
+                        <div
+                            className={`xp-fill rank-${rankAtual}`}
+                            style={{ width: `${progresso}%` }}
+                        />
                     </div>
                 </div>
 

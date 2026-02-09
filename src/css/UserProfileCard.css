@@ -128,7 +128,6 @@
 
 .xp-fill {
     height: 100%;
-    background: #22c55e;
     width: 0%;
     transition: width 0.5s ease;
     border-radius: 6px;
