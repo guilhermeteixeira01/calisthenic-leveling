@@ -36,6 +36,7 @@ export default function Register() {
                 displayNameLower: name.trim().toLowerCase(), // 🔥 nome normalizado pro login
                 email: email.trim().toLowerCase(), // já salva email padronizado também
                 xp: 0,
+                cargo: "free",
                 photoURL: userCredential.user.photoURL || null
             });
 

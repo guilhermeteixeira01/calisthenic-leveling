@@ -6,6 +6,8 @@ import { db } from "../firebase";
 import { SITENAME, XP_POR_RANK } from "../constants/xpPorRank";
 import { calcularProgressoXp } from "../utils/rankUtils";
 
+import LOGOVIP from "../assets/img/vip.png";
+
 const RANKS = Object.entries(XP_POR_RANK);
 
 export default function UserSidebar({
@@ -20,12 +22,12 @@ export default function UserSidebar({
 }) {
     const [userData, setUserData] = useState(null);
     const [showNovidades, setShowNovidades] = useState(false);
+    const [isVIP, setIsVIP] = useState(false);
 
     const handleMenuClick = (action) => {
         setMenuOpen(false); // fecha o menu
         action?.();         // executa a ação do botão
     };
-
 
     /* ===== Controla scroll ===== */
     useEffect(() => {
@@ -44,11 +46,14 @@ export default function UserSidebar({
                     xp: 0,
                     criadoEm: Date.now(),
                     photoURL: null,
+                    cargo: "free", // valor padrão
                 });
                 return;
             }
 
-            setUserData(snap.data());
+            const data = snap.data();
+            setUserData(data);
+            setIsVIP(data.cargo === "vip"); // ✅ VIP atualizado corretamente
         });
 
         return () => unsub();
@@ -60,9 +65,7 @@ export default function UserSidebar({
         if (!url || !user?.uid) return;
 
         try {
-            await updateDoc(doc(db, "usuarios", user.uid), {
-                photoURL: url,
-            });
+            await updateDoc(doc(db, "usuarios", user.uid), { photoURL: url });
             setUserData((prev) => ({ ...prev, photoURL: url }));
         } catch (err) {
             console.error("Erro ao atualizar a foto:", err);
@@ -85,35 +88,60 @@ export default function UserSidebar({
             {/* Sidebar */}
             <aside className={`user-sidebar ${menuOpen ? "active" : ""}`}>
                 {/* UPDATE */}
-                <button
-                    className="btn-novidades"
-                    onClick={() => setShowNovidades(true)}
-                >
+                <button className="btn-novidades" onClick={() => setShowNovidades(true)}>
                     NEW
                 </button>
 
                 <div className="user-profile">
                     {/* Avatar clicável */}
-                    <div
-                        className="avatar-wrapper"
-                        onClick={handleChangePhotoURL}
-                        title="Clique para mudar a foto"
-                        style={{
-                            width: "180px",
-                            height: "180px",
-                        }}
-                    >
-                        <img
-                            src={
-                                userData?.photoURL ||
-                                "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                            }
-                            alt="Perfil"
-                            className="avatarusersidebar"
-                        />
-                    </div>
+                    {isVIP ? (
+                        <>
+                            <div
+                                className="avatar-wrapper"
+                                onClick={handleChangePhotoURL}
+                                title="Clique para mudar a foto"
+                            >
+                                <div className="avatar-hover-layer">
+                                    <img
+                                        src={
+                                            userData?.photoURL ||
+                                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                                        }
+                                        alt="Perfil"
+                                        className="avatarusersidebarvip"
+                                    />
+                                </div>
 
-                    <span className="user-name">{user.displayName || "Usuário"}</span>
+                                {/* Badge VIP */}
+                                <img src={LOGOVIP} alt="VIP" className="vip-badge" />
+                            </div>
+
+                            <span className="user-name-vip">{user.displayName || "Usuário"}</span>
+                        </>
+                    ) : (
+                        <>
+                            <div
+                                className="avatar-wrapper"
+                                onClick={handleChangePhotoURL}
+                                title="Clique para mudar a foto"
+                            >
+                                <div className="avatar-hover-layer">
+                                    <img
+                                        src={
+                                            userData?.photoURL ||
+                                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                                        }
+                                        alt="Perfil"
+                                        className="avatarusersidebar"
+                                    />
+                                </div>
+                            </div>
+
+                            <span className="user-name">{user.displayName || "Usuário"}</span>
+                        </>
+                    )}
+
+
                     <span className={`user-rank rank-${rank}`}>Rank {rank}</span>
 
                     {/* XP */}
@@ -165,6 +193,7 @@ export default function UserSidebar({
                 <button className="logout-btn" onClick={onLogout}>
                     Sair
                 </button>
+
                 {/* Copyright */}
                 <div
                     style={{
@@ -178,23 +207,26 @@ export default function UserSidebar({
                     © Desenvolvido por Guilherme Teixeira
                 </div>
             </aside>
+
+            {/* Novidades overlay */}
             {showNovidades && (
                 <div className="novidades-overlay" onClick={() => setShowNovidades(false)}>
-                    <div
-                        className="novidades-card"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button
-                            className="novidades-close"
-                            onClick={() => setShowNovidades(false)}
-                        >
+                    <div className="novidades-card" onClick={(e) => e.stopPropagation()}>
+                        <button className="novidades-close" onClick={() => setShowNovidades(false)}>
                             ✕
                         </button>
 
-                        <h2><img src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp" alt="fire" style={{ width: 25 }} /> Novidades</h2>
+                        <h2>
+                            <img
+                                src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
+                                alt="fire"
+                                style={{ width: 25 }}
+                            />{" "}
+                            Novidades
+                        </h2>
 
                         <p>
-                            Bem-vindo à nova atualização do <strong>{SITENAME}</strong> !
+                            Bem-vindo à nova atualização do <strong>{SITENAME}</strong>!
                         </p>
 
                         <ul>
@@ -224,7 +256,6 @@ export default function UserSidebar({
                             <strong>4.</strong> O CSS foi totalmente otimizado para
                             <strong> mobile e desktop</strong>, garantindo melhor desempenho e usabilidade.
                         </p>
-
                     </div>
                 </div>
             )}
