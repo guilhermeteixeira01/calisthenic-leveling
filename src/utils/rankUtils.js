@@ -40,3 +40,16 @@ export function calcularProgressoXp(xpTotal = 0) {
         progresso: Math.min((xpExtra / XP_POR_RANK.S) * 100, 100)
     };
 }
+
+export function calcularRankPorXp(xpTotal) {
+    let acumulado = 0;
+
+    for (const [rank, xpRank] of RANKS) {
+        acumulado += xpRank;
+        if (xpTotal < acumulado) {
+            return rank;
+        }
+    }
+
+    return "S";
+}

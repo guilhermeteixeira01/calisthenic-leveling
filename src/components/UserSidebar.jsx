@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, updateDoc, getDoc, writeBatch, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 // XP necessário por rank
 import { SITENAME, XP_POR_RANK } from "../constants/xpPorRank";
-import { calcularProgressoXp } from "../utils/rankUtils";
+import { calcularProgressoXp, calcularRankPorXp } from "../utils/rankUtils";
 
 import LOGOVIP from "../assets/img/vip.png";
 
@@ -23,10 +23,11 @@ export default function UserSidebar({
     const [userData, setUserData] = useState(null);
     const [showNovidades, setShowNovidades] = useState(false);
     const [isVIP, setIsVIP] = useState(false);
+    const [isResetting, setIsResetting] = useState(false); // ✅ status do reset
 
     const handleMenuClick = (action) => {
-        setMenuOpen(false); // fecha o menu
-        action?.();         // executa a ação do botão
+        setMenuOpen(false);
+        action?.();
     };
 
     /* ===== Controla scroll ===== */
@@ -47,37 +48,73 @@ export default function UserSidebar({
                     criadoEm: Date.now(),
                     photoURL: null,
                     cargo: "free", // valor padrão
+                    novidadesVistas: false, // adiciona campo
                 });
+                setShowNovidades(true); // abre modal na primeira vez
                 return;
             }
 
             const data = snap.data();
             setUserData(data);
-            setIsVIP(data.cargo === "vip"); // ✅ VIP atualizado corretamente
+            setIsVIP(data.cargo === "vip");
+
+            // Abre o modal se não tiver visto ainda
+            if (!data.novidadesVistas) {
+                setShowNovidades(true);
+            }
         });
 
         return () => unsub();
     }, [user]);
 
-    if (isVIP) {
-        document.documentElement.style.setProperty('--purple', 'gold');
-        document.documentElement.style.setProperty('--purple2', '#5a451d');
-        document.documentElement.style.setProperty('--purple-glow', 'rgba(238, 207, 34, 0.45)');
-        document.documentElement.style.setProperty('--back1', '#5a4c1d');
-        document.documentElement.style.setProperty('--back2', '#2c2510');
-        document.documentElement.style.setProperty('--back3', '#0d0d0d');
-        document.documentElement.style.setProperty('--back4', '#050505');
-        document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
-    } else {
-        document.documentElement.style.setProperty('--purple', '#7f5af0');
-        document.documentElement.style.setProperty('--purple2', '#3b1d5a');
-        document.documentElement.style.setProperty('--purple-glow', 'rgba(122, 34, 238, 0.45)');
-        document.documentElement.style.setProperty('--back1', '#3b1d5a');
-        document.documentElement.style.setProperty('--back2', '#1c102c');
-        document.documentElement.style.setProperty('--back3', '#0d0d0d');
-        document.documentElement.style.setProperty('--back4', '#050505');
-        document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
-    }
+    /* ===== Função para fechar novidades ===== */
+    const closeNovidades = async () => {
+        setShowNovidades(false);
+
+        if (!user?.uid) return;
+
+        try {
+            await updateDoc(doc(db, "usuarios", user.uid), {
+                novidadesVistas: true
+            });
+        } catch (err) {
+            console.error("Erro ao atualizar novidades:", err);
+        }
+    };
+
+    /* ===== Resetar novidades de todos (admin) ===== */
+    const resetNovidadesParaTodos = async () => {
+        if (!userData?.admin) return;
+        if (!window.confirm("Tem certeza que deseja resetar as novidades para todos os usuários?")) return;
+
+        try {
+            setIsResetting(true);
+
+            const usuariosRef = collection(db, "usuarios");
+            const snapshot = await getDoc(usuariosRef);
+
+            if (snapshot.empty) {
+                alert("Nenhum usuário encontrado!");
+                setIsResetting(false);
+                return;
+            }
+
+            const batch = writeBatch(db);
+
+            snapshot.forEach((userDoc) => {
+                const userRef = doc(db, "usuarios", userDoc.id);
+                batch.update(userRef, { novidadesVistas: false });
+            });
+
+            await batch.commit();
+            alert(`Novidades resetadas para ${snapshot.size} usuários!`);
+        } catch (err) {
+            console.error("Erro ao resetar novidades:", err);
+            alert("Erro ao resetar novidades, veja o console.");
+        } finally {
+            setIsResetting(false);
+        }
+    };
 
     /* ===== Atualiza foto por URL ===== */
     const handleChangePhotoURL = async () => {
@@ -97,6 +134,29 @@ export default function UserSidebar({
     const xpTotal = userData?.xp ?? 0;
     const rank = calcularRankPorXp(xpTotal);
     const { xpAtual, xpMax, progresso, nivel } = calcularProgressoXp(xpTotal);
+
+    // ===== VIP CSS =====
+    useEffect(() => {
+        if (isVIP) {
+            document.documentElement.style.setProperty('--purple', 'gold');
+            document.documentElement.style.setProperty('--purple2', '#5a451d');
+            document.documentElement.style.setProperty('--purple-glow', 'rgba(238, 207, 34, 0.45)');
+            document.documentElement.style.setProperty('--back1', '#5a4c1d');
+            document.documentElement.style.setProperty('--back2', '#2c2510');
+            document.documentElement.style.setProperty('--back3', '#0d0d0d');
+            document.documentElement.style.setProperty('--back4', '#050505');
+            document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
+        } else {
+            document.documentElement.style.setProperty('--purple', '#7f5af0');
+            document.documentElement.style.setProperty('--purple2', '#3b1d5a');
+            document.documentElement.style.setProperty('--purple-glow', 'rgba(122, 34, 238, 0.45)');
+            document.documentElement.style.setProperty('--back1', '#3b1d5a');
+            document.documentElement.style.setProperty('--back2', '#1c102c');
+            document.documentElement.style.setProperty('--back3', '#0d0d0d');
+            document.documentElement.style.setProperty('--back4', '#050505');
+            document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
+        }
+    }, [isVIP]);
 
     return (
         <>
@@ -229,77 +289,79 @@ export default function UserSidebar({
                 >
                     © Desenvolvido por Guilherme Teixeira
                 </div>
-            </aside>
 
-            {/* Novidades overlay */}
-            {showNovidades && (
-                <div className="novidades-overlay" onClick={() => setShowNovidades(false)}>
-                    <div className="novidades-card" onClick={(e) => e.stopPropagation()}>
-                        <button className="novidades-close" onClick={() => setShowNovidades(false)}>
-                            ✕
-                        </button>
 
-                        <h2 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "center", gap: 20 }}>
-                            <img
-                                src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
-                                alt="fire"
-                                style={{ width: 30 }}
-                            />{" "}
-                            Novidades
-                            <img
-                                src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
-                                alt="fire"
-                                style={{ width: 30 }}
-                            />{" "}
-                        </h2>
+                {/* Novidades overlay */}
+                {showNovidades && (
+                    <div className="novidades-overlay" onClick={closeNovidades}>
+                        <div className="novidades-card" onClick={(e) => e.stopPropagation()}>
+                            <button className="novidades-close" onClick={closeNovidades}>
+                                ✕
+                            </button>
 
-                        <p>
-                            Bem-vindo à nova atualização do <strong>{SITENAME}</strong>!
-                        </p>
+                            <h2 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "center", gap: 20 }}>
+                                <img
+                                    src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
+                                    alt="fire"
+                                    style={{ width: 30 }}
+                                />{" "}
+                                Novidades
+                                <img
+                                    src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
+                                    alt="fire"
+                                    style={{ width: 30 }}
+                                />{" "}
+                            </h2>
 
-                        <ul>
-                            <li>✨ Novo sistema de <span style={{ color: "red", fontWeight: "bold" }}>XP</span> com progressão</li>
-                            <li>🎯 Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span><strong> já disponível</strong></li>
-                            <li>🏆 Ranking <span style={{ color: "red", fontWeight: "bold" }}>Top 15</span> dos atletas</li>
-                            <li>🛠️ Novo Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Upgrades</span></li>
-                            <li>👑 Novo designer e insignia <span style={{ color: "gold", fontWeight: "bold" }}>VIP</span></li>
-                        </ul>
+                            <p>
+                                Bem-vindo à nova atualização do <strong>{SITENAME}</strong>!
+                            </p>
 
-                        <p>
-                            <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: todo o visual do Aplicatvo foi reformulado para ficar
-                            ainda mais fiel ao tema esportivo e gamer.
-                        </p>
+                            <ul>
+                                <li>✨ Novo sistema de <span style={{ color: "red", fontWeight: "bold" }}>XP</span> com progressão</li>
+                                <li>🎯 Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span><strong> já disponível</strong></li>
+                                <li>🏆 Ranking <span style={{ color: "red", fontWeight: "bold" }}>Top 15</span> dos atletas</li>
+                                <li>🛠️ Novo Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Upgrades</span></li>
+                                <li>👑 Novo designer e insignia <span style={{ color: "gold", fontWeight: "bold" }}>VIP</span></li>
+                            </ul>
 
-                        <p>
-                            <strong>2.</strong> O sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span> já está ativo!
-                            Complete desafios, evolua e ganhe XP extra todos os dias.
-                        </p>
+                            <p>
+                                <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: todo o visual do Aplicatvo foi reformulado para ficar
+                                ainda mais fiel ao tema esportivo e gamer.
+                            </p>
 
-                        <p>
-                            <strong>3.</strong> O novo <span style={{ color: "red", fontWeight: "bold" }}>Sistema de Upgrades</span> permite
-                            aprimorar atributos, desbloquear vantagens e evoluir ainda mais seu status
-                            dentro da plataforma.
-                        </p>
+                            <p>
+                                <strong>2.</strong> O sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span> já está ativo!
+                                Complete desafios, evolua e ganhe XP extra todos os dias.
+                            </p>
+
+                            <p>
+                                <strong>3.</strong> O novo <span style={{ color: "red", fontWeight: "bold" }}>Sistema de Upgrades</span> permite
+                                aprimorar atributos, desbloquear vantagens e evoluir ainda mais seu status
+                                dentro da plataforma.
+                            </p>
+
+                            {userData?.admin && (
+                                <button
+                                    className="btn-reset-novidades"
+                                    onClick={resetNovidadesParaTodos}
+                                    style={{
+                                        backgroundColor: "red",
+                                        color: "#fff",
+                                        marginTop: "10px",
+                                        padding: "5px 10px",
+                                        border: "2px solid rgba(255, 255, 255, 0.6)",
+                                        borderRadius: 20,
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    🔄 Resetar Novidades (Admin)
+                                </button>
+                            )}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </aside>
         </>
     );
-}
-
-/* =========================
-   FUNÇÕES AUXILIARES
-========================= */
-
-function calcularRankPorXp(xpTotal) {
-    let acumulado = 0;
-
-    for (const [rank, xpRank] of RANKS) {
-        acumulado += xpRank;
-        if (xpTotal < acumulado) {
-            return rank;
-        }
-    }
-
-    return "S";
 }
