@@ -18,8 +18,8 @@
     text-align: center;
     overflow: hidden;
     box-shadow:
-        0 0 30px rgba(127, 90, 240, 0.35),
-        inset 0 0 20px rgba(127, 90, 240, 0.12);
+        0 0 30px var(--purple-glow),
+        inset 0 0 20px var(--purple);
     animation: cardGlow 6s ease-in-out infinite;
 }
 
@@ -30,7 +30,7 @@
     inset: -50%;
     background: conic-gradient(from 0deg,
             transparent,
-            rgba(127, 90, 240, 0.35),
+            var(--purple-glow),
             transparent 30%);
     animation: rotateGlow 8s linear infinite;
     z-index: 0;
@@ -91,11 +91,11 @@
     font-weight: 800;
     font-size: 14px;
     letter-spacing: 0.6px;
-    background: linear-gradient(135deg, #7f5af0, #5b3fd9);
+    background: linear-gradient(135deg, var(--purple), var(--purple2));
     color: #fff;
     box-shadow:
-        0 0 18px rgba(127, 90, 240, 0.6),
-        0 0 6px rgba(127, 90, 240, 0.8);
+        0 0 18px var(--purple-glow),
+        0 0 6px var(--purple-glow);
     transition: all 0.25s ease;
     position: relative;
     /* necessário pro ::after */
@@ -105,8 +105,8 @@
 .missao-btn:hover:not(:disabled) {
     transform: translateY(-2px) scale(1.04);
     box-shadow:
-        0 0 30px rgba(127, 90, 240, 0.9),
-        0 0 12px rgba(127, 90, 240, 1);
+        0 0 30px var(--purple-glow),
+        0 0 12px var(--purple-glow);
 }
 
 /* click */
@@ -163,13 +163,13 @@
     0%,
     100% {
         box-shadow:
-            0 0 25px rgba(127, 90, 240, 0.35),
-            inset 0 0 18px rgba(127, 90, 240, 0.12);
+            0 0 25px var(--purple-glow),
+            inset 0 0 18px var(--purple);
     }
 
     50% {
         box-shadow:
-            0 0 40px rgba(127, 90, 240, 0.6),
-            inset 0 0 26px rgba(127, 90, 240, 0.25);
+            0 0 40px var(--purple-glow),
+            inset 0 0 26px var(--purple-glow);
     }
 }

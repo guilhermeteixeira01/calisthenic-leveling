@@ -5,8 +5,8 @@
     --bg: #0b0f14;
     --card: #111827;
     --card-border: rgba(255, 255, 255, 0.08);
-    --primary: #8122ee;
-    --primary-glow: rgba(122, 34, 238, 0.45);
+    --purple: #8122ee;
+    --purple-glow: rgba(122, 34, 238, 0.45);
     --text: #e5e7eb;
     --muted: #9ca3af;
     --danger: #ef4444;
@@ -82,11 +82,11 @@
 
 .upgrade-card:hover {
     transform: translateY(-6px) scale(1.02);
-    border-color: var(--primary);
+    border-color: var(--purple);
 }
 
 .upgrade-card:hover::before {
-    box-shadow: 0 0 28px var(--primary-glow);
+    box-shadow: 0 0 28px var(--purple-glow);
 }
 
 /* =========================
@@ -96,13 +96,13 @@
     width: 42px;
     height: 42px;
     margin: 0 auto 12px;
-    color: var(--primary);
+    color: var(--purple);
     display: flex;
     align-items: center;
     justify-content: center;
 
     /* glow */
-    filter: drop-shadow(0 0 10px var(--primary-glow));
+    filter: drop-shadow(0 0 10px var(--purple-glow));
     transition: transform 0.25s ease, filter 0.25s ease;
 }
 
@@ -115,7 +115,7 @@
 
 .upgrade-card:hover .upgrade-icon {
     transform: scale(1.12);
-    filter: drop-shadow(0 0 18px var(--primary-glow));
+    filter: drop-shadow(0 0 18px var(--purple-glow));
 }
 
 /* =========================
@@ -141,7 +141,7 @@
     padding: 10px;
     border-radius: 12px;
     border: none;
-    background: linear-gradient(135deg, var(--primary), #38bdf8);
+    background: linear-gradient(135deg, var(--purple), #38bdf8);
     color: #020617;
     font-weight: 600;
     cursor: pointer;
@@ -150,7 +150,7 @@
 
 .upgrade-btn:hover:not(:disabled) {
     filter: brightness(1.1);
-    box-shadow: 0 0 16px var(--primary-glow);
+    box-shadow: 0 0 16px var(--purple-glow);
     cursor: pointer;
 }
 

@@ -5,7 +5,7 @@
     background: linear-gradient(180deg,
             rgba(255, 255, 255, 0.04),
             rgba(255, 255, 255, 0.01));
-    border: 1px solid rgba(128, 0, 255, 0.8);
+    border: 1px solid var(--purple-glow);
     border-radius: 50px;
     box-shadow: 20px 15px 25px black;
     color: #fff;
@@ -20,7 +20,7 @@
     text-shadow:
         0 0 6px var(--purple),
         0 0 12px var(--purple),
-        0 0 24px rgba(128, 0, 255, 0.8);
+        0 0 24px var(--purple-glow);
 }
 
 .top15-list {
@@ -49,9 +49,9 @@
 .top15-left {
     display: flex;
     align-items: center;
+    align-content: center;
     gap: 10px;
     min-width: 300px;
-    /* garante alinhamento das colunas */
 }
 
 /* Número da posição */
@@ -66,7 +66,6 @@
 /* Medalha */
 .top15-item .medal {
     width: 30px;
-    height: 30px;
     flex-shrink: 0;
 }
 
@@ -137,7 +136,6 @@
 .avatar-wrappertop15 {
     position: relative;
     display: inline-block;
-    margin-bottom: 16px;
 }
 
 .vip-badgetop15 {
@@ -153,19 +151,26 @@
     }
 
     .top15-container {
-        padding: none;
+        margin: 0;
+        padding: 0;
         box-shadow: none;
+        border-radius: 20px;
+    }
+
+    .top15-container h2 {
+        margin-top: 20px;
     }
 
     .top15-item {
-        flex-direction: row;
-        justify-content: center;
+        width: 100%;
+        flex-direction: column;
         align-items: center;
-        padding: 10px 12px;
+        justify-content: center;
     }
 
     .top15-left {
-        gap: 8px;
+        gap: 20px;
+        padding-bottom: 20px;
     }
 
     .top15-left .name {

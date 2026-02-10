@@ -15,6 +15,8 @@ import LOGOVIP from "../assets/img/vip.png";
 // 🔥 FUNÇÃO UNIFICADA
 import { calcularProgressoXp } from "../utils/rankUtils";
 
+import { LEVELMAX } from "../constants/xpPorRank";
+
 const ATRIBUTOS = [
     { id: "forca", nome: "Força", Icon: ForcaIcon },
     { id: "foco", nome: "Foco", Icon: FocoIcon },
@@ -39,7 +41,7 @@ export default function UserProfileCard({ userId, onClose }) {
 
     if (!user) return null;
 
-    const isVIP = user.cargo?.toLowerCase() === "vip";
+    const isVIP = user.cargo === "vip";
 
     const photoURL =
         user.photoURL ||
@@ -95,7 +97,12 @@ export default function UserProfileCard({ userId, onClose }) {
                         <div key={a.id} className={isVIP ? "atributovip" : "atributo"}>
                             <a.Icon />
                             <span>{a.nome}</span>
-                            <b>{user.atributos?.[a.id] || 0}</b>
+                            {user.atributos?.[a.id] === LEVELMAX
+                                ? <b style={{ color: "red" }}>
+                                    Nível Max {user.atributos?.[a.id] ?? 0}
+                                </b>
+                                : <b>{user.atributos?.[a.id] ?? 0}</b>
+                            }
                         </div>
                     ))}
                 </div>

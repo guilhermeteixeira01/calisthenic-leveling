@@ -23,7 +23,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(280deg, #7f5af0, #11162a);
+    background: linear-gradient(280deg, var(--purple), #11162a);
     border-radius: 10px;
 }
 
@@ -43,10 +43,19 @@
     --bg-main: #0b0f1a;
     --bg-card: #11162a;
     --purple: #7f5af0;
-    --gold: #f0bb5a;
+    --purple2: #3b1d5a;
+    --gold: gold;
+    --gold2: #5a451d;
     --text: #eaeaea;
     --success: #22c55e;
     --red: #ff0000;
+
+    /* background */
+    --back1: #3b1d5a;
+    --back2: #1c102c;
+    --back3: #0d0d0d;
+    --back4: #050505;
+    --backbox: rgba(120, 60, 255, 0.15);
 }
 
 /* BODY */
@@ -57,11 +66,11 @@ body {
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
     background: linear-gradient(to top,
-            #3b1d5a 0%,
-            #1c102c 25%,
-            #0d0d0d 55%,
-            #050505 100%);
-    box-shadow: inset 0 0 300px rgba(120, 60, 255, 0.15);
+            var(--back1) 0%,
+            var(--back2) 25%,
+            var(--back3) 55%,
+            var(--back4) 100%);
+    box-shadow: inset 0 0 300px var(--backbox);
     color: var(--text);
     overflow-x: hidden;
     padding-top: env(safe-area-inset-top);
@@ -360,35 +369,6 @@ header h1::after {
     .notification {
         font-size: 0.8rem;
         padding: 0.6rem 0.8rem;
-    }
-
-    .top15-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px;
-    }
-
-    .top15-item .avatar {
-        margin-bottom: 5px;
-    }
-
-    .top15-item .name,
-    .top15-item .xp,
-    .top15-item .rank {
-        margin-right: 0;
-        margin-top: 2px;
-    }
-
-    .top15-item .name {
-        font-size: 16px;
-    }
-
-    .top15-item .xp {
-        font-size: 14px;
-    }
-
-    .top15-item .rank {
-        font-size: 18px;
     }
 
     .sidebar-actions button {

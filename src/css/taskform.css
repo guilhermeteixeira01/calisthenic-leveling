@@ -13,7 +13,7 @@
     padding: 0.75rem 1rem;
     font-size: 1rem;
     border-radius: 8px;
-    border: 2px solid #7f5af0;
+    border: 2px solid var(--purple);
     background: var(--bg);
     color: #eaeaea;
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -29,13 +29,12 @@
 .form input:focus,
 .form select:focus {
     outline: none;
-    border-color: #a178f7;
-    box-shadow: 0 0 8px #a178f7;
+    border-color: var(--purple2);
+    box-shadow: 0 0 8px var(--purple2);
 }
 
 .form button {
-    background-color: #7f5af0;
-    color: white;
+    background-color: var(--purple);
     padding: 0 1.5rem;
     border: none;
     border-radius: 8px;
@@ -48,8 +47,8 @@
 }
 
 .form button:hover {
-    background-color: #a178f7;
-    box-shadow: 0 0 15px #a178f7;
+    background-color: var(--purple2);
+    box-shadow: 0 0 15px var(--purple2);
 }
 
 .form select {

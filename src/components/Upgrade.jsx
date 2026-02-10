@@ -9,7 +9,7 @@ import { ReactComponent as VitalidadeIcon } from "../assets/icons/vitalidade.svg
 import { ReactComponent as CarismaIcon } from "../assets/icons/carisma.svg";
 import { ReactComponent as SabedoriaIcon } from "../assets/icons/sabedoria.svg";
 
-const XP_POR_PONTO = 800;
+import { LEVELMAX, XP_POR_PONTO } from "../constants/xpPorRank";
 
 const ATRIBUTOS = [
     { id: "forca", nome: "Força", Icon: ForcaIcon },
@@ -50,8 +50,6 @@ export default function Upgrades({ user }) {
                     xpConvertidoUpgrade:
                         xpConvertido + novosPontos * XP_POR_PONTO
                 });
-
-                // ⚠️ NÃO retorna — deixa o snapshot rodar novamente
                 return;
             }
 
@@ -98,21 +96,24 @@ export default function Upgrades({ user }) {
                         </div>
 
                         <h3>{a.nome}</h3>
-                        <p>Nível {atributos[a.id] || 0}</p>
+
+                        {atributos[a.id] === LEVELMAX
+                            ? <p>Nível Max</p>
+                            : <><p>Nível {atributos[a.id]}</p></>
+                        }
 
                         <button
                             type="button"
                             className="upgrade-btn"
-                            disabled={pontos <= 0}
+                            disabled={pontos <= 0 || atributos[a.id] === LEVELMAX}
                             onClick={() => upar(a.id)}
                         >
                             + Upgrade
                         </button>
-
-
                     </div>
                 ))}
             </div>
-        </div>
+
+        </div >
     );
 }

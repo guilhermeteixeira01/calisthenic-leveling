@@ -15,12 +15,6 @@ const medals = {
     3: BronzeMedal,
 };
 
-const nameColors = {
-    1: "#FFD700",
-    2: "#C0C0C0",
-    3: "#CD7F32",
-};
-
 export default function Top15({ onOpenProfile }) {
     const [usuarios, setUsuarios] = useState([]);
 
@@ -97,8 +91,8 @@ export default function Top15({ onOpenProfile }) {
                                 <span
                                     className="name"
                                     style={{
-                                        color: nameColors[rankPosicao] || "#22c55e",
-                                        fontWeight: rankPosicao <= 3 ? "bold" : "normal",
+                                        color: isVIP ? "gold" : "snow",
+                                        fontWeight: "bold",
                                     }}
                                 >
                                     {user.displayName}

@@ -1,4 +1,6 @@
 export const SITENAME = "Calisthenic Leveling";
+export const LEVELMAX = 100;
+export const XP_POR_PONTO = 200;
 
 export const XP_POR_RANK = {
     E: 150,

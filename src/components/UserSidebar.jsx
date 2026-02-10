@@ -59,6 +59,26 @@ export default function UserSidebar({
         return () => unsub();
     }, [user]);
 
+    if (isVIP) {
+        document.documentElement.style.setProperty('--purple', 'gold');
+        document.documentElement.style.setProperty('--purple2', '#5a451d');
+        document.documentElement.style.setProperty('--purple-glow', 'rgba(238, 207, 34, 0.45)');
+        document.documentElement.style.setProperty('--back1', '#5a4c1d');
+        document.documentElement.style.setProperty('--back2', '#2c2510');
+        document.documentElement.style.setProperty('--back3', '#0d0d0d');
+        document.documentElement.style.setProperty('--back4', '#050505');
+        document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
+    } else {
+        document.documentElement.style.setProperty('--purple', '#7f5af0');
+        document.documentElement.style.setProperty('--purple2', '#3b1d5a');
+        document.documentElement.style.setProperty('--purple-glow', 'rgba(122, 34, 238, 0.45)');
+        document.documentElement.style.setProperty('--back1', '#3b1d5a');
+        document.documentElement.style.setProperty('--back2', '#1c102c');
+        document.documentElement.style.setProperty('--back3', '#0d0d0d');
+        document.documentElement.style.setProperty('--back4', '#050505');
+        document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
+    }
+
     /* ===== Atualiza foto por URL ===== */
     const handleChangePhotoURL = async () => {
         const url = prompt("Cole a URL da imagem do seu avatar:");
@@ -76,7 +96,6 @@ export default function UserSidebar({
     /* ===== XP TOTAL ===== */
     const xpTotal = userData?.xp ?? 0;
     const rank = calcularRankPorXp(xpTotal);
-    console.log(rank);
     const { xpAtual, xpMax, progresso, nivel } = calcularProgressoXp(xpTotal);
 
     return (
@@ -220,13 +239,18 @@ export default function UserSidebar({
                             ✕
                         </button>
 
-                        <h2>
+                        <h2 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "center", gap: 20 }}>
                             <img
                                 src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
                                 alt="fire"
-                                style={{ width: 25 }}
+                                style={{ width: 30 }}
                             />{" "}
                             Novidades
+                            <img
+                                src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
+                                alt="fire"
+                                style={{ width: 30 }}
+                            />{" "}
                         </h2>
 
                         <p>
@@ -234,31 +258,27 @@ export default function UserSidebar({
                         </p>
 
                         <ul>
-                            <li>✨ Novo sistema de XP com progressão automática</li>
-                            <li>🎯 Sistema de Missões Diárias <strong>já disponível</strong></li>
-                            <li>🏆 Ranking Top 15 dos atletas</li>
-                            <li>🛠️ Novo Sistema de Upgrades</li>
+                            <li>✨ Novo sistema de <span style={{ color: "red", fontWeight: "bold" }}>XP</span> com progressão</li>
+                            <li>🎯 Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span><strong> já disponível</strong></li>
+                            <li>🏆 Ranking <span style={{ color: "red", fontWeight: "bold" }}>Top 15</span> dos atletas</li>
+                            <li>🛠️ Novo Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Upgrades</span></li>
+                            <li>👑 Novo designer e insignia <span style={{ color: "gold", fontWeight: "bold" }}>VIP</span></li>
                         </ul>
 
                         <p>
-                            <strong>1.</strong> Mega Update: todo o visual do site foi reformulado para ficar
+                            <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: todo o visual do Aplicatvo foi reformulado para ficar
                             ainda mais fiel ao tema esportivo e gamer.
                         </p>
 
                         <p>
-                            <strong>2.</strong> O sistema de <strong>Missões Diárias</strong> já está ativo!
-                            Complete desafios, evolua seu personagem e ganhe XP extra todos os dias.
+                            <strong>2.</strong> O sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span> já está ativo!
+                            Complete desafios, evolua e ganhe XP extra todos os dias.
                         </p>
 
                         <p>
-                            <strong>3.</strong> O novo <strong>Sistema de Upgrades</strong> permite
-                            aprimorar atributos, desbloquear vantagens e evoluir ainda mais seu atleta
+                            <strong>3.</strong> O novo <span style={{ color: "red", fontWeight: "bold" }}>Sistema de Upgrades</span> permite
+                            aprimorar atributos, desbloquear vantagens e evoluir ainda mais seu status
                             dentro da plataforma.
-                        </p>
-
-                        <p>
-                            <strong>4.</strong> O CSS foi totalmente otimizado para
-                            <strong> mobile e desktop</strong>, garantindo melhor desempenho e usabilidade.
                         </p>
                     </div>
                 </div>

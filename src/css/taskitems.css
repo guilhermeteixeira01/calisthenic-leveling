@@ -9,19 +9,19 @@
     background: linear-gradient(180deg,
             rgba(255, 255, 255, 0.04),
             rgba(255, 255, 255, 0.01));
-    border-left: 6px solid var(--purple, #7f5af0);
+    border-left: 6px solid var(--purple, var(--purple));
     padding: 1rem 1.2rem;
     border-radius: 20px;
     margin-bottom: 1rem;
     color: var(--text, #eaeaea);
-    box-shadow: 0 0 28px var(--primary-glow);
+    box-shadow: 0 0 10px var(--purple);
     transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
 }
 
 .card.done {
     border-left: 6px solid var(--success);
     opacity: 0.8;
-    box-shadow: 0 0 28px rgba(34, 197, 94, 0.6);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
     text-decoration: line-through;
     color: #a0a0a0;
 }
@@ -51,8 +51,8 @@ button.complete.disabled {
 
 .complete {
     background: transparent;
-    border: 2px solid var(--purple, #7f5af0);
-    color: var(--purple, #7f5af0);
+    border: 2px solid var(--purple, var(--purple));
+    color: var(--purple, var(--purple));
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-weight: 600;
@@ -62,7 +62,7 @@ button.complete.disabled {
 }
 
 .complete:hover {
-    background-color: var(--purple, #7f5af0);
+    background-color: var(--purple, var(--purple));
     color: #fff;
     box-shadow: 0 0 28px var(--primary-glow);
 }
