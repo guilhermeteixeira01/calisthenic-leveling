@@ -490,6 +490,8 @@
 
 /* Card */
 .novidades-card {
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 90%;
     max-width: 420px;
@@ -502,6 +504,23 @@
     padding: 26px;
     color: #fff;
     animation: slideUp 0.35s ease;
+}
+
+.btn-reset-novidades {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 2px solid red;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bolder;
+}
+
+.btn-reset-novidades:hover {
+    background-color: var(--purple);
+    color: black;
 }
 
 /* Título */

@@ -106,12 +106,17 @@ export default function Top15({ onOpenProfile }) {
                                         Rank {rankAtual}
                                     </strong>
                                     <span>•</span>
-                                    <strong className={`rank-${rankAtual}`}>
-                                        Nível {nivel}
-                                    </strong>
+                                    {user.xp === 7550
+                                        ? <strong className={`rank-${rankAtual}`}>
+                                            Nível Max
+                                        </strong>
+                                        : <strong className={`rank-${rankAtual}`}>
+                                            Nível {nivel}
+                                        </strong>
+                                    }
                                 </div>
 
-                                <span className="xp">{user.xp} XP</span>
+                                <span className={`xp-${rankAtual}`}>{user.xp} XP</span>
                             </div>
                         </li>
                     );

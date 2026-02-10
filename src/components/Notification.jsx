@@ -115,8 +115,8 @@ export default function Notification() {
 
             setTimeout(() => {
                 setNotifications(prev => prev.filter(n => n.id !== id));
-            }, 8000);
-        }, 12000);
+            }, 6000);
+        }, 30000);
 
         return () => clearInterval(interval);
     }, []);

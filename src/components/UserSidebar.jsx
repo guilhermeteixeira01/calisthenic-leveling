@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { doc, onSnapshot, setDoc, updateDoc, getDoc, writeBatch, collection } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, updateDoc, getDocs, writeBatch, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 // XP necessário por rank
-import { SITENAME, XP_POR_RANK } from "../constants/xpPorRank";
+import { SITENAME } from "../constants/xpPorRank";
 import { calcularProgressoXp, calcularRankPorXp } from "../utils/rankUtils";
 
 import LOGOVIP from "../assets/img/vip.png";
-
-const RANKS = Object.entries(XP_POR_RANK);
 
 export default function UserSidebar({
     user,
@@ -85,24 +83,24 @@ export default function UserSidebar({
     /* ===== Resetar novidades de todos (admin) ===== */
     const resetNovidadesParaTodos = async () => {
         if (!userData?.admin) return;
+
         if (!window.confirm("Tem certeza que deseja resetar as novidades para todos os usuários?")) return;
 
         try {
             setIsResetting(true);
 
             const usuariosRef = collection(db, "usuarios");
-            const snapshot = await getDoc(usuariosRef);
+            const snapshot = await getDocs(usuariosRef); // ✅ CERTO
 
             if (snapshot.empty) {
                 alert("Nenhum usuário encontrado!");
-                setIsResetting(false);
                 return;
             }
 
             const batch = writeBatch(db);
 
             snapshot.forEach((userDoc) => {
-                const userRef = doc(db, "usuarios", userDoc.id);
+                const userRef = doc(db, "usuarios", userDoc.id); // ✅ DocumentReference
                 batch.update(userRef, { novidadesVistas: false });
             });
 
@@ -227,7 +225,10 @@ export default function UserSidebar({
                     {/* XP */}
                     <div className="xp-container">
                         <div className="xp-info">
-                            <span className="nivel-text">Nível {nivel}</span>
+                            {xpTotal === 7550
+                                ? <span className="nivel-text">Nível Max</span>
+                                : <span className="nivel-text">Nível {nivel}</span>
+                            }
                             <span className="xp-text">
                                 {xpAtual} / {xpMax} XP
                             </span>
@@ -345,15 +346,6 @@ export default function UserSidebar({
                                 <button
                                     className="btn-reset-novidades"
                                     onClick={resetNovidadesParaTodos}
-                                    style={{
-                                        backgroundColor: "red",
-                                        color: "#fff",
-                                        marginTop: "10px",
-                                        padding: "5px 10px",
-                                        border: "2px solid rgba(255, 255, 255, 0.6)",
-                                        borderRadius: 20,
-                                        cursor: "pointer"
-                                    }}
                                 >
                                     🔄 Resetar Novidades (Admin)
                                 </button>

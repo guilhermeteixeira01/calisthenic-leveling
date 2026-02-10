@@ -66,6 +66,7 @@
 /* Medalha */
 .top15-item .medal {
     width: 30px;
+    height: 30px;
     flex-shrink: 0;
 }
 
@@ -91,7 +92,9 @@
 /* Rank e Nível */
 .top15-right {
     display: flex;
+    justify-content: center;
     align-items: center;
+    align-content: center;
     gap: 15px;
     min-width: 180px;
 }
@@ -107,19 +110,6 @@
     font-weight: bold;
     font-size: 16px;
     color: #00ffea;
-}
-
-/* Rank colors */
-.rank-1 {
-    color: #FFD700;
-}
-
-.rank-2 {
-    color: #C0C0C0;
-}
-
-.rank-3 {
-    color: #CD7F32;
 }
 
 .usernamevip {
@@ -164,8 +154,6 @@
     .top15-item {
         width: 100%;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
 
     .top15-left {
@@ -174,12 +162,16 @@
     }
 
     .top15-left .name {
-        font-size: 16px;
+        font-size: 12px;
     }
 
     .top15-right {
         gap: 8px;
-        font-size: 14px;
+        font-size: 12px;
+    }
+
+    .xp {
+        font-size: 12px;
     }
 
     .medal {

@@ -18,6 +18,11 @@
     background-color: gold;
 }
 
+.xp-S {
+    color: gold;
+    font-weight: bolder;
+}
+
 /* 🔴 RANK A – ELITE */
 .rank-A {
     color: red;
@@ -29,6 +34,11 @@
 
 .xp-fill.rank-A {
     background-color: red;
+}
+
+.xp-A {
+    color: red;
+    font-weight: bolder;
 }
 
 /* 🔵 RANK B – RARO */
@@ -44,9 +54,14 @@
     background-color: cyan;
 }
 
+.xp-B {
+    color: cyan;
+    font-weight: bolder;
+}
+
 /* 🟢 RANK C – COMBATENTE */
 .rank-C {
-    color: green;
+    color: rgb(54, 206, 54);
     text-shadow:
         0 0 2px rgba(0, 230, 118, 0.5),
         0 0 4px rgba(105, 240, 174, 0.4),
@@ -54,7 +69,12 @@
 }
 
 .xp-fill.rank-C {
-    background-color: green;
+    background-color: rgb(54, 206, 54);
+}
+
+.xp-C {
+    color: rgb(54, 206, 54);
+    font-weight: bolder;
 }
 
 /* 🟠 RANK D – INICIANTE */
@@ -70,6 +90,11 @@
     background-color: orange;
 }
 
+.xp-D {
+    color: orange;
+    font-weight: bolder;
+}
+
 /* ⚪ RANK E – BÁSICO */
 .rank-E {
     color: #b0bec5;
@@ -80,6 +105,11 @@
 
 .xp-fill.rank-E {
     background-color: #b0bec5;
+}
+
+.xp-E {
+    color: #b0bec5;
+    font-weight: bolder;
 }
 
 .rank-S,
