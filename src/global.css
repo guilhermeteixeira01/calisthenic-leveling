@@ -193,13 +193,13 @@ header h1::after {
         top: 30px;
         right: 15px;
         z-index: 1100;
-        background: #7f5af0;
-        color: #fff;
+        background: var(--purple);
+        color: black;
         border: none;
         font-size: 22px;
         padding: 5px 10px;
         border-radius: 10px;
-        box-shadow: 0 0 10px #7f5af0;
+        box-shadow: 0 0 10px var(--purple);
         cursor: pointer;
     }
 
