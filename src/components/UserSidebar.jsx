@@ -29,6 +29,45 @@ export default function UserSidebar({
         action?.();
     };
 
+    useEffect(() => {
+        if (!userData) return;
+
+        const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
+
+        switch (theme) {
+            case "light":
+                document.documentElement.style.setProperty('--purple', '#fafafa');
+                document.documentElement.style.setProperty('--purple2', '#5d5663');
+                document.documentElement.style.setProperty('--purple-glow', 'rgba(223, 215, 235, 0.45)');
+                document.documentElement.style.setProperty('--back1', '#58505f');
+                document.documentElement.style.setProperty('--back2', '#302d33');
+                document.documentElement.style.setProperty('--back3', '#0d0d0d');
+                document.documentElement.style.setProperty('--back4', '#050505');
+                document.documentElement.style.setProperty('--backbox', 'rgba(231, 224, 248, 0.15)');
+                break;
+            case "vip-theme":
+                document.documentElement.style.setProperty('--purple', 'gold');
+                document.documentElement.style.setProperty('--purple2', '#5a451d');
+                document.documentElement.style.setProperty('--purple-glow', 'rgba(238, 207, 34, 0.45)');
+                document.documentElement.style.setProperty('--back1', '#5a4c1d');
+                document.documentElement.style.setProperty('--back2', '#2c2510');
+                document.documentElement.style.setProperty('--back3', '#0d0d0d');
+                document.documentElement.style.setProperty('--back4', '#050505');
+                document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
+                break;
+            default: // dark
+                document.documentElement.style.setProperty('--purple', '#7f5af0');
+                document.documentElement.style.setProperty('--purple2', '#3b1d5a');
+                document.documentElement.style.setProperty('--purple-glow', 'rgba(122, 34, 238, 0.45)');
+                document.documentElement.style.setProperty('--back1', '#3b1d5a');
+                document.documentElement.style.setProperty('--back2', '#1c102c');
+                document.documentElement.style.setProperty('--back3', '#0d0d0d');
+                document.documentElement.style.setProperty('--back4', '#050505');
+                document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
+                break;
+        }
+    }, [userData, isVIP]);
+
     /* ===== Controla scroll ===== */
     useEffect(() => {
         document.body.classList.toggle("menu-open", menuOpen);

@@ -40,7 +40,7 @@ export default function PerfilCFG({ user }) {
     useEffect(() => {
         if (!userData) return;
 
-        const theme = userData.theme || "dark";
+        const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
 
         switch (theme) {
             case "light":
@@ -74,7 +74,7 @@ export default function PerfilCFG({ user }) {
                 document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
                 break;
         }
-    }, [userData]);
+    }, [userData, isVIP]);
 
     if (!userData) return <h2>Carregando...</h2>;
 
@@ -168,7 +168,7 @@ export default function PerfilCFG({ user }) {
                 <div className="select-wrapper">
                     <select
                         className={isVIP ? "vip" : ""}
-                        value={userData.theme || "light"}
+                        value={isVIP ? userData.theme || "vip-theme" : userData.theme || "dark"}
                         onChange={async (e) => {
                             const selectedTheme = e.target.value;
 
