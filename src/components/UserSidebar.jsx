@@ -16,7 +16,8 @@ export default function UserSidebar({
     onOpenTreino,
     onOpenMissoes,
     onOpenUpgrades,
-    onOpenTop15
+    onOpenTop15,
+    onOpenMenuCFG
 }) {
     const [userData, setUserData] = useState(null);
     const [showNovidades, setShowNovidades] = useState(false);
@@ -272,6 +273,13 @@ export default function UserSidebar({
                         </svg>
                         Top 15
                     </button>
+
+                    <button onClick={() => handleMenuClick(onOpenMenuCFG)}>
+                        <svg className="icon" viewBox="0 0 24 24">
+                            <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.028 7.028 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.9 2h-3.8a.5.5 0 00-.49.42l-.36 2.54c-.58.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 8.48a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.6.22l2.39-.96c.51.42 1.05.72 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.22 1.12-.52 1.63-.94l2.39.96c.23.09.5 0 .6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z" />
+                        </svg>
+                        Configurar Perfil
+                    </button>
                 </div>
 
                 <button className="logout-btn" onClick={onLogout}>
@@ -290,70 +298,57 @@ export default function UserSidebar({
                 >
                     © Desenvolvido por Guilherme Teixeira
                 </div>
-
-
-                {/* Novidades overlay */}
-                {showNovidades && (
-                    <div className="novidades-overlay" onClick={closeNovidades}>
-                        <div className="novidades-card" onClick={(e) => e.stopPropagation()}>
-                            <button className="novidades-close" onClick={closeNovidades}>
-                                ✕
-                            </button>
-
-                            <h2 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "center", gap: 20 }}>
-                                <img
-                                    src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
-                                    alt="fire"
-                                    style={{ width: 30 }}
-                                />{" "}
-                                Novidades
-                                <img
-                                    src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
-                                    alt="fire"
-                                    style={{ width: 30 }}
-                                />{" "}
-                            </h2>
-
-                            <p>
-                                Bem-vindo à nova atualização do <strong>{SITENAME}</strong>!
-                            </p>
-
-                            <ul>
-                                <li>✨ Novo sistema de <span style={{ color: "red", fontWeight: "bold" }}>XP</span> com progressão</li>
-                                <li>🎯 Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span><strong> já disponível</strong></li>
-                                <li>🏆 Ranking <span style={{ color: "red", fontWeight: "bold" }}>Top 15</span> dos atletas</li>
-                                <li>🛠️ Novo Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Upgrades</span></li>
-                                <li>👑 Novo designer e insignia <span style={{ color: "gold", fontWeight: "bold" }}>VIP</span></li>
-                            </ul>
-
-                            <p>
-                                <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: todo o visual do Aplicatvo foi reformulado para ficar
-                                ainda mais fiel ao tema esportivo e gamer.
-                            </p>
-
-                            <p>
-                                <strong>2.</strong> O sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span> já está ativo!
-                                Complete desafios, evolua e ganhe XP extra todos os dias.
-                            </p>
-
-                            <p>
-                                <strong>3.</strong> O novo <span style={{ color: "red", fontWeight: "bold" }}>Sistema de Upgrades</span> permite
-                                aprimorar atributos, desbloquear vantagens e evoluir ainda mais seu status
-                                dentro da plataforma.
-                            </p>
-
-                            {userData?.admin && (
-                                <button
-                                    className="btn-reset-novidades"
-                                    onClick={resetNovidadesParaTodos}
-                                >
-                                    🔄 Resetar Novidades (Admin)
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                )}
             </aside>
+            {/* Novidades overlay */}
+            {showNovidades && (
+                <div className="novidades-overlay" onClick={closeNovidades}>
+                    <div className="novidades-card" onClick={(e) => e.stopPropagation()}>
+                        <button className="novidades-close" onClick={closeNovidades}>
+                            ✕
+                        </button>
+
+                        <h2 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "center", gap: 20 }}>
+                            <img
+                                src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
+                                alt="fire"
+                                style={{ width: 30 }}
+                            />{" "}
+                            Novidades
+                            <img
+                                src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
+                                alt="fire"
+                                style={{ width: 30 }}
+                            />{" "}
+                        </h2>
+
+                        <p>
+                            Bem-vindo à nova atualização do <strong>{SITENAME}</strong>!
+                        </p>
+
+                        <ul>
+                            <li>✨ Novo sistema de <span style={{ color: "red", fontWeight: "bold" }}>XP</span> com progressão</li>
+                            <li>🎯 Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Missões Diárias</span><strong> já disponível</strong></li>
+                            <li>🏆 Ranking <span style={{ color: "red", fontWeight: "bold" }}>Top 15</span> dos atletas</li>
+                            <li>🛠️ Novo Sistema de <span style={{ color: "red", fontWeight: "bold" }}>Upgrades</span></li>
+                            <li>👑 Novo designer e insignia <span style={{ color: "gold", fontWeight: "bold" }}>VIP</span></li>
+                        </ul>
+
+                        <p>
+                            <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: Foi fixado alguns bugs de entrega de <span style={{ color: "gold", fontWeight: "bold" }}>XP</span> e adicionado o botão configurar perfil OBS esta em <span style={{ color: "gold", fontWeight: "bold" }}>Manuntenção</span>.
+                        </p>
+
+
+                        {userData?.admin && (
+                            <button
+                                className="btn-reset-novidades"
+                                onClick={resetNovidadesParaTodos}
+                            >
+                                🔄 Resetar Novidades (Admin)
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
         </>
     );
 }

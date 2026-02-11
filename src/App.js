@@ -16,6 +16,7 @@ import Upgrades from './components/Upgrade';
 import UserProfileCard from "./components/UserProfileCard";
 import Top15 from './components/Top15';
 import Missoes from './components/Missoes';
+import PerfilCFG from './components/perfilcfg';
 
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -122,7 +123,6 @@ function App() {
       const semanaAtual = getSegundaAtual();
       const lastReset = userSnap.data()?.lastWeeklyReset;
 
-      // Já resetou nesta semana
       if (lastReset === semanaAtual) return;
 
       console.log("🔄 Reset semanal iniciado");
@@ -189,6 +189,7 @@ function App() {
               onOpenMissoes={() => setTelaAtiva("missoes")}
               onOpenUpgrades={() => setTelaAtiva("upgrades")}
               onOpenTop15={() => setTelaAtiva("top15")}
+              onOpenMenuCFG={() => setTelaAtiva("PerfilCFG")}
               onLogout={logout}
             />
             <div className="container-conteudo">
@@ -197,7 +198,7 @@ function App() {
               {telaAtiva === "treino" && (
                 <>
                   <TaskForm addTask={addTask} diasSemana={diasSemana} />
-                  <ProgressBar tasks={tasks} />
+                  <ProgressBar tasks={tasks} user={user} />
                   <div className="week">
                     {diasSemana.map(day => {
                       const dayTasks = tasks.filter(t => t.day === day);
@@ -219,6 +220,7 @@ function App() {
               {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
               {telaAtiva === "upgrades" && <Upgrades user={user} />}
               {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
+              {telaAtiva === "PerfilCFG" && <PerfilCFG />}
 
               <Notification />
             </div>
