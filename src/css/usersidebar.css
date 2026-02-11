@@ -245,7 +245,7 @@
     right: -2px;
     width: 45px;
     height: 45px;
-    z-index: 5;
+    z-index: 4;
     pointer-events: none;
     filter: drop-shadow(0 0 6px gold);
 }
@@ -484,7 +484,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 6;
     animation: fadeIn 0.3s ease;
 }
 
@@ -503,6 +503,7 @@
     border-radius: 18px;
     padding: 26px;
     color: #fff;
+    z-index: 6;
     animation: slideUp 0.35s ease;
 }
 

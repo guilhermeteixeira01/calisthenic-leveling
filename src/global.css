@@ -192,7 +192,7 @@ header h1::after {
         position: fixed;
         top: 30px;
         right: 15px;
-        z-index: 1100;
+        z-index: 4;
         background: var(--purple);
         color: black;
         border: none;
@@ -221,7 +221,7 @@ header h1::after {
                 #4a4a4a 45%,
                 #3a3a3a 70%,
                 #0d0d0d 100%);
-        z-index: 1000;
+        z-index: 3;
         transition: left 0.3s ease;
         border-radius: 0;
         display: flex;
