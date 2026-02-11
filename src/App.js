@@ -220,7 +220,7 @@ function App() {
               {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
               {telaAtiva === "upgrades" && <Upgrades user={user} />}
               {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
-              {telaAtiva === "PerfilCFG" && <PerfilCFG />}
+              {telaAtiva === "PerfilCFG" && <PerfilCFG user={user} />}
 
               <Notification />
             </div>

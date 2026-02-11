@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 function Login() {
     const [loginInput, setLoginInput] = useState("");
@@ -28,7 +28,7 @@ function Login() {
             if (!loginLimpo.includes("@")) {
                 const q = query(
                     collection(db, "usuarios"),
-                    where("displayNameLower", "==", loginLimpo.toLowerCase()) // 🔥 busca case-insensitive
+                    where("displayNameLower", "==", loginLimpo.toLowerCase())
                 );
 
                 const snapshot = await getDocs(q);
@@ -49,7 +49,7 @@ function Login() {
 
         } catch (error) {
             console.error(error);
-            setMensagem("Email ou senha inválidos");
+            setMensagem("Email, Usuário ou senha inválidos");
             setTipoMensagem("erro");
 
             setTimeout(() => {
@@ -71,7 +71,7 @@ function Login() {
 
             <input
                 type="text"
-                placeholder="Email"
+                placeholder="Email ou Usuário"
                 onChange={(e) => setLoginInput(e.target.value)}
             />
 

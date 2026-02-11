@@ -115,47 +115,10 @@ export default function UserSidebar({
         }
     };
 
-    /* ===== Atualiza foto por URL ===== */
-    const handleChangePhotoURL = async () => {
-        const url = prompt("Cole a URL da imagem do seu avatar:");
-        if (!url || !user?.uid) return;
-
-        try {
-            await updateDoc(doc(db, "usuarios", user.uid), { photoURL: url });
-            setUserData((prev) => ({ ...prev, photoURL: url }));
-        } catch (err) {
-            console.error("Erro ao atualizar a foto:", err);
-            alert("Não foi possível atualizar a imagem");
-        }
-    };
-
     /* ===== XP TOTAL ===== */
     const xpTotal = userData?.xp ?? 0;
     const rank = calcularRankPorXp(xpTotal);
     const { xpAtual, xpMax, progresso, nivel } = calcularProgressoXp(xpTotal);
-
-    // ===== VIP CSS =====
-    useEffect(() => {
-        if (isVIP) {
-            document.documentElement.style.setProperty('--purple', 'gold');
-            document.documentElement.style.setProperty('--purple2', '#5a451d');
-            document.documentElement.style.setProperty('--purple-glow', 'rgba(238, 207, 34, 0.45)');
-            document.documentElement.style.setProperty('--back1', '#5a4c1d');
-            document.documentElement.style.setProperty('--back2', '#2c2510');
-            document.documentElement.style.setProperty('--back3', '#0d0d0d');
-            document.documentElement.style.setProperty('--back4', '#050505');
-            document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
-        } else {
-            document.documentElement.style.setProperty('--purple', '#7f5af0');
-            document.documentElement.style.setProperty('--purple2', '#3b1d5a');
-            document.documentElement.style.setProperty('--purple-glow', 'rgba(122, 34, 238, 0.45)');
-            document.documentElement.style.setProperty('--back1', '#3b1d5a');
-            document.documentElement.style.setProperty('--back2', '#1c102c');
-            document.documentElement.style.setProperty('--back3', '#0d0d0d');
-            document.documentElement.style.setProperty('--back4', '#050505');
-            document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
-        }
-    }, [isVIP]);
 
     return (
         <>
@@ -175,48 +138,39 @@ export default function UserSidebar({
                     {/* Avatar clicável */}
                     {isVIP ? (
                         <>
-                            <div
-                                className="avatar-wrapper"
-                                onClick={handleChangePhotoURL}
-                                title="Clique para mudar a foto"
-                            >
-                                <div className="avatar-hover-layer">
-                                    <img
-                                        src={
-                                            userData?.photoURL ||
-                                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                                        }
-                                        alt="Perfil"
-                                        className="avatarusersidebarvip"
-                                    />
-                                </div>
-
+                            <div className="avatar-wrapper">
+                                <img
+                                    src={
+                                        userData?.photoURL ||
+                                        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                                    }
+                                    alt="Perfil"
+                                    className="avatarusersidebarvip"
+                                />
                                 {/* Badge VIP */}
                                 <img src={LOGOVIP} alt="VIP" className="vip-badge" />
                             </div>
 
-                            <span className="user-name-vip">{user.displayName || "Usuário"}</span>
+                            <span className="user-name-vip">
+                                {userData?.displayName || user.displayName || "Usuário"}
+                            </span>
                         </>
                     ) : (
                         <>
-                            <div
-                                className="avatar-wrapper"
-                                onClick={handleChangePhotoURL}
-                                title="Clique para mudar a foto"
-                            >
-                                <div className="avatar-hover-layer">
-                                    <img
-                                        src={
-                                            userData?.photoURL ||
-                                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                                        }
-                                        alt="Perfil"
-                                        className="avatarusersidebar"
-                                    />
-                                </div>
+                            <div className="avatar-wrapper">
+                                <img
+                                    src={
+                                        userData?.photoURL ||
+                                        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                                    }
+                                    alt="Perfil"
+                                    className="avatarusersidebar"
+                                />
                             </div>
 
-                            <span className="user-name">{user.displayName || "Usuário"}</span>
+                            <span className="user-name">
+                                {userData?.displayName || user.displayName || "Usuário"}
+                            </span>
                         </>
                     )}
 
@@ -334,7 +288,7 @@ export default function UserSidebar({
                         </ul>
 
                         <p>
-                            <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: Foi fixado alguns bugs de entrega de <span style={{ color: "gold", fontWeight: "bold" }}>XP</span> e adicionado o botão configurar perfil OBS esta em <span style={{ color: "gold", fontWeight: "bold" }}>Manuntenção</span>.
+                            <strong>1.</strong> <span style={{ color: "red", fontWeight: "bold" }}>Mega Update</span>: Foi fixado alguns bugs de entrega de <span style={{ color: "gold", fontWeight: "bold" }}>XP</span> e adicionado o botão configurar perfil.
                         </p>
 
 
