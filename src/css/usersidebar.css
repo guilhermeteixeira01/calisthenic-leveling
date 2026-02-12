@@ -232,7 +232,7 @@
     position: absolute;
     top: 5%;
     right: -2px;
-    width: 45px;    
+    width: 45px;
     height: 45px;
     z-index: 4;
     pointer-events: none;
@@ -254,11 +254,42 @@
     color: snow;
 }
 
+.user-name-p {
+    font-size: 1.3rem;
+    padding-bottom: 5px;
+}
+
 .user-name-vip {
     font-weight: bold;
     font-size: 1rem;
     text-align: center;
     display: inline-block;
+
+    background: linear-gradient(120deg,
+            #d4af37 0%,
+            #f6d365 20%,
+            #ffe57f 40%,
+            #fff8dc 50%,
+            #ffe57f 60%,
+            #f6d365 80%,
+            #d4af37 100%);
+
+    background-size: 250% 100%;
+    background-position: -200% 0;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+
+    animation: shineText 5s linear infinite;
+}
+
+.user-name-vip-p {
+    font-weight: bold;
+    font-size: 1.3rem;
+    padding-bottom: 5px;
+    text-align: center;
 
     background: linear-gradient(120deg,
             #d4af37 0%,

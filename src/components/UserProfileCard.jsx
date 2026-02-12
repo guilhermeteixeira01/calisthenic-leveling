@@ -65,7 +65,7 @@ export default function UserProfileCard({ userId, onClose }) {
                     )}
                 </div>
 
-                <h2 style={{ color: isVIP ? "#FFD700" : "inherit" }}>{user.displayName}</h2> {/* Nome VIP dourado */}
+                <h2 className={isVIP ? "user-name-vip-p" : "user-name-p"}>{user.displayName}</h2> {/* Nome VIP dourado */}
 
                 {/* 🔥 Rank / Nível */}
                 <div style={{ marginBottom: "12px" }}>
@@ -101,7 +101,7 @@ export default function UserProfileCard({ userId, onClose }) {
                                 ? <b className={isVIP ? "user-name-vip" : "user-name"}>
                                     Nível Max {user.atributos?.[a.id] ?? 0}
                                 </b>
-                                : <b>{user.atributos?.[a.id] ?? 0}</b>
+                                : <b className={isVIP ? "user-name-vip-p" : "user-name-p"}>{user.atributos?.[a.id] ?? 0}</b>
                             }
                         </div>
                     ))}
