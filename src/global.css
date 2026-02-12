@@ -348,7 +348,7 @@ header h1::after {
         font-size: 0.7rem;
     }
 
-    .user-name-vip {
+    .notification .user-name-vip {
         line-height: 1.2;
         font-size: 0.7rem;
     }
