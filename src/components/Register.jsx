@@ -49,7 +49,7 @@ export default function Register() {
     };
 
     return (
-        <div className="Registerdiv">
+        <div className="auth-card">
             <h2>Registrar</h2>
             <input
                 type="text"
@@ -69,7 +69,7 @@ export default function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button onClick={handleRegister}>Registrar</button>
+            <button className="btnn" onClick={handleRegister}>Registrar</button>
         </div>
     );
 }
