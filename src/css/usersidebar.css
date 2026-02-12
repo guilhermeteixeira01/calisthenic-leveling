@@ -406,14 +406,29 @@
 }
 
 .sidebar-actions .icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     fill: var(--purple);
-    transition: fill 0.25s;
+    filter: drop-shadow(0 0 6px var(--purple));
+    transition: all 0.3s ease;
 }
 
 .sidebar-actions button:hover .icon {
-    fill: #22c55e;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 12px var(--purple));
+}
+
+.sidebar-actions .vip-icon {
+    width: 24px;
+    height: 24px;
+    fill: url(#goldGradient);
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+    transition: all 0.3s ease;
+}
+
+.sidebar-actions button:hover .vip-icon {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1));
 }
 
 .btn-novidades {

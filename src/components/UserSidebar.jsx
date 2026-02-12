@@ -32,7 +32,7 @@ export default function UserSidebar({
     useEffect(() => {
         if (!userData) return;
 
-        const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
+        const theme = isVIP ? userData.theme || "vip-theme" : "dark";
 
         switch (theme) {
             case "light":
@@ -67,6 +67,7 @@ export default function UserSidebar({
                 break;
         }
     }, [userData, isVIP]);
+
 
     /* ===== Controla scroll ===== */
     useEffect(() => {
@@ -240,37 +241,45 @@ export default function UserSidebar({
                 {/* Botões */}
                 <div className="sidebar-actions">
                     <button onClick={() => handleMenuClick(onOpenTreino)}>
-                        <svg className="icon" viewBox="0 0 24 24">
-                            <path d="M4 14v-4h2V7h2v10H6v-3H4zm14-7v3h2v4h-2v3h-2V7h2zm-6-2h-2v14h2V5z" />
+                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                            <defs>
+                                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#f6d365" />
+                                    <stop offset="40%" stopColor="#ffd700" />
+                                    <stop offset="50%" stopColor="#fff8dc" />
+                                    <stop offset="60%" stopColor="#ffd700" />
+                                    <stop offset="100%" stopColor="#d4af37" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M2 9h2v6H2V9zm3-2h2v10H5V7zm4 3h6v4H9v-4zm8-3h2v10h-2V7zm3 2h2v6h-2V9z" />
                         </svg>
+
                         Treino Semanal
                     </button>
 
                     <button onClick={() => handleMenuClick(onOpenMissoes)}>
-                        <svg className="icon" viewBox="0 0 24 24">
-                            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" />
+                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L22 9L17 14L18 22L12 18L6 22L7 14L2 9L9 8L12 2Z" />
                         </svg>
                         Missões
                     </button>
 
                     <button onClick={() => handleMenuClick(onOpenUpgrades)}>
-                        <svg className="icon" viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h7v8l10-12h-7z" />
+                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h6l-1 8 10-14h-6l1-6z" />
                         </svg>
                         Upgrades
                     </button>
 
                     <button onClick={() => handleMenuClick(onOpenTop15)}>
-                        <svg className="icon" viewBox="0 0 24 24">
-                            <path d="M17 3h4v2c0 3.3-2.7 6-6 6h-1a5 5 0 01-10 0H3V3h4V1h16v2zm-2 2H9v2a3 3 0 006 0V5zM6 21h12v-2H6v2z" />
+                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                            <path d="M2 7l5 4 5-6 5 6 5-4-2 13H4L2 7z" />
                         </svg>
                         Top 15
                     </button>
 
                     <button onClick={() => handleMenuClick(onOpenMenuCFG)}>
-                        <svg className="icon" viewBox="0 0 24 24">
-                            <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.028 7.028 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.9 2h-3.8a.5.5 0 00-.49.42l-.36 2.54c-.58.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 8.48a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.6.22l2.39-.96c.51.42 1.05.72 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.22 1.12-.52 1.63-.94l2.39.96c.23.09.5 0 .6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z" />
-                        </svg>
+                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24"> <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.028 7.028 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.9 2h-3.8a.5.5 0 00-.49.42l-.36 2.54c-.58.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 8.48a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.6.22l2.39-.96c.51.42 1.05.72 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.22 1.12-.52 1.63-.94l2.39.96c.23.09.5 0 .6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z" /> </svg>
                         Configurar Perfil
                     </button>
                 </div>

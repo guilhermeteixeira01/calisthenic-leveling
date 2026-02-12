@@ -40,7 +40,7 @@ export default function PerfilCFG({ user }) {
     useEffect(() => {
         if (!userData) return;
 
-        const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
+        const theme = isVIP ? userData.theme || "vip-theme" : "dark";
 
         switch (theme) {
             case "light":
