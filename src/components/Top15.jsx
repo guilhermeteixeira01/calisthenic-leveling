@@ -89,11 +89,7 @@ export default function Top15({ onOpenProfile }) {
                                 </div>
 
                                 <span
-                                    className="name"
-                                    style={{
-                                        color: isVIP ? "gold" : "snow",
-                                        fontWeight: "bold",
-                                    }}
+                                    className={isVIP ? "user-name-vip" : "user-name"}
                                 >
                                     {user.displayName}
                                 </span>

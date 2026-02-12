@@ -8,28 +8,23 @@
     top: 0;
     width: 250px;
     height: 100vh;
-    background: linear-gradient(to top,
-            #2b292c 0%,
-            #2c2b2e 25%,
-            #0d0d0d 55%,
-            #050505 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
     animation: Boxshadow 5s ease infinite;
 }
 
 @keyframes Boxshadow {
     0% {
         border-right: 2px solid var(--purple);
-        box-shadow: 2px 0 6px var(--purple);
     }
 
     50% {
         border-right: 2px solid var(--purple2);
-        box-shadow: 2px 0 6px var(--purple2);
     }
 
     100% {
         border-right: 2px solid var(--purple);
-        box-shadow: 2px 0 6px var(--purple);
     }
 }
 
@@ -70,17 +65,14 @@
 @keyframes BoxshadowN {
     0% {
         border-right: 2px solid #7f5af0;
-        box-shadow: 2px 0 6px #7f5af0;
     }
 
     50% {
         border-right: 2px solid #3b1d5a;
-        box-shadow: 2px 0 6px #3b1d5a;
     }
 
     100% {
         border-right: 2px solid #7f5af0;
-        box-shadow: 2px 0 6px #7f5af0;
     }
 }
 
@@ -113,17 +105,14 @@
 @keyframes Boxshadowvip {
     0% {
         border-right: 2px solid gold;
-        box-shadow: 2px 0 6px gold;
     }
 
     50% {
         border-right: 2px solid #5a451d;
-        box-shadow: 2px 0 6px #5a451d;
     }
 
     100% {
         border-right: 2px solid gold;
-        box-shadow: 2px 0 6px gold;
     }
 }
 
@@ -243,11 +232,10 @@
     position: absolute;
     top: 5%;
     right: -2px;
-    width: 45px;
+    width: 45px;    
     height: 45px;
     z-index: 4;
     pointer-events: none;
-    filter: drop-shadow(0 0 6px gold);
 }
 
 
@@ -264,22 +252,45 @@
     font-size: 1rem;
     text-align: center;
     color: snow;
-    text-shadow:
-        0 0 6px var(--purple),
-        0 0 12px var(--purple),
-        0 0 24px rgba(128, 0, 255, 0.8);
 }
 
 .user-name-vip {
     font-weight: bold;
     font-size: 1rem;
     text-align: center;
-    color: snow;
-    text-shadow:
-        0 0 6px var(--gold),
-        0 0 12px var(--gold),
-        0 0 24px rgba(255, 166, 0, 0.8);
+    display: inline-block;
+
+    background: linear-gradient(120deg,
+            #d4af37 0%,
+            #f6d365 20%,
+            #ffe57f 40%,
+            #fff8dc 50%,
+            #ffe57f 60%,
+            #f6d365 80%,
+            #d4af37 100%);
+
+    background-size: 250% 100%;
+    background-position: -200% 0;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+
+    animation: shineText 5s linear infinite;
 }
+
+@keyframes shineText {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+
 
 .logout-btn {
     margin-top: auto;
@@ -290,7 +301,6 @@
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 0 10px var(--purple);
     transition: all 0.3s ease;
 }
 
@@ -298,7 +308,6 @@
 .logout-btn:hover {
     font-weight: bold;
     background: #22c55e;
-    box-shadow: 0 0 20px #22c55e;
 }
 
 .xp-container {
@@ -399,10 +408,6 @@
     cursor: pointer;
     overflow: hidden;
 
-    box-shadow:
-        0 0 15px rgba(255, 0, 0, 0.55),
-        0 0 30px rgba(255, 50, 50, 0.4);
-
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     animation: gradientMove 6s ease infinite;
 }
@@ -441,9 +446,6 @@
 /* Hover */
 .btn-novidades:hover {
     transform: scale(1.08);
-    box-shadow:
-        0 0 25px rgba(255, 0, 0, 0.9),
-        0 0 45px rgba(255, 60, 60, 0.7);
 }
 
 /* Click */
@@ -499,7 +501,6 @@
             #0d0d0d,
             #1a1a1a);
     border: 1px solid rgba(255, 0, 0, 0.7);
-    box-shadow: 0 0 12px rgba(255, 0, 0, 0.7);
     border-radius: 18px;
     padding: 26px;
     color: #fff;

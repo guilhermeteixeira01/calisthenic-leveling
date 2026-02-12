@@ -98,7 +98,7 @@ export default function UserProfileCard({ userId, onClose }) {
                             <a.Icon />
                             <span>{a.nome}</span>
                             {user.atributos?.[a.id] === LEVELMAX
-                                ? <b style={{ color: "red" }}>
+                                ? <b className={isVIP ? "user-name-vip" : "user-name"}>
                                     Nível Max {user.atributos?.[a.id] ?? 0}
                                 </b>
                                 : <b>{user.atributos?.[a.id] ?? 0}</b>

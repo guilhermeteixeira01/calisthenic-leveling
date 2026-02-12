@@ -17,10 +17,6 @@
     font-size: 28px;
     margin-bottom: 20px;
     color: snow;
-    text-shadow:
-        0 0 6px var(--purple),
-        0 0 12px var(--purple),
-        0 0 24px var(--purple-glow);
 }
 
 .top15-list {

@@ -27,7 +27,6 @@
     text-align: center;
     position: relative;
     backdrop-filter: blur(8px);
-    box-shadow: 0 0 25px rgba(128, 0, 255, 0.5);
 }
 
 .profile-cardvip {
@@ -42,7 +41,6 @@
     text-align: center;
     position: relative;
     backdrop-filter: blur(8px);
-    box-shadow: 0 0 25px gold;
 }
 
 /* =========================
@@ -61,13 +59,11 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #8122ee;
-    box-shadow: 0 0 16px rgba(129, 34, 238, 0.6);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-avatar:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 24px rgba(129, 34, 238, 0.9);
 }
 
 .profile-avatarvip {
@@ -76,13 +72,11 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid gold;
-    box-shadow: 0 0 16px rgba(238, 190, 34, 0.6);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-avatarvip:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 24px rgba(238, 190, 34, 0.6);
 }
 
 /* Badge VIP */
@@ -152,7 +146,6 @@
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 0 16px rgba(129, 34, 238, 0.5);
     backdrop-filter: blur(6px);
 }
 
@@ -165,7 +158,6 @@
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 0 16px gold;
     backdrop-filter: blur(6px);
 }
 
@@ -195,13 +187,11 @@
     padding: 6px 10px;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 0 12px rgba(129, 34, 238, 0.6);
     transition: all 0.2s ease;
 }
 
 .close-btn:hover {
     filter: brightness(1.1);
-    box-shadow: 0 0 20px rgba(129, 34, 238, 0.8);
 }
 
 .close-btnvip {
@@ -216,13 +206,11 @@
     padding: 6px 10px;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 0 12px gold;
     transition: all 0.2s ease;
 }
 
 .close-btnvip:hover {
     filter: brightness(1.1);
-    box-shadow: 0 0 20px gold;
 }
 
 .close-btn:active,
