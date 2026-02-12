@@ -32,7 +32,7 @@ export default function UserSidebar({
     useEffect(() => {
         if (!userData) return;
 
-        const theme = isVIP ? userData.theme || "vip-theme" : "dark";
+        const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
 
         switch (theme) {
             case "light":
@@ -67,7 +67,6 @@ export default function UserSidebar({
                 break;
         }
     }, [userData, isVIP]);
-
 
     /* ===== Controla scroll ===== */
     useEffect(() => {
