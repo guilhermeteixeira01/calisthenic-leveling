@@ -74,6 +74,7 @@ export default function Top15({ onOpenProfile }) {
                                         src={medalSrc}
                                         alt={`Medalha ${rankPosicao}`}
                                         className="medal"
+                                        loading="lazy"
                                     />
                                 )}
 
@@ -82,9 +83,10 @@ export default function Top15({ onOpenProfile }) {
                                         src={user.photoURL}
                                         alt={user.displayName}
                                         className={isVIP ? "avatarvip" : "avatar"}
+                                        loading="lazy"
                                     />
                                     {isVIP && (
-                                        <img src={LOGOVIP} alt="VIP" className="vip-badgetop15" /> // badge opcional
+                                        <img src={LOGOVIP} alt="VIP" className="vip-badgetop15" loading="lazy" /> // badge opcional
                                     )}
                                 </div>
 

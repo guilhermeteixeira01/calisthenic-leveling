@@ -133,10 +133,11 @@ export default function PerfilCFG({ user }) {
                             }
                             alt="Perfil"
                             className="avatarusersidebarvip"
+                            loading="lazy"
                         />
                     </div>
                     {isVIP && (
-                        <img src={LOGOVIP} alt="VIP" className="vip-badge" />
+                        <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />
                     )}
                 </div>
 

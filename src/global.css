@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter&display=swap');
-@import url('css/usersidebar.css');
 @import url('css/login.css');
 @import url('css/notification.css');
 @import url('css/ranks.css');
@@ -43,6 +42,7 @@
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+    scroll-behavior: smooth;
 }
 
 /* VARIÁVEIS DE COR */
@@ -186,14 +186,35 @@ header h1::after {
         overflow-x: hidden;
     }
 
+    header h1 {
+        margin: 20px;
+        font-size: 1.3rem;
+        text-shadow: none;
+        animation: none;
+        width: 100vw;
+        animation: neonGlow 1.6s ease-in-out infinite alternate;
+    }
+
     .container {
-        padding: 20px;
+        padding: 15px;
+    }
+
+    .container-conteudo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0;
+        padding: 0;
+    }
+
+    body.menu-open .container-conteudo {
+        display: none;
     }
 
     .menu-toggle {
         display: flex;
         align-items: center;
-        justify-content: center;
         position: fixed;
         top: 30px;
         right: 15px;
@@ -202,9 +223,15 @@ header h1::after {
         color: black;
         border: none;
         font-size: 22px;
-        padding: 5px 10px;
+        padding: 6px 10px;
         border-radius: 10px;
-        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .menu-toggle.active {
+        background: transparent;
+        color: white;
+        transform: rotate(180deg) scale(1.3);
     }
 
     .btn-novidades {
@@ -214,14 +241,19 @@ header h1::after {
     .user-sidebar {
         position: fixed;
         top: 0;
-        left: -105%;
-        width: 101vw;
+        left: 0;
+        width: 100vw;
         height: 100vh;
         z-index: 3;
-        transition: left 0.3s ease;
-        border-radius: 0;
-        display: flex;
         animation: none;
+        transform: translateX(-100%);
+        transition: transform 0.4s ease-in-out;
+
+        display: flex;
+    }
+
+    .user-sidebar.active {
+        transform: translateX(0);
     }
 
     .logout-btn {
@@ -229,10 +261,6 @@ header h1::after {
         bottom: 45px;
     }
 
-    .user-sidebar.active {
-        left: 0;
-        overflow-x: hidden;
-    }
 
     .sidebar-actions button {
         padding: 8px;
@@ -246,15 +274,6 @@ header h1::after {
         height: 20px;
     }
 
-    .container-conteudo {
-        margin-left: 0;
-        padding: 1rem;
-    }
-
-    body.menu-open .container-conteudo {
-        display: none;
-    }
-
     .main-container,
     .app {
         max-width: 100%;
@@ -262,12 +281,6 @@ header h1::after {
         padding: 1rem;
     }
 
-    header h1 {
-        margin: 20px;
-        font-size: 1.1rem;
-        text-shadow: none;
-        animation: none;
-    }
 
     .task-list {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -335,11 +348,6 @@ header h1::after {
 
 /* PARA TELEFONE PEQUENO */
 @media (max-width: 480px) {
-    header h1 {
-        text-shadow: none;
-        animation: none;
-    }
-
     .start-button {
         padding: 0.6rem 1.5rem;
         font-size: 0.9rem;

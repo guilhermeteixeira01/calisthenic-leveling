@@ -162,7 +162,7 @@ export default function UserSidebar({
     return (
         <>
             {/* Botão mobile */}
-            <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+            <button className={`menu-toggle ${menuOpen ? "active" : ""}`} onClick={() => setMenuOpen(!menuOpen)}>
                 {menuOpen ? "✕" : "☰"}
             </button>
 
@@ -185,9 +185,10 @@ export default function UserSidebar({
                                     }
                                     alt="Perfil"
                                     className="avatarusersidebarvip"
+                                    loading="lazy"
                                 />
                                 {/* Badge VIP */}
-                                <img src={LOGOVIP} alt="VIP" className="vip-badge" />
+                                <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />
                             </div>
 
                             <span className="user-name-vip">
@@ -204,6 +205,7 @@ export default function UserSidebar({
                                     }
                                     alt="Perfil"
                                     className="avatarusersidebar"
+                                    loading="lazy"
                                 />
                             </div>
 
@@ -313,12 +315,14 @@ export default function UserSidebar({
                                 src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
                                 alt="fire"
                                 style={{ width: 30 }}
+                                loading="lazy"
                             />{" "}
                             Novidades
                             <img
                                 src="https://media.tenor.com/sRL5jAfDjMcAAAAm/flame-lit.webp"
                                 alt="fire"
                                 style={{ width: 30 }}
+                                loading="lazy"
                             />{" "}
                         </h2>
 

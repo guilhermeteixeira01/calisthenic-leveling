@@ -59,9 +59,10 @@ export default function UserProfileCard({ userId, onClose }) {
                         src={photoURL}
                         alt={user.displayName}
                         className={isVIP ? "profile-avatarvip" : "profile-avatar"} // ✅ Avatar VIP
+                        loading="lazy"
                     />
                     {isVIP && (
-                        <img src={LOGOVIP} alt="VIP" className="vip-badgeprofile" /> // badge opcional
+                        <img src={LOGOVIP} alt="VIP" className="vip-badgeprofile" loading="lazy" /> // badge opcional
                     )}
                 </div>
 
