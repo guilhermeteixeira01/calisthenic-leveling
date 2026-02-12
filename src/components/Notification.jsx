@@ -1,31 +1,12 @@
 import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase"; // ajuste o caminho
 
-const players = [
-    "Gabriel", "Lucas", "Matheus", "Pedro", "Guilherme", "Rafael",
-    "Henrique", "Felipe", "Bruno", "Ricardo", "Carlos", "Daniel",
-    "Marcos", "André", "Eduardo", "Vitor", "Diego", "Thiago",
-    "Leonardo", "Rodrigo", "Samuel", "Leandro", "Alexandre", "Caio",
-    "Fernando", "Victor", "Paulo", "João", "Luiz", "Marcelo",
-    "Augusto", "Fernando", "Maurício", "César", "Renato", "Roberto",
-    "Antonio", "José", "Francisco", "Sérgio", "Marco", "Mário",
-    "Alex", "Daniela", "Amanda", "Juliana", "Larissa", "Patrícia",
-    "Beatriz", "Mariana", "Camila", "Bruna", "Fernanda", "Aline",
-    "Bianca", "Carolina", "Tatiana", "Renata", "Natália", "Juliette",
-    "Paula", "Sandra", "Vanessa", "Monique", "Priscila", "Karina",
-    "Érica", "Simone", "Adriana", "Letícia", "Isabela", "Jéssica",
-    "Marta", "Rosana", "Talita", "Viviane", "Yasmin", "Nicole",
-    "Sofia", "Giovanna", "Luna", "Valentina", "Alice", "Helena",
-    "Laura", "Júlia", "Ana", "Clara", "Maria", "Beatriz",
-    "Gabriela", "Sarah", "Lívia", "Esther", "Cecília", "Emanuel",
-    "Ramon", "Igor", "Murilo", "Thiago", "Nathan", "Enzo",
-    "Arthur", "Miguel", "Davi", "Heitor", "Theo", "Gael",
-    "Lorenzo", "Benjamin", "Samuel", "Matias", "Jonas"
-];
-
+// Rank e XP
 const RankUp = ["S", "A", "B", "C", "D"];
-
 const CountXps = ["50", "150", "200", "500"];
 
+// Skills
 const skills = [
     { id: "forca", nome: "Força" },
     { id: "foco", nome: "Foco" },
@@ -34,6 +15,7 @@ const skills = [
     { id: "sabedoria", nome: "Sabedoria" }
 ];
 
+// Itens raros
 const rareItems = [
     "Espada Ancestral",
     "Amuleto do Dragão",
@@ -43,74 +25,89 @@ const rareItems = [
     "Orbe do Conhecimento"
 ];
 
-
 // Templates de mensagens
-const messages = [
-    // Rank (JSX)
-    (player, rank) => (
-        <>
-            {player} subiu para o Rank{" "}
-            <span className={`rank-${rank}`}>{rank}</span> 🚀
-        </>
-    ),
-
-    // XP
-    (player, _, xp) =>
-        `${player} ganhou ${xp} XP 🔥`,
-
-    // Quest
-    (player) =>
-        `${player} completou uma quest 💎`,
-
-    // Item raro
-    (player, _, __, ___, item) =>
-        `${player} encontrou um item raro: ${item} ✨`,
-
-    // Nível
-    (player, _, __, level) =>
-        `${player} subiu para o nível ${level} 📈`,
-
-    // Skills
-    (player, _, __, ___, ____, skill) =>
-        `${player} aumentou (${skill}) 🔥`,
-
-    (player, _, __, ___, ____, skill) =>
-        `${player} evoluiu sua habilidade (${skill}) ⚡`
+// Separar templates VIP e normais
+const vipTemplates = [
+    (player, _, __, ___, ____, _____, isVip) =>
+        <><span className="user-name-vip">{player}</span> é agora um <span className="user-name-vip">VIP</span> 👑</>
 ];
 
+const normalTemplates = [
+    (player, rank, _, __, ___, ____, isVip) => (
+        <>{isVip ? <span className="user-name-vip">{player}</span> : player} subiu para o Rank <span className={`rank-${rank}`}>{rank}</span> 🚀</>
+    ),
+    (player, _, xp, __, ___, ____, isVip) => (
+        <>{isVip ? <span className="user-name-vip">{player}</span> : player} ganhou {xp} XP 🔥</>
+    ),
+    (player, _, __, ___, ____, _____, isVip) => (
+        <>{isVip ? <span className="user-name-vip">{player}</span> : player} completou uma quest 💎</>
+    ),
+    (player, _, __, ___, item, ____, isVip) => (
+        <>{isVip ? <span className="user-name-vip">{player}</span> : player} encontrou um item raro: {item} ✨</>
+    ),
+    (player, _, __, level, ___, ____, isVip) => (
+        <>{isVip ? <span className="user-name-vip">{player}</span> : player} subiu para o nível {level} 📈</>
+    ),
+    (player, _, __, ___, ____, skill, isVip) => (
+        <>{isVip ? <span className="user-name-vip">{player}</span> : player} evoluiu sua habilidade ({skill}) ⚡</>
+    )
+];
 
 export default function Notification() {
     const [notifications, setNotifications] = useState([]);
+    const [players, setPlayers] = useState([]); // array de {id, displayName, isVip}
 
+    // 🔹 Buscar usuários do Firebase
     useEffect(() => {
+        async function fetchUsers() {
+            try {
+                const snapshot = await getDocs(collection(db, "usuarios"));
+
+                const userList = snapshot.docs
+                    .map(doc => {
+                        const data = doc.data();
+                        return data.displayName
+                            ? {
+                                id: doc.id,
+                                displayName: data.displayName,
+                                isVip: data.cargo?.toLowerCase() === "vip"
+                            }
+                            : null;
+                    })
+                    .filter(Boolean);
+
+                setPlayers(userList);
+            } catch (error) {
+                console.error("Erro ao buscar usuários:", error);
+            }
+        }
+
+        fetchUsers();
+    }, []);
+
+    // 🔹 Criar notificações aleatórias
+    // 🔹 Criar notificações aleatórias
+    useEffect(() => {
+        if (players.length === 0) return;
+
         const interval = setInterval(() => {
-            const player = players[Math.floor(Math.random() * players.length)];
+            const randomPlayer = players[Math.floor(Math.random() * players.length)];
+
+            const player = randomPlayer.displayName;
+            const isVip = randomPlayer.isVip;
             const xp = CountXps[Math.floor(Math.random() * CountXps.length)];
             const rank = RankUp[Math.floor(Math.random() * RankUp.length)];
+            const skill = skills[Math.floor(Math.random() * skills.length)].nome;
+            const item = rareItems[Math.floor(Math.random() * rareItems.length)];
+            const level = Math.floor(Math.random() * 6) + 2;
 
-            const skill =
-                skills[Math.floor(Math.random() * skills.length)].nome;
+            // Escolher template correto
+            const templates = isVip ? [...vipTemplates, ...normalTemplates] : normalTemplates;
+            const messageTemplate = templates[Math.floor(Math.random() * templates.length)];
 
-            const item =
-                rareItems[Math.floor(Math.random() * rareItems.length)];
-
-            const level = Math.floor(Math.random() * 6) + 1;
-
-            const messageTemplate =
-                messages[Math.floor(Math.random() * messages.length)];
-
-            const message = messageTemplate(
-                player,
-                rank,
-                xp,
-                level,
-                item,
-                skill
-            );
-
+            const message = messageTemplate(player, rank, xp, level, item, skill, isVip);
 
             const id = Date.now();
-
             setNotifications(prev => [...prev, { id, message, rank }]);
 
             setTimeout(() => {
@@ -119,19 +116,15 @@ export default function Notification() {
         }, 30000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [players]);
 
     return (
         <div className="notification-container">
             {notifications.map(n => (
-                <div
-                    key={n.id}
-                    className="notification"
-                >
+                <div key={n.id} className="notification">
                     <span className="notification-dot" />
                     <span className="notification-text">{n.message}</span>
                 </div>
-
             ))}
         </div>
     );
