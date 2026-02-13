@@ -13,7 +13,7 @@ export default function PerfilCFG({ user }) {
     // Temas disponíveis
     const isVIP = userData?.cargo === "vip";
     const THEMES_PUBLIC = ["dark", "light"];
-    const THEMES_VIP = ["vip-theme"];
+    const THEMES_VIP = ["vip-theme", "anime"];
 
     const availableThemes = isVIP
         ? [...THEMES_PUBLIC, ...THEMES_VIP]
@@ -39,6 +39,7 @@ export default function PerfilCFG({ user }) {
     useEffect(() => {
         if (!userData) return;
 
+        const wp = document.getElementById("wpp");
         const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
 
         switch (theme) {
@@ -51,6 +52,7 @@ export default function PerfilCFG({ user }) {
                 document.documentElement.style.setProperty('--back3', '#0d0d0d');
                 document.documentElement.style.setProperty('--back4', '#050505');
                 document.documentElement.style.setProperty('--backbox', 'rgba(231, 224, 248, 0.15)');
+                wp.className = "wallpaper";
                 break;
             case "vip-theme":
                 document.documentElement.style.setProperty('--purple', 'gold');
@@ -61,6 +63,12 @@ export default function PerfilCFG({ user }) {
                 document.documentElement.style.setProperty('--back3', '#0d0d0d');
                 document.documentElement.style.setProperty('--back4', '#050505');
                 document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
+                wp.className = "wallpaper";
+                break;
+            case "anime":
+                document.documentElement.style.setProperty('--purple', '#73f05a');
+                document.documentElement.style.setProperty('--purple2', '#225a1d');
+                wp.className = "wallpaper-img";
                 break;
             default: // dark
                 document.documentElement.style.setProperty('--purple', '#7f5af0');
@@ -71,6 +79,7 @@ export default function PerfilCFG({ user }) {
                 document.documentElement.style.setProperty('--back3', '#0d0d0d');
                 document.documentElement.style.setProperty('--back4', '#050505');
                 document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
+                wp.className = "wallpaper";
                 break;
         }
     }, [userData, isVIP]);

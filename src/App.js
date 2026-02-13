@@ -176,60 +176,63 @@ function App() {
 
   return (
     <div className="App">
-      {profileUserId && (
-        <UserProfileCard userId={profileUserId} onClose={() => setProfileUserId(null)} />
-      )}
+      <div className="wallpaper" id="wpp">
 
-      {!profileUserId && (
-        <>
-          <div className="container">
-            <div className="left-container">
-              <UserSidebar
-                user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
-                onOpenTreino={() => setTelaAtiva("treino")}
-                onOpenMissoes={() => setTelaAtiva("missoes")}
-                onOpenUpgrades={() => setTelaAtiva("upgrades")}
-                onOpenTop15={() => setTelaAtiva("top15")}
-                onOpenMenuCFG={() => setTelaAtiva("PerfilCFG")}
-                onLogout={logout}
-              />
+        {profileUserId && (
+          <UserProfileCard userId={profileUserId} onClose={() => setProfileUserId(null)} />
+        )}
+
+        {!profileUserId && (
+          <>
+            <div className="container">
+              <div className="left-container">
+                <UserSidebar
+                  user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
+                  onOpenTreino={() => setTelaAtiva("treino")}
+                  onOpenMissoes={() => setTelaAtiva("missoes")}
+                  onOpenUpgrades={() => setTelaAtiva("upgrades")}
+                  onOpenTop15={() => setTelaAtiva("top15")}
+                  onOpenMenuCFG={() => setTelaAtiva("PerfilCFG")}
+                  onLogout={logout}
+                />
+              </div>
+
+              <div className="right-container" style={{ display: menuOpen ? "none" : "block" }}>
+                <header><h1>{SITENAME}</h1></header>
+
+                {telaAtiva === "treino" && (
+                  <>
+                    <TaskForm addTask={addTask} diasSemana={diasSemana} />
+                    <ProgressBar tasks={tasks} user={user} />
+                    <div className="week">
+                      {diasSemana.map(day => {
+                        const dayTasks = tasks.filter(t => t.day === day);
+                        const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
+                        return (
+                          <div key={day} className={`day ${allDone ? "day-complete" : ""}`}>
+                            <h2>{day}</h2>
+                            {dayTasks.length === 0 && <p>Nenhum exercício</p>}
+                            {dayTasks.map(task => (
+                              <TaskItem key={task.id} task={task} toggleDone={toggleDone} removeTask={removeTask} />
+                            ))}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+
+                {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
+                {telaAtiva === "upgrades" && <Upgrades user={user} />}
+                {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
+                {telaAtiva === "PerfilCFG" && <PerfilCFG user={user} />}
+
+                <Notification />
+              </div>
             </div>
-
-            <div className="right-container" style={{ display: menuOpen ? "none" : "block" }}>
-              <header><h1>{SITENAME}</h1></header>
-
-              {telaAtiva === "treino" && (
-                <>
-                  <TaskForm addTask={addTask} diasSemana={diasSemana} />
-                  <ProgressBar tasks={tasks} user={user} />
-                  <div className="week">
-                    {diasSemana.map(day => {
-                      const dayTasks = tasks.filter(t => t.day === day);
-                      const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
-                      return (
-                        <div key={day} className={`day ${allDone ? "day-complete" : ""}`}>
-                          <h2>{day}</h2>
-                          {dayTasks.length === 0 && <p>Nenhum exercício</p>}
-                          {dayTasks.map(task => (
-                            <TaskItem key={task.id} task={task} toggleDone={toggleDone} removeTask={removeTask} />
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-
-              {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
-              {telaAtiva === "upgrades" && <Upgrades user={user} />}
-              {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
-              {telaAtiva === "PerfilCFG" && <PerfilCFG user={user} />}
-
-              <Notification />
-            </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
