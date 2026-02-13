@@ -1,31 +1,40 @@
+/* =========================
+   PERFIL CONTAINER
+========================= */
+
 .perfil-container {
     max-width: 600px;
-    margin: auto;
-    padding: 30px;
-    color: white;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.01));
-    border-radius: 8px;
-    border: 1px solid snow;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    & h1 {
-        text-align: center;
-    }
+    margin: 40px auto;
+    padding: 40px;
+    color: #fff;
+    background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.75),
+            rgba(20, 20, 30, 0.9));
+    border-radius: 12px;
+    border: 1px solid var(--purple);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
+
+/* =========================
+   AVATAR
+========================= */
 
 .perfil-avatar-section {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .avatar-wrapper {
     position: relative;
-    width: 120px;
-    height: 120px;
-    margin: auto;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.05);
 }
 
 .avatar-normal,
@@ -35,110 +44,125 @@
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--purple);
+    transition: all 0.3s ease;
 }
 
 .avatar-vip {
-    border: 3px solid gold;
+    border-color: gold;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
 .vip-badge {
     position: absolute;
-    bottom: -5px;
-    right: -5px;
-    width: 35px;
-    height: 35px;
+    bottom: -6px;
+    right: -6px;
+    width: 36px;
+    height: 36px;
 }
+
+/* =========================
+   SEÇÕES
+========================= */
 
 .perfil-section {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
-.perfil-section input {
+.perfil-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* =========================
+   INPUT & SELECT
+========================= */
+
+.perfil-section input,
+.select-wrapper select {
     width: 100%;
-    margin-top: 10px;
-    padding: 10px 40px 10px 15px;
-    font-size: 16px;
-    border-radius: 12px;
+    padding: 12px 45px 12px 15px;
+    font-size: 15px;
+    border-radius: 10px;
     border: 2px solid var(--purple);
     background-color: var(--back2);
     color: #fff;
-    appearance: none;
     outline: none;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
-.perfil-section button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background: var(--purple);
-    border: none;
-    color: rgb(0, 0, 0);
-    font-weight: bolder;
-    border-radius: 6px;
+.perfil-section input:focus,
+.select-wrapper select:focus {
+    border-color: var(--purple-glow);
+    box-shadow: 0 0 12px var(--purple-glow);
 }
 
-.perfil-section button:hover {
-    box-shadow: 0 0 20px var(--purple);
-    cursor: pointer;
-}
+/* =========================
+   SELECT CUSTOM
+========================= */
 
-.xp-bar {
-    width: 100%;
-    height: 12px;
-    background: #222;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-/* Container do select */
 .select-wrapper {
     position: relative;
-    width: 100%;
 }
 
 .select-wrapper select {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px 40px 10px 15px;
-    font-size: 16px;
-    border-radius: 12px;
-    border: 2px solid var(--purple);
-    background-color: var(--back2);
-    color: #fff;
     appearance: none;
     cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
 }
 
 .select-wrapper .select-arrow {
     position: absolute;
     right: 15px;
-    top: 60%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: var(--purple);
-    font-size: 14px;
-}
-
-/* Hover e foco */
-.perfil-section select:hover,
-.perfil-section select:focus {
-    border-color: var(--purple-glow);
-    box-shadow: 0 0 10px var(--purple-glow);
-}
-
-/* seta customizada */
-.perfil-section select::-ms-expand {
-    display: none;
-}
-
-.perfil-section select::after {
-    content: '▼';
-    position: absolute;
-    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
+    font-size: 14px;
     color: var(--purple);
+}
+
+/* Remove seta padrão IE */
+select::-ms-expand {
+    display: none;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.perfil-section button {
+    margin-top: 12px;
+    padding: 12px 18px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    background: var(--purple);
+    color: #000;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.perfil-section button:hover {
+    box-shadow: 0 0 20px var(--purple);
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+/* =========================
+   XP BAR
+========================= */
+
+.xp-bar {
+    width: 100%;
+    height: 14px;
+    background: #1c1c25;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.xp-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--purple), var(--purple-glow));
+    transition: width 0.4s ease;
 }

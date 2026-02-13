@@ -183,16 +183,19 @@ function App() {
       {!profileUserId && (
         <>
           <div className="container">
-            <UserSidebar
-              user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
-              onOpenTreino={() => setTelaAtiva("treino")}
-              onOpenMissoes={() => setTelaAtiva("missoes")}
-              onOpenUpgrades={() => setTelaAtiva("upgrades")}
-              onOpenTop15={() => setTelaAtiva("top15")}
-              onOpenMenuCFG={() => setTelaAtiva("PerfilCFG")}
-              onLogout={logout}
-            />
-            <div className="container-conteudo">
+            <div className="left-container">
+              <UserSidebar
+                user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
+                onOpenTreino={() => setTelaAtiva("treino")}
+                onOpenMissoes={() => setTelaAtiva("missoes")}
+                onOpenUpgrades={() => setTelaAtiva("upgrades")}
+                onOpenTop15={() => setTelaAtiva("top15")}
+                onOpenMenuCFG={() => setTelaAtiva("PerfilCFG")}
+                onLogout={logout}
+              />
+            </div>
+
+            <div className="right-container" style={{ display: menuOpen ? "none" : "block" }}>
               <header><h1>{SITENAME}</h1></header>
 
               {telaAtiva === "treino" && (

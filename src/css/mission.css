@@ -1,6 +1,9 @@
 .missoes-container {
-    display: flex;
-    flex-direction: column;
+    min-height: 80vh;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
     padding: 5rem;
     gap: 20px;
 }
@@ -11,39 +14,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 600px;
     gap: 10px;
     border-radius: 20px;
     padding: 26px;
     color: #fff;
     text-align: center;
     overflow: hidden;
+    background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.75),
+            rgba(20, 20, 30, 0.9));
     box-shadow:
-        0 0 30px var(--purple-glow),
-        inset 0 0 20px var(--purple);
-    animation: cardGlow 6s ease-in-out infinite;
-}
-
-/* 🔮 brilho animado de fundo */
-.missao-card::before {
-    content: "";
-    position: absolute;
-    inset: -50%;
-    background: conic-gradient(from 0deg,
-            transparent,
-            var(--purple-glow),
-            transparent 30%);
-    animation: rotateGlow 8s linear infinite;
-    z-index: 0;
-}
-
-/* escurece por cima do brilho */
-.missao-card::after {
-    content: "";
-    position: absolute;
-    inset: 2px;
-    background: var(--bg);
-    border-radius: 18px;
-    z-index: 1;
+        0 0 10px var(--purple-glow),
+        inset 0 0 10px var(--purple);
 }
 
 /* mantém conteúdo acima */
@@ -98,7 +81,6 @@
         0 0 6px var(--purple-glow);
     transition: all 0.25s ease;
     position: relative;
-    /* necessário pro ::after */
 }
 
 /* hover */
@@ -144,32 +126,4 @@
     color: #9ca3af;
     cursor: not-allowed;
     box-shadow: none;
-}
-
-
-/* 🎞️ animações */
-@keyframes rotateGlow {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes cardGlow {
-
-    0%,
-    100% {
-        box-shadow:
-            0 0 25px var(--purple-glow),
-            inset 0 0 18px var(--purple);
-    }
-
-    50% {
-        box-shadow:
-            0 0 40px var(--purple-glow),
-            inset 0 0 26px var(--purple-glow);
-    }
 }

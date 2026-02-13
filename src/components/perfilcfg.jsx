@@ -120,7 +120,7 @@ export default function PerfilCFG({ user }) {
 
     return (
         <div className="perfil-container">
-            <h1>Configuração de Perfil</h1>
+            <h1>Perfil</h1>
 
             {/* Avatar */}
             <div className="perfil-avatar-section">
@@ -140,7 +140,6 @@ export default function PerfilCFG({ user }) {
                         <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />
                     )}
                 </div>
-
                 <p className="cargo-text">
                     Cargo:{" "}
                     <strong style={{ color: isVIP ? "gold" : "#aaa" }}>
@@ -148,6 +147,7 @@ export default function PerfilCFG({ user }) {
                     </strong>
                 </p>
             </div>
+
 
             {/* Nome */}
             <div className="perfil-section">

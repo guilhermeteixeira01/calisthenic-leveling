@@ -14,7 +14,9 @@
     font-size: 1rem;
     border-radius: 8px;
     border: 2px solid var(--purple);
-    background: var(--bg);
+    background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.75),
+            rgba(20, 20, 30, 0.9));
     color: #eaeaea;
     transition: border-color 0.3s, box-shadow 0.3s;
     font-family: 'Inter', sans-serif;
@@ -29,14 +31,17 @@
 .form input:focus,
 .form select:focus {
     outline: none;
-    border-color: var(--purple2);
-    box-shadow: 0 0 8px var(--purple2);
+    border-color: var(--purple);
+    box-shadow: 0 0 8px var(--purple);
 }
 
 .form button {
-    background-color: var(--purple);
+    background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.75),
+            rgba(20, 20, 30, 0.9));
     padding: 0 1.5rem;
-    border: none;
+    color: snow;
+    border: 2px solid var(--purple);
     border-radius: 8px;
     cursor: pointer;
     font-weight: 700;
@@ -47,12 +52,11 @@
 }
 
 .form button:hover {
-    background-color: var(--purple2);
-    box-shadow: 0 0 15px var(--purple2);
+    box-shadow: 0 0 15px var(--purple);
 }
 
 .form select {
-    background-color: #11162a;
+    background-color: rgba(0, 0, 0, 0.75);
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 10px 5px;

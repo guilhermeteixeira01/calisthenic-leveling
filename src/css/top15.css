@@ -1,5 +1,5 @@
 .top15-container {
-    max-width: 900px;
+    min-height: 80vh;
     margin: 40px auto;
     padding: 20px;
     background: linear-gradient(180deg,
