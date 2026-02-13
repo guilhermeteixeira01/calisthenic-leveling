@@ -23,11 +23,21 @@ export default function UserSidebar({
     const [showNovidades, setShowNovidades] = useState(false);
     const [isVIP, setIsVIP] = useState(false);
     const [isResetting, setIsResetting] = useState(false); // ✅ status do reset
+    const [renderSidebar, setRenderSidebar] = useState(false);
 
     const handleMenuClick = (action) => {
         setMenuOpen(false);
         action?.();
     };
+
+    useEffect(() => {
+        if (menuOpen) {
+            setRenderSidebar(true); // renderiza imediatamente
+        } else {
+            const timeout = setTimeout(() => setRenderSidebar(false), 300); // espera animação
+            return () => clearTimeout(timeout);
+        }
+    }, [menuOpen]);
 
     useEffect(() => {
         if (!userData) return;
@@ -167,141 +177,144 @@ export default function UserSidebar({
             </button>
 
             {/* Sidebar */}
-            <aside className={`user-sidebar ${menuOpen ? "active" : ""}`}>
-                {/* UPDATE */}
-                <button className="btn-novidades" onClick={() => setShowNovidades(true)}>
-                    NEW
-                </button>
+            {renderSidebar && (
+                <aside className={`user-sidebar ${menuOpen ? "active" : ""}`}>
+                    {/* UPDATE */}
+                    <button className="btn-novidades" onClick={() => setShowNovidades(true)}>
+                        NEW
+                    </button>
 
-                <div className="user-profile">
-                    {/* Avatar clicável */}
-                    {isVIP ? (
-                        <>
-                            <div className="avatar-wrapper">
-                                <img
-                                    src={
-                                        userData?.photoURL ||
-                                        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                                    }
-                                    alt="Perfil"
-                                    className="avatarusersidebarvip"
-                                    loading="lazy"
-                                />
-                                {/* Badge VIP */}
-                                <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />
+                    <div className="user-profile">
+                        {/* Avatar clicável */}
+                        {isVIP ? (
+                            <>
+                                <div className="avatar-wrapper">
+                                    <img
+                                        src={
+                                            userData?.photoURL ||
+                                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                                        }
+                                        alt="Perfil"
+                                        className="avatarusersidebarvip"
+                                        loading="lazy"
+                                    />
+                                    {/* Badge VIP */}
+                                    <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />
+                                </div>
+
+                                <span className="user-name-vip">
+                                    {userData?.displayName || user.displayName || "Usuário"}
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                <div className="avatar-wrapper">
+                                    <img
+                                        src={
+                                            userData?.photoURL ||
+                                            "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
+                                        }
+                                        alt="Perfil"
+                                        className="avatarusersidebar"
+                                        loading="lazy"
+                                    />
+                                </div>
+
+                                <span className="user-name">
+                                    {userData?.displayName || user.displayName || "Usuário"}
+                                </span>
+                            </>
+                        )}
+
+
+                        <span className={`user-rank rank-${rank}`}>Rank {rank}</span>
+
+                        {/* XP */}
+                        <div className="xp-container">
+                            <div className="xp-info">
+                                {xpTotal === 7550
+                                    ? <span className="nivel-text">Nível Max</span>
+                                    : <span className="nivel-text">Nível {nivel}</span>
+                                }
+                                <span className="xp-text">
+                                    {xpAtual} / {xpMax} XP
+                                </span>
                             </div>
 
-                            <span className="user-name-vip">
-                                {userData?.displayName || user.displayName || "Usuário"}
-                            </span>
-                        </>
-                    ) : (
-                        <>
-                            <div className="avatar-wrapper">
-                                <img
-                                    src={
-                                        userData?.photoURL ||
-                                        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                                    }
-                                    alt="Perfil"
-                                    className="avatarusersidebar"
-                                    loading="lazy"
+                            <div className="xp-bar">
+                                <div
+                                    className={`xp-fill rank-${rank}`}
+                                    style={{ width: `${progresso}%` }}
                                 />
                             </div>
-
-                            <span className="user-name">
-                                {userData?.displayName || user.displayName || "Usuário"}
-                            </span>
-                        </>
-                    )}
-
-
-                    <span className={`user-rank rank-${rank}`}>Rank {rank}</span>
-
-                    {/* XP */}
-                    <div className="xp-container">
-                        <div className="xp-info">
-                            {xpTotal === 7550
-                                ? <span className="nivel-text">Nível Max</span>
-                                : <span className="nivel-text">Nível {nivel}</span>
-                            }
-                            <span className="xp-text">
-                                {xpAtual} / {xpMax} XP
-                            </span>
-                        </div>
-
-                        <div className="xp-bar">
-                            <div
-                                className={`xp-fill rank-${rank}`}
-                                style={{ width: `${progresso}%` }}
-                            />
                         </div>
                     </div>
-                </div>
 
-                {/* Botões */}
-                <div className="sidebar-actions">
-                    <button onClick={() => handleMenuClick(onOpenTreino)}>
-                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
-                            <defs>
-                                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#f6d365" />
-                                    <stop offset="40%" stopColor="#ffd700" />
-                                    <stop offset="50%" stopColor="#fff8dc" />
-                                    <stop offset="60%" stopColor="#ffd700" />
-                                    <stop offset="100%" stopColor="#d4af37" />
-                                </linearGradient>
-                            </defs>
-                            <path d="M2 9h2v6H2V9zm3-2h2v10H5V7zm4 3h6v4H9v-4zm8-3h2v10h-2V7zm3 2h2v6h-2V9z" />
-                        </svg>
+                    {/* Botões */}
+                    <div className="sidebar-actions">
+                        <button onClick={() => handleMenuClick(onOpenTreino)}>
+                            <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                                <defs>
+                                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="#f6d365" />
+                                        <stop offset="40%" stopColor="#ffd700" />
+                                        <stop offset="50%" stopColor="#fff8dc" />
+                                        <stop offset="60%" stopColor="#ffd700" />
+                                        <stop offset="100%" stopColor="#d4af37" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M2 9h2v6H2V9zm3-2h2v10H5V7zm4 3h6v4H9v-4zm8-3h2v10h-2V7zm3 2h2v6h-2V9z" />
+                            </svg>
 
-                        Treino Semanal
+                            Treino Semanal
+                        </button>
+
+                        <button onClick={() => handleMenuClick(onOpenMissoes)}>
+                            <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                                <path d="M12 2L15 8L22 9L17 14L18 22L12 18L6 22L7 14L2 9L9 8L12 2Z" />
+                            </svg>
+                            Missões
+                        </button>
+
+                        <button onClick={() => handleMenuClick(onOpenUpgrades)}>
+                            <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                                <path d="M13 2L3 14h6l-1 8 10-14h-6l1-6z" />
+                            </svg>
+                            Upgrades
+                        </button>
+
+                        <button onClick={() => handleMenuClick(onOpenTop15)}>
+                            <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
+                                <path d="M2 7l5 4 5-6 5 6 5-4-2 13H4L2 7z" />
+                            </svg>
+                            Top 15
+                        </button>
+
+                        <button onClick={() => handleMenuClick(onOpenMenuCFG)}>
+                            <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24"> <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.028 7.028 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.9 2h-3.8a.5.5 0 00-.49.42l-.36 2.54c-.58.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 8.48a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.6.22l2.39-.96c.51.42 1.05.72 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.22 1.12-.52 1.63-.94l2.39.96c.23.09.5 0 .6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z" /> </svg>
+                            Configurar Perfil
+                        </button>
+                    </div>
+
+                    <button className="logout-btn" onClick={onLogout}>
+                        Sair
                     </button>
 
-                    <button onClick={() => handleMenuClick(onOpenMissoes)}>
-                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
-                            <path d="M12 2L15 8L22 9L17 14L18 22L12 18L6 22L7 14L2 9L9 8L12 2Z" />
-                        </svg>
-                        Missões
-                    </button>
-
-                    <button onClick={() => handleMenuClick(onOpenUpgrades)}>
-                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h6l-1 8 10-14h-6l1-6z" />
-                        </svg>
-                        Upgrades
-                    </button>
-
-                    <button onClick={() => handleMenuClick(onOpenTop15)}>
-                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24">
-                            <path d="M2 7l5 4 5-6 5 6 5-4-2 13H4L2 7z" />
-                        </svg>
-                        Top 15
-                    </button>
-
-                    <button onClick={() => handleMenuClick(onOpenMenuCFG)}>
-                        <svg className={isVIP ? "vip-icon" : "icon"} viewBox="0 0 24 24"> <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.028 7.028 0 00-1.63-.94l-.36-2.54A.5.5 0 0013.9 2h-3.8a.5.5 0 00-.49.42l-.36 2.54c-.58.22-1.12.52-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.71 8.48a.5.5 0 00.12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.43.34.6.22l2.39-.96c.51.42 1.05.72 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.22 1.12-.52 1.63-.94l2.39.96c.23.09.5 0 .6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8a3.5 3.5 0 010 7.5z" /> </svg>
-                        Configurar Perfil
-                    </button>
-                </div>
-
-                <button className="logout-btn" onClick={onLogout}>
-                    Sair
-                </button>
-
-                {/* Copyright */}
-                <div
-                    style={{
-                        marginTop: "10px",
-                        paddingBottom: "30px",
-                        textAlign: "center",
-                        fontSize: "12px",
-                        color: "#888",
-                    }}
-                >
-                    © Desenvolvido por Guilherme Teixeira
-                </div>
-            </aside>
+                    {/* Copyright */}
+                    <div
+                        style={{
+                            marginTop: "10px",
+                            paddingBottom: "30px",
+                            textAlign: "center",
+                            fontSize: "12px",
+                            color: "#888",
+                        }}
+                    >
+                        © Desenvolvido por Guilherme Teixeira
+                    </div>
+                </aside>
+            )}
+            
             {/* Novidades overlay */}
             {showNovidades && (
                 <div className="novidades-overlay" onClick={closeNovidades}>
