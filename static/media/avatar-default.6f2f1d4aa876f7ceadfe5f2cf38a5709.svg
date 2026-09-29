@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 38 196 196">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#12306a"/>
+      <stop offset="45%" stop-color="#081631"/>
+      <stop offset="100%" stop-color="#02050c"/>
+    </radialGradient>
+    <linearGradient id="cloak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1426"/>
+      <stop offset="100%" stop-color="#03060d"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8fd8ff"/>
+      <stop offset="60%" stop-color="#3aa0ff"/>
+      <stop offset="100%" stop-color="#3aa0ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur8" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- fundo -->
+  <rect x="0" y="0" width="256" height="256" fill="url(#bg)"/>
+
+  <!-- portal / anel -->
+  <circle cx="128" cy="112" r="78" fill="none" stroke="#3aa0ff" stroke-opacity=".18" stroke-width="2"/>
+  <circle cx="128" cy="112" r="92" fill="none" stroke="#3aa0ff" stroke-opacity=".08" stroke-width="1"/>
+
+  <!-- aura de sombra -->
+  <ellipse cx="128" cy="230" rx="120" ry="40" fill="#5b3cff" opacity=".35" filter="url(#blur8)"/>
+  <ellipse cx="70" cy="215" rx="40" ry="50" fill="#1e5bff" opacity=".25" filter="url(#blur8)"/>
+  <ellipse cx="190" cy="210" rx="40" ry="55" fill="#1e5bff" opacity=".25" filter="url(#blur8)"/>
+
+  <!-- corpo / capa -->
+  <path d="M40 256 C46 200 70 172 100 160 L156 160 C186 172 210 200 216 256 Z" fill="url(#cloak)"/>
+  <path d="M40 256 C46 200 70 172 100 160" fill="none" stroke="url(#rim)" stroke-width="2" opacity=".7"/>
+
+  <!-- capuz -->
+  <path d="M128 50 C96 50 78 76 76 108 C74 136 84 160 100 172 L156 172 C172 160 182 136 180 108 C178 76 160 50 128 50 Z"
+        fill="url(#cloak)"/>
+  <path d="M128 50 C96 50 78 76 76 108 C74 136 84 160 100 172"
+        fill="none" stroke="url(#rim)" stroke-width="2.5"/>
+  <path d="M128 50 C160 50 178 76 180 108" fill="none" stroke="#3aa0ff" stroke-opacity=".35" stroke-width="1.5"/>
+
+  <!-- rosto na sombra -->
+  <path d="M128 78 C108 78 98 96 98 116 C98 138 110 154 128 158 C146 154 158 138 158 116 C158 96 148 78 128 78 Z"
+        fill="#010207"/>
+
+  <!-- olhos -->
+  <g filter="url(#glow)" fill="#8fd8ff">
+    <path d="M104 116 L122 112 L120 119 L106 120 Z"/>
+    <path d="M152 116 L134 112 L136 119 L150 120 Z"/>
+  </g>
+  <g fill="#ffffff">
+    <path d="M110 116 L119 114 L118 117 L111 118 Z"/>
+    <path d="M146 116 L137 114 L138 117 L145 118 Z"/>
+  </g>
+
+  <!-- gola -->
+  <path d="M100 172 L128 196 L156 172" fill="none" stroke="#3aa0ff" stroke-opacity=".45" stroke-width="2"/>
+</svg>
