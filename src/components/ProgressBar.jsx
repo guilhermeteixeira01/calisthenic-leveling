@@ -45,17 +45,31 @@ export default function ProgressBar({ tasks, user, xpSemana = 100 }) {
     }, [percent, user, xpSemana]);
 
     return (
-        <div className="progress">
-            <span className="progress-text">
-                Progresso Semanal: {percent}%
-            </span>
-
-            <div className="progress-bar">
-                <div
-                    className="progress-fill"
-                    style={{ width: `${percent}%` }}
-                />
+        <section className="sys-panel progress-panel">
+            <div className="sys-head">
+                <span className="sys-mark">!</span>
+                <span className="sys-title">Progresso Semanal</span>
             </div>
-        </div>
+
+            <div className="sys-body">
+                <div className="progress-value">{percent}<small>%</small></div>
+
+                <div className="meter lg">
+                    <div className="meter-fill" style={{ width: `${percent}%` }} />
+                </div>
+
+                <div className="progress-stats">
+                    <div className="stat"><b>{completed}</b><span>Feitas</span></div>
+                    <div className="stat"><b>{total - completed}</b><span>Restam</span></div>
+                    <div className="stat"><b>+{xpSemana}</b><span>XP bônus</span></div>
+                </div>
+
+                <p className="progress-note">
+                    {percent === 100
+                        ? "Semana concluída. Recompensa entregue."
+                        : "Complete todas as quests da semana para receber o bônus de XP."}
+                </p>
+            </div>
+        </section>
     );
 }

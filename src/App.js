@@ -23,6 +23,14 @@ import Register from "./components/Register";
 
 import { SITENAME } from "./constants/xpPorRank";
 
+const PAGINAS = {
+  treino: { eyebrow: "Daily Quest", titulo: "Treino Semanal" },
+  missoes: { eyebrow: "Quest Info", titulo: "Missões" },
+  upgrades: { eyebrow: "Status", titulo: "Atributos" },
+  top15: { eyebrow: "Hunter Ranking", titulo: "Top 15" },
+  PerfilCFG: { eyebrow: "Player", titulo: "Configurar Perfil" }
+};
+
 function App() {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -152,87 +160,100 @@ function App() {
 
   if (!user) {
     return (
-      <div className="container-login-register">
-        {showRegister ? (
-          <>
-            <Register />
-            <p className="login-switch-text">
-              Já tem conta?{" "}
-              <button className="login-switch-button" onClick={() => setShowRegister(false)}>Faça login</button>
-            </p>
-          </>
-        ) : (
-          <>
-            <Login />
-            <p className="login-switch-text">
-              Não tem conta?{" "}
-              <button className="login-switch-button" onClick={() => setShowRegister(true)}>Crie uma aqui</button>
-            </p>
-          </>
-        )}
+      <div className="auth-screen">
+        <div className="app-bg" aria-hidden="true" />
+        <div className="auth-wrap">
+          <div className="auth-hero">
+            <div className="brand-mark"><span>CL</span></div>
+            <p className="eyebrow">[ Sistema ]</p>
+            <h1>{SITENAME}</h1>
+            <p>Complete suas quests diárias. Suba de rank. Torne-se o caçador mais forte.</p>
+          </div>
+
+          {showRegister ? <Register /> : <Login />}
+
+          <p className="auth-switch">
+            {showRegister ? "Já é um jogador? " : "Ainda não despertou? "}
+            <button className="link-btn" onClick={() => setShowRegister(!showRegister)}>
+              {showRegister ? "Entrar" : "Criar conta"}
+            </button>
+          </p>
+        </div>
       </div>
     );
   }
 
+  const hojeIndex = (new Date().getDay() + 6) % 7;
+  const pagina = PAGINAS[telaAtiva];
+
   return (
-    <div className="App">
-      <div className="wallpaper" id="wpp">
+    <div className="app-shell">
+      <div className="app-bg" aria-hidden="true" />
 
-        {profileUserId && (
-          <UserProfileCard userId={profileUserId} onClose={() => setProfileUserId(null)} />
-        )}
+      <UserSidebar
+        user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
+        telaAtiva={telaAtiva} onNavigate={setTelaAtiva}
+        onLogout={logout}
+      />
 
-        {!profileUserId && (
-          <>
-            <div className="container">
-              <div className="left-container">
-                <UserSidebar
-                  user={user} menuOpen={menuOpen} setMenuOpen={setMenuOpen}
-                  onOpenTreino={() => setTelaAtiva("treino")}
-                  onOpenMissoes={() => setTelaAtiva("missoes")}
-                  onOpenUpgrades={() => setTelaAtiva("upgrades")}
-                  onOpenTop15={() => setTelaAtiva("top15")}
-                  onOpenMenuCFG={() => setTelaAtiva("PerfilCFG")}
-                  onLogout={logout}
-                />
-              </div>
+      <main className="main">
+        <header className="topbar">
+          <div>
+            <p className="eyebrow">{pagina.eyebrow}</p>
+            <h1>{pagina.titulo}</h1>
+          </div>
+          <div className="topbar-date">
+            <strong>{diasSemana[hojeIndex]}</strong>
+            {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long" })}
+          </div>
+        </header>
 
-              <div className="right-container" style={{ display: menuOpen ? "none" : "block" }}>
-                <header><h1>{SITENAME}</h1></header>
-
-                {telaAtiva === "treino" && (
-                  <>
-                    <TaskForm addTask={addTask} diasSemana={diasSemana} />
-                    <ProgressBar tasks={tasks} user={user} />
-                    <div className="week">
-                      {diasSemana.map(day => {
-                        const dayTasks = tasks.filter(t => t.day === day);
-                        const allDone = dayTasks.length > 0 && dayTasks.every(t => t.done);
-                        return (
-                          <div key={day} className={`day ${allDone ? "day-complete" : ""}`}>
-                            <h2>{day}</h2>
-                            {dayTasks.length === 0 && <p>Nenhum exercício</p>}
-                            {dayTasks.map(task => (
-                              <TaskItem key={task.id} task={task} toggleDone={toggleDone} removeTask={removeTask} />
-                            ))}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
-
-                {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
-                {telaAtiva === "upgrades" && <Upgrades user={user} />}
-                {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
-                {telaAtiva === "PerfilCFG" && <PerfilCFG user={user} />}
-
-                <Notification />
-              </div>
+        {telaAtiva === "treino" && (
+          <div className="page">
+            <div className="training-top">
+              <TaskForm addTask={addTask} diasSemana={diasSemana} />
+              <ProgressBar tasks={tasks} user={user} />
             </div>
-          </>
+
+            <div className="week">
+              {diasSemana.map((day, i) => {
+                const dayTasks = tasks.filter(t => t.day === day);
+                const doneCount = dayTasks.filter(t => t.done).length;
+                const allDone = dayTasks.length > 0 && doneCount === dayTasks.length;
+                const isToday = i === hojeIndex;
+                return (
+                  <section key={day} className={`sys-panel day ${isToday ? "today" : ""} ${allDone ? "complete" : ""}`}>
+                    <div className="sys-head">
+                      <span className="day-name">{day}</span>
+                      {allDone
+                        ? <span className="day-tag clear">CLEAR</span>
+                        : isToday && <span className="day-tag">HOJE</span>}
+                      <span className="day-count">{doneCount}/{dayTasks.length}</span>
+                    </div>
+                    <div className="day-body">
+                      {dayTasks.length === 0 && <p className="empty">Dia de descanso</p>}
+                      {dayTasks.map(task => (
+                        <TaskItem key={task.id} task={task} toggleDone={toggleDone} removeTask={removeTask} />
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          </div>
         )}
-      </div>
+
+        {telaAtiva === "missoes" && <Missoes tasks={tasks} user={user} onComplete={() => { }} />}
+        {telaAtiva === "upgrades" && <Upgrades user={user} />}
+        {telaAtiva === "top15" && <Top15 onOpenProfile={setProfileUserId} />}
+        {telaAtiva === "PerfilCFG" && <PerfilCFG user={user} />}
+      </main>
+
+      <Notification />
+
+      {profileUserId && (
+        <UserProfileCard userId={profileUserId} onClose={() => setProfileUserId(null)} />
+      )}
     </div>
   );
 }

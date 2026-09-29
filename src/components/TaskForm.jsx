@@ -116,60 +116,87 @@ export default function TaskForm({ addTask, diasSemana }) {
     };
 
     return (
-        <form className="form" onSubmit={handleSubmit}>
-            <select value={day} onChange={e => setDay(e.target.value)} required>
-                <option value="">Dia da semana</option>
-                {diasSemana.map(d => (
-                    <option key={d} value={d}>{d}</option>
-                ))}
-            </select>
+        <section className="sys-panel">
+            <div className="sys-head">
+                <span className="sys-mark">+</span>
+                <span className="sys-title">Nova Quest</span>
+            </div>
 
-            <select value={exercise} onChange={e => setExercise(e.target.value)} required>
-                <option value="">Selecione um exercício</option>
-                {exercises.map((ex, i) => (
-                    <option key={i} value={ex}>{ex}</option>
-                ))}
-            </select>
+            <form className="sys-body quest-form" onSubmit={handleSubmit}>
+                <label className="field">
+                    <span className="field-label">Dia</span>
+                    <select className="select" value={day} onChange={e => setDay(e.target.value)} required>
+                        <option value="">Dia da semana</option>
+                        {diasSemana.map(d => (
+                            <option key={d} value={d}>{d}</option>
+                        ))}
+                    </select>
+                </label>
 
-            {/* SÉRIES */}
-            <select value={series} onChange={e => setSeries(e.target.value)} required>
-                <option value="">Selecione as séries</option>
-                {seriesOptions.map((s, i) => (
-                    <option key={i} value={s}>{s}</option>
-                ))}
-                <option value="custom">Outro (personalizado)</option>
-            </select>
+                <label className="field">
+                    <span className="field-label">Exercício</span>
+                    <select className="select" value={exercise} onChange={e => setExercise(e.target.value)} required>
+                        <option value="">Selecione um exercício</option>
+                        {exercises.map((ex, i) => (
+                            <option key={i} value={ex}>{ex}</option>
+                        ))}
+                    </select>
+                </label>
 
-            {series === "custom" && (
-                <input
-                    type="text"
-                    placeholder="Ex: 4x8 + drop set"
-                    value={customSeries}
-                    onChange={e => setCustomSeries(e.target.value)}
-                    required
-                />
-            )}
+                {/* SÉRIES */}
+                <label className="field">
+                    <span className="field-label">Séries</span>
+                    <select className="select" value={series} onChange={e => setSeries(e.target.value)} required>
+                        <option value="">Selecione as séries</option>
+                        {seriesOptions.map((s, i) => (
+                            <option key={i} value={s}>{s}</option>
+                        ))}
+                        <option value="custom">Outro (personalizado)</option>
+                    </select>
+                </label>
 
-            {/* REPETIÇÕES / TEMPO */}
-            <select value={reps} onChange={e => setReps(e.target.value)} required>
-                <option value="">Selecione repetições / tempo</option>
-                {repsOptions.map((r, i) => (
-                    <option key={i} value={r}>{r}</option>
-                ))}
-                <option value="custom">Outro (personalizado)</option>
-            </select>
+                {/* REPETIÇÕES / TEMPO */}
+                <label className="field">
+                    <span className="field-label">Repetições / tempo</span>
+                    <select className="select" value={reps} onChange={e => setReps(e.target.value)} required>
+                        <option value="">Selecione repetições / tempo</option>
+                        {repsOptions.map((r, i) => (
+                            <option key={i} value={r}>{r}</option>
+                        ))}
+                        <option value="custom">Outro (personalizado)</option>
+                    </select>
+                </label>
 
-            {reps === "custom" && (
-                <input
-                    type="text"
-                    placeholder="Ex: até falha / 12-10-8"
-                    value={customReps}
-                    onChange={e => setCustomReps(e.target.value)}
-                    required
-                />
-            )}
+                {series === "custom" && (
+                    <label className="field">
+                        <span className="field-label">Séries personalizadas</span>
+                        <input
+                            className="input"
+                            type="text"
+                            placeholder="Ex: 4x8 + drop set"
+                            value={customSeries}
+                            onChange={e => setCustomSeries(e.target.value)}
+                            required
+                        />
+                    </label>
+                )}
 
-            <button type="submit">Adicionar Exercício</button>
-        </form>
+                {reps === "custom" && (
+                    <label className="field">
+                        <span className="field-label">Repetições personalizadas</span>
+                        <input
+                            className="input"
+                            type="text"
+                            placeholder="Ex: até falha / 12-10-8"
+                            value={customReps}
+                            onChange={e => setCustomReps(e.target.value)}
+                            required
+                        />
+                    </label>
+                )}
+
+                <button type="submit" className="btn btn-primary">Adicionar Quest</button>
+            </form>
+        </section>
     );
 }

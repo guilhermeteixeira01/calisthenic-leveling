@@ -2,6 +2,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { IconEye, IconEyeOff } from "./Icons";
 
 function Login() {
     const [loginInput, setLoginInput] = useState("");
@@ -61,49 +62,55 @@ function Login() {
     }
 
     return (
-        <form className="auth-card" onSubmit={logar}>
-            <h2>Login</h2>
-
-            {mensagem && (
-                <div className={`mensagem ${tipoMensagem}`}>
-                    {mensagem}
-                </div>
-            )}
-
-            <input
-                type="text"
-                placeholder="Email ou Usuário"
-                onChange={(e) => setLoginInput(e.target.value)}
-            />
-
-            <div className="input-password">
-                <input
-                    type={mostrarSenha ? "text" : "password"}
-                    placeholder="Senha"
-                    onChange={(e) => setSenha(e.target.value)}
-                />
-
-                <button
-                    type="button"
-                    className="toggle-password"
-                    onClick={() => setMostrarSenha(!mostrarSenha)}
-                >
-                    {mostrarSenha ? (
-                        /* Olho fechado */
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M17.94 17.94A10.94 10.94 0 0112 19C7 19 2.73 15.11 1 12c.73-1.32 1.7-2.5 2.84-3.44M9.9 4.24A10.94 10.94 0 0112 5c5 0 9.27 3.89 11 7a10.96 10.96 0 01-4.16 4.36M1 1l22 22" />
-                        </svg>
-                    ) : (
-                        /* Olho aberto */
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    )}
-                </button>
+        <form className="sys-panel" onSubmit={logar}>
+            <div className="sys-head">
+                <span className="sys-mark">!</span>
+                <span className="sys-title">Acesso do Jogador</span>
             </div>
 
-            <button className="btnn">Entrar</button>
+            <div className="sys-body auth-form">
+                <p className="auth-lead">Você recebeu uma <strong>quest</strong>. Deseja aceitar?</p>
+
+                {mensagem && (
+                    <div className={`alert ${tipoMensagem}`} role="alert">
+                        {mensagem}
+                    </div>
+                )}
+
+                <label className="field">
+                    <span className="field-label">Email ou usuário</span>
+                    <input
+                        className="input"
+                        type="text"
+                        autoComplete="username"
+                        placeholder="caçador@email.com"
+                        onChange={(e) => setLoginInput(e.target.value)}
+                    />
+                </label>
+
+                <label className="field">
+                    <span className="field-label">Senha</span>
+                    <div className="password-field">
+                        <input
+                            className="input"
+                            type={mostrarSenha ? "text" : "password"}
+                            autoComplete="current-password"
+                            placeholder="••••••••"
+                            onChange={(e) => setSenha(e.target.value)}
+                        />
+                        <button
+                            type="button"
+                            className="icon-btn password-toggle"
+                            onClick={() => setMostrarSenha(!mostrarSenha)}
+                            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                        >
+                            {mostrarSenha ? <IconEyeOff /> : <IconEye />}
+                        </button>
+                    </div>
+                </label>
+
+                <button className="btn btn-primary btn-block">Aceitar · Entrar</button>
+            </div>
         </form>
     );
 }

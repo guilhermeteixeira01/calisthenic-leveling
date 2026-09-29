@@ -1,0 +1,66 @@
+/* =========================================================
+   NOTIFICAÇÕES DO SISTEMA
+   ========================================================= */
+.toast-stack {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100vw - 32px));
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--panel-solid);
+    animation: toastIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both, toastOut 0.4s ease 5.6s forwards;
+}
+
+.toast .sys-mark {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+}
+
+.toast-label {
+    display: block;
+    margin-bottom: 2px;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+}
+
+.toast-text {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text);
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+}
+
+@keyframes toastOut {
+    to {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+}
+
+@media (max-width: 560px) {
+    .toast-stack {
+        right: 16px;
+        bottom: 16px;
+    }
+}

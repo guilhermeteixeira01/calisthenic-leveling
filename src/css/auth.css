@@ -1,0 +1,108 @@
+/* =========================================================
+   LOGIN / REGISTRO — "Você foi escolhido como Jogador"
+   ========================================================= */
+.auth-screen {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 40px 16px;
+}
+
+.auth-wrap {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    animation: pageIn 0.5s ease both;
+}
+
+.auth-hero {
+    text-align: center;
+}
+
+.auth-hero .brand-mark {
+    margin: 0 auto 22px;
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+}
+
+.auth-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 6vw, 32px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 22px rgba(var(--accent-rgb), 0.6);
+}
+
+.auth-hero p {
+    margin-top: 8px;
+    color: var(--text-2);
+    font-size: 14px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-lead {
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-align: center;
+}
+
+.auth-lead strong {
+    color: var(--accent-2);
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-field .input {
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    border: 0;
+}
+
+.alert {
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 77, 97, 0.45);
+    border-left-width: 3px;
+    border-radius: var(--radius);
+    background: rgba(255, 77, 97, 0.08);
+    color: #ffb3bc;
+    font-size: 14px;
+}
+
+.auth-switch {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+}
+
+.link-btn {
+    border: 0;
+    background: none;
+    color: var(--accent-2);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.link-btn:hover {
+    color: #fff;
+}

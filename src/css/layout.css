@@ -1,0 +1,375 @@
+/* =========================================================
+   SHELL
+   ========================================================= */
+.app-shell {
+    min-height: 100vh;
+}
+
+.main {
+    min-height: 100vh;
+    margin-left: var(--sidebar-w);
+    padding: 32px clamp(16px, 3vw, 44px) 80px;
+}
+
+.page {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: pageIn 0.45s ease both;
+}
+
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+.topbar {
+    max-width: 1280px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+}
+
+.topbar h1 {
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.55);
+}
+
+.topbar-date {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+}
+
+.topbar-date strong {
+    display: block;
+    color: var(--accent-2);
+    font-size: 16px;
+}
+
+/* =========================================================
+   SIDEBAR — JANELA DE STATUS
+   ========================================================= */
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: var(--sidebar-w);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 24px 18px 18px;
+    background: linear-gradient(180deg, rgba(4, 8, 18, 0.92), rgba(4, 8, 18, 0.82));
+    border-right: 1px solid var(--line);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 40%;
+    background: linear-gradient(180deg, var(--accent), transparent);
+    box-shadow: 0 0 12px var(--accent);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 6px;
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 15px;
+    transform: rotate(45deg);
+    box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.5), inset 0 0 10px rgba(var(--accent-rgb), 0.3);
+}
+
+.brand-mark span {
+    transform: rotate(-45deg);
+}
+
+.brand-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.brand-name small {
+    display: block;
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+}
+
+/* cartão do jogador */
+.player-card .sys-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px;
+}
+
+.player-id {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.player-id .avatar {
+    width: 56px;
+    height: 56px;
+}
+
+.player-meta {
+    min-width: 0;
+    flex: 1;
+}
+
+.player-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-family: var(--font-ui);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.15;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.player-title {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* navegação */
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-label {
+    padding: 0 12px 6px;
+}
+
+.nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-2);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-align: left;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.nav-item svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    color: var(--muted);
+    transition: color 0.2s, filter 0.2s;
+}
+
+.nav-item:hover {
+    color: #fff;
+    background: rgba(var(--accent-rgb), 0.06);
+}
+
+.nav-item:hover svg {
+    color: var(--accent-2);
+}
+
+.nav-item.active {
+    color: #fff;
+    border-color: var(--line);
+    background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.2), rgba(var(--accent-rgb), 0.02));
+}
+
+.nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.nav-item.active svg {
+    color: var(--accent);
+    filter: drop-shadow(0 0 6px rgba(var(--accent-rgb), 0.8));
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-footer .row {
+    display: flex;
+    gap: 8px;
+}
+
+.sidebar-footer .row .btn {
+    flex: 1;
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 13px;
+}
+
+.btn-news {
+    position: relative;
+}
+
+.btn-news .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--danger);
+    box-shadow: 0 0 8px var(--danger);
+}
+
+.copyright {
+    color: var(--muted);
+    font-size: 11px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+.mobile-bar,
+.sidebar-backdrop {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    .main {
+        margin-left: 0;
+        padding: 88px 16px 80px;
+    }
+
+    .mobile-bar {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        height: 64px;
+        padding: 0 16px;
+        padding-top: env(safe-area-inset-top);
+        background: rgba(4, 8, 18, 0.85);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+
+    .mobile-bar .mobile-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .sidebar {
+        width: min(320px, 86vw);
+        transform: translateX(-100%);
+        transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .sidebar.open {
+        transform: none;
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 35;
+        display: block;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+
+    .sidebar-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .topbar {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 560px) {
+    .topbar-date {
+        display: none;
+    }
+}

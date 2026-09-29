@@ -159,17 +159,31 @@ export default function Missoes({ tasks = [], user, onComplete }) {
         }
     }
 
+    function progresso(m) {
+        if (!m) return { atual: 0, meta: 0 };
+        switch (m.tipo) {
+            case "tasks_dia": return { atual: progressoHoje(), meta: m.valor };
+            case "dia_completo": return { atual: progressoHoje(), meta: totalHoje() };
+            case "tasks_semana": return { atual: progressoSemana(), meta: m.valor };
+            case "dias_completos": return { atual: diasCompletosSemana(), meta: m.valor };
+            case "semana_completa": return { atual: diasCompletosSemana(), meta: 7 };
+            default: return { atual: 0, meta: 0 };
+        }
+    }
+
     if (!userReady) {
-        return <div className="missoes-container">Carregando usuário...</div>;
+        return <div className="loading">Carregando missões...</div>;
     }
 
     return (
-        <div className="missoes-container">
-            <Missao titulo="📅 Missão do Dia" missao={missaoDia} xp={xpDia}
+        <div className="page missions">
+            <Missao tipo="Missão Diária" missao={missaoDia} xp={xpDia}
+                progresso={progresso(missaoDia)}
                 concluida={concluida(missaoDia)} resgatada={resgatadaDia}
                 onClick={() => resgatar("dia")} />
 
-            <Missao titulo="📆 Missão da Semana" missao={missaoSemana} xp={xpSemana}
+            <Missao tipo="Missão Semanal" missao={missaoSemana} xp={xpSemana}
+                progresso={progresso(missaoSemana)}
                 concluida={concluida(missaoSemana)} resgatada={resgatadaSemana}
                 onClick={() => resgatar("semana")} />
         </div>
@@ -177,21 +191,43 @@ export default function Missoes({ tasks = [], user, onComplete }) {
 }
 
 /* ================= COMPONENTE MISSÃO ================= */
-function Missao({ titulo, missao, xp, concluida, resgatada, onClick }) {
-    return (
-        <div className="missao-card">
-            <h2>{titulo}</h2>
-            <p>{missao?.texto ?? "Gerando missão..."}</p>
-            <span>+{xp} XP</span>
+function Missao({ tipo, missao, xp, progresso, concluida, resgatada, onClick }) {
+    const { atual, meta } = progresso;
 
-            <button
-                className={`missao-btn ${resgatada ? "resgatado" : ""}`}
-                disabled={!concluida || resgatada}
-                onClick={onClick}
-            >
-                {resgatada ? "Resgatado" : concluida ? "Resgatar XP" : "Em progresso"}
-            </button>
-        </div>
+    return (
+        <section className="sys-panel mission">
+            <div className="sys-head">
+                <span className="sys-mark">!</span>
+                <span className="sys-title">Quest Info</span>
+            </div>
+
+            <div className="sys-body">
+                <span className="mission-kind">[ {tipo} ]</span>
+                <p className="mission-goal">{missao?.texto ?? "Gerando missão..."}</p>
+
+                <div className={`mission-goal-row ${concluida ? "ok" : ""}`}>
+                    <span>Objetivo</span>
+                    <span className="count">[{Math.min(atual, meta)}/{meta}]</span>
+                </div>
+
+                <div className="mission-reward">
+                    <span className="eyebrow">Recompensa</span>
+                    <b>+{xp} XP</b>
+                </div>
+
+                <button
+                    className={`btn btn-block ${resgatada ? "claimed" : concluida ? "btn-primary" : ""}`}
+                    disabled={!concluida || resgatada}
+                    onClick={onClick}
+                >
+                    {resgatada ? "Recompensa resgatada" : concluida ? "Resgatar recompensa" : "Em progresso"}
+                </button>
+
+                <p className="mission-warning">
+                    <em>Aviso:</em> missões não concluídas serão substituídas no próximo ciclo.
+                </p>
+            </div>
+        </section>
     );
 }
 

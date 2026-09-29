@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase";
 import { calcularProgressoXp } from "../utils/rankUtils";
+import { DEFAULT_AVATAR, handleAvatarError } from "../utils/avatar";
 
 // Medalhas PNG
 import GoldMedal from "../assets/icons/1.png";
@@ -33,7 +34,7 @@ export default function Top15({ onOpenProfile }) {
                     displayName: user.displayName || "Usuário",
                     photoURL:
                         user.photoURL ||
-                        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg",
+                        DEFAULT_AVATAR,
                     xp: user.xp || 0,
                     cargo: user.cargo?.toLowerCase() || "", // ✅ minúscula
                 };
@@ -46,80 +47,67 @@ export default function Top15({ onOpenProfile }) {
     }, []);
 
     return (
-        <div className="top15-container">
-            <h2>Top 15 Usuários</h2>
+        <div className="page">
+            <section className="sys-panel">
+                <div className="sys-head">
+                    <span className="sys-mark">!</span>
+                    <span className="sys-title">Ranking de Caçadores</span>
+                    <span className="sys-head-extra">Top {usuarios.length}</span>
+                </div>
 
-            <ol className="top15-list">
-                {usuarios.map((user, index) => {
-                    const rankPosicao = index + 1;
-                    const { rankAtual, nivel } = calcularProgressoXp(user.xp);
-                    const medalSrc = medals[rankPosicao];
+                {usuarios.length === 0 && <div className="loading">Carregando ranking...</div>}
 
-                    const isVIP = user.cargo === "vip";
+                <ol className="ranking">
+                    {usuarios.map((user, index) => {
+                        const rankPosicao = index + 1;
+                        const { rankAtual, nivel } = calcularProgressoXp(user.xp);
+                        const medalSrc = medals[rankPosicao];
 
-                    return (
-                        <li
-                            key={user.id}
-                            className="top15-item"
-                            onClick={() => onOpenProfile(user.id)}
-                        >
-                            {/* ESQUERDA */}
-                            <div className="top15-left">
-                                {rankPosicao > 3 && (
-                                    <span className="top15-position">{rankPosicao}</span>
-                                )}
+                        const isVIP = user.cargo === "vip";
 
-                                {medalSrc && (
-                                    <img
-                                        src={medalSrc}
-                                        alt={`Medalha ${rankPosicao}`}
-                                        className="medal"
-                                        loading="lazy"
-                                    />
-                                )}
-
-                                <div className="avatar-wrappertop15">
-                                    <img
-                                        src={user.photoURL}
-                                        alt={user.displayName}
-                                        className={isVIP ? "avatarvip" : "avatar"}
-                                        loading="lazy"
-                                    />
-                                    {isVIP && (
-                                        <img src={LOGOVIP} alt="VIP" className="vip-badgetop15" loading="lazy" /> // badge opcional
-                                    )}
-                                </div>
-
-                                <span
-                                    className={isVIP ? "user-name-vip" : "user-name"}
-                                >
-                                    {user.displayName}
+                        return (
+                            <li
+                                key={user.id}
+                                className={`ranking-item ${rankPosicao <= 3 ? `podium-${rankPosicao}` : ""}`}
+                                onClick={() => onOpenProfile(user.id)}
+                                onKeyDown={e => e.key === "Enter" && onOpenProfile(user.id)}
+                                tabIndex={0}
+                            >
+                                <span className="ranking-pos">
+                                    {medalSrc
+                                        ? <img src={medalSrc} alt={`${rankPosicao}º lugar`} loading="lazy" />
+                                        : rankPosicao}
                                 </span>
-                            </div>
 
-                            {/* DIREITA */}
-                            <div className="top15-right">
-                                <div className="rank-info">
-                                    <strong className={`rank-${rankAtual}`}>
-                                        Rank {rankAtual}
-                                    </strong>
-                                    <span>•</span>
-                                    {user.xp === 7550
-                                        ? <strong className={`rank-${rankAtual}`}>
-                                            Nível Max
-                                        </strong>
-                                        : <strong className={`rank-${rankAtual}`}>
-                                            Nível {nivel}
-                                        </strong>
-                                    }
+                                <div className="ranking-user">
+                                    <div className={`avatar ${isVIP ? "vip" : ""}`}>
+                                        <img src={user.photoURL} alt="" loading="lazy" onError={handleAvatarError} />
+                                        {isVIP && <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />}
+                                    </div>
+                                    <div style={{ minWidth: 0 }}>
+                                        <span className={`ranking-name ${isVIP ? "name-vip" : ""}`}>
+                                            {user.displayName}
+                                        </span>
+                                        <span className="ranking-sub">
+                                            <span className={`rank-text rank-${rankAtual}`}>Rank {rankAtual}</span>
+                                            {" · "}
+                                            {user.xp === 7550 ? "Nível Max" : `Nível ${nivel}`}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <span className={`xp-${rankAtual}`}>{user.xp} XP</span>
-                            </div>
-                        </li>
-                    );
-                })}
-            </ol>
+                                <div className="ranking-right">
+                                    <div className={`ranking-xp rank-text rank-${rankAtual}`}>
+                                        {user.xp}
+                                        <small>XP</small>
+                                    </div>
+                                    <span className={`rank-badge rank-${rankAtual}`}>{rankAtual}</span>
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ol>
+            </section>
         </div>
     );
 }

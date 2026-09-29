@@ -1,3 +1,5 @@
+import { IconCheck, IconTrash } from "./Icons";
+
 export default function TaskItem({ task, toggleDone, removeTask }) {
     const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
@@ -39,32 +41,36 @@ export default function TaskItem({ task, toggleDone, removeTask }) {
     }
 
     return (
-        <div className={`card ${jaConcluidaHoje ? "done" : ""}`}>
-            <div className="card-content">
-                <h2>{task.name}</h2>
-                <p>{task.series} séries • {task.reps}</p>
+        <div className={`quest ${jaConcluidaHoje ? "done" : ""}`}>
+            <button
+                className="quest-check"
+                onClick={handleToggle}
+                disabled={!jaConcluidaHoje && !podeCompletarHoje}
+                title={jaConcluidaHoje
+                    ? "Quest concluída"
+                    : diaCorreto
+                        ? "Concluir quest"
+                        : `Disponível apenas na ${task.day}`}
+                aria-label="Concluir quest"
+            >
+                <IconCheck />
+            </button>
+
+            <div className="quest-info">
+                <div className="quest-name">{task.name}</div>
+                <div className="quest-meta">
+                    {task.series} séries<span className="sep">•</span>{task.reps}
+                </div>
             </div>
 
-            <div className="actions">
-                <button
-                    className={`complete ${!podeCompletarHoje ? "disabled" : ""}`}
-                    onClick={handleToggle}
-                >
-                    {jaConcluidaHoje
-                        ? "QUEST COMPLETE"
-                        : diaCorreto
-                            ? "COMPLETE QUEST"
-                            : "DIA INCORRETO"}
-                </button>
-
-                <button
-                    className="delete"
-                    onClick={() => removeTask(task.id)}
-                    aria-label="Remover tarefa"
-                >
-                    ✖
-                </button>
-            </div>
+            <button
+                className="icon-btn danger"
+                onClick={() => removeTask(task.id)}
+                aria-label="Remover quest"
+                title="Remover quest"
+            >
+                <IconTrash />
+            </button>
         </div>
     );
 }

@@ -29,27 +29,27 @@ const rareItems = [
 // Separar templates VIP e normais
 const vipTemplates = [
     (player, _, __, ___, ____, _____, isVip) =>
-        <><span className="user-name-vip">{player}</span> é agora um <span className="user-name-vip">VIP</span> 👑</>
+        <><span className="name-vip">{player}</span> é agora um <span className="name-vip">VIP</span> 👑</>
 ];
 
 const normalTemplates = [
     (player, rank, _, __, ___, ____, isVip) => (
-        <>{isVip ? <span className="user-name-vip">{player}</span> : player} subiu para o Rank <span className={`rank-${rank}`}>{rank}</span> 🚀</>
+        <>{isVip ? <span className="name-vip">{player}</span> : player} subiu para o Rank <span className={`rank-text rank-${rank}`}>{rank}</span> 🚀</>
     ),
     (player, _, xp, __, ___, ____, isVip) => (
-        <>{isVip ? <span className="user-name-vip">{player}</span> : player} ganhou {xp} XP 🔥</>
+        <>{isVip ? <span className="name-vip">{player}</span> : player} ganhou {xp} XP 🔥</>
     ),
     (player, _, __, ___, ____, _____, isVip) => (
-        <>{isVip ? <span className="user-name-vip">{player}</span> : player} completou uma quest 💎</>
+        <>{isVip ? <span className="name-vip">{player}</span> : player} completou uma quest 💎</>
     ),
     (player, _, __, ___, item, ____, isVip) => (
-        <>{isVip ? <span className="user-name-vip">{player}</span> : player} encontrou um item raro: {item} ✨</>
+        <>{isVip ? <span className="name-vip">{player}</span> : player} encontrou um item raro: {item} ✨</>
     ),
     (player, _, __, level, ___, ____, isVip) => (
-        <>{isVip ? <span className="user-name-vip">{player}</span> : player} subiu para o nível {level} 📈</>
+        <>{isVip ? <span className="name-vip">{player}</span> : player} subiu para o nível {level} 📈</>
     ),
     (player, _, __, ___, ____, skill, isVip) => (
-        <>{isVip ? <span className="user-name-vip">{player}</span> : player} evoluiu sua habilidade ({skill}) ⚡</>
+        <>{isVip ? <span className="name-vip">{player}</span> : player} evoluiu sua habilidade ({skill}) ⚡</>
     )
 ];
 
@@ -119,11 +119,14 @@ export default function Notification() {
     }, [players]);
 
     return (
-        <div className="notification-container">
+        <div className="toast-stack" aria-live="polite">
             {notifications.map(n => (
-                <div key={n.id} className="notification">
-                    <span className="notification-dot" />
-                    <span className="notification-text">{n.message}</span>
+                <div key={n.id} className="sys-panel toast">
+                    <span className="sys-mark">!</span>
+                    <div>
+                        <span className="toast-label">NOTIFICAÇÃO</span>
+                        <span className="toast-text">{n.message}</span>
+                    </div>
                 </div>
             ))}
         </div>

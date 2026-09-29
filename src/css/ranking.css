@@ -1,0 +1,119 @@
+/* =========================================================
+   TOP 15 — RANKING DE CAÇADORES
+   ========================================================= */
+.ranking {
+    list-style: none;
+}
+
+.ranking-item {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ranking-item:last-child {
+    border-bottom: 0;
+}
+
+.ranking-item:hover {
+    background: rgba(var(--accent-rgb), 0.07);
+}
+
+.ranking-item:focus-visible {
+    outline-offset: -2px;
+}
+
+.ranking-pos {
+    display: grid;
+    place-items: center;
+    height: 36px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--muted);
+}
+
+.ranking-pos img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.ranking-item.podium-1 {
+    background: linear-gradient(90deg, rgba(245, 197, 66, 0.12), transparent 60%);
+}
+
+.ranking-item.podium-2 {
+    background: linear-gradient(90deg, rgba(200, 214, 230, 0.08), transparent 60%);
+}
+
+.ranking-item.podium-3 {
+    background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), transparent 60%);
+}
+
+.ranking-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.ranking-name {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 17px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ranking-sub {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.ranking-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ranking-xp {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.ranking-xp small {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+}
+
+@media (max-width: 560px) {
+    .ranking-item {
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .ranking-item .avatar {
+        display: none;
+    }
+
+    .ranking-right .rank-badge {
+        display: none;
+    }
+}

@@ -3,7 +3,17 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 import { calcularProgressoXp, calcularRankPorXp } from "../utils/rankUtils";
+import { THEMES_PUBLIC, THEMES_VIP, THEME_LABELS, resolveTheme } from "../utils/theme";
+import { DEFAULT_AVATAR, handleAvatarError } from "../utils/avatar";
 import LOGOVIP from "../assets/img/vip.png";
+
+
+const THEME_SWATCH = {
+    dark: "#3aa0ff",
+    light: "#9b6bff",
+    "vip-theme": "#f5c542",
+    anime: "#5dffb0"
+};
 
 export default function PerfilCFG({ user }) {
     const [userData, setUserData] = useState(null);
@@ -12,8 +22,6 @@ export default function PerfilCFG({ user }) {
 
     // Temas disponíveis
     const isVIP = userData?.cargo === "vip";
-    const THEMES_PUBLIC = ["dark", "light"];
-    const THEMES_VIP = ["vip-theme", "anime"];
 
     const availableThemes = isVIP
         ? [...THEMES_PUBLIC, ...THEMES_VIP]
@@ -35,61 +43,13 @@ export default function PerfilCFG({ user }) {
         return () => unsub();
     }, [user]);
 
-    // ===== CSS THEMES =====
-    useEffect(() => {
-        if (!userData) return;
-
-        const wp = document.getElementById("wpp");
-        const theme = isVIP ? userData.theme || "vip-theme" : userData.theme || "dark";
-
-        switch (theme) {
-            case "light":
-                document.documentElement.style.setProperty('--purple', '#fafafa');
-                document.documentElement.style.setProperty('--purple2', '#5d5663');
-                document.documentElement.style.setProperty('--purple-glow', 'rgba(223, 215, 235, 0.45)');
-                document.documentElement.style.setProperty('--back1', '#58505f');
-                document.documentElement.style.setProperty('--back2', '#302d33');
-                document.documentElement.style.setProperty('--back3', '#0d0d0d');
-                document.documentElement.style.setProperty('--back4', '#050505');
-                document.documentElement.style.setProperty('--backbox', 'rgba(231, 224, 248, 0.15)');
-                wp.className = "wallpaper";
-                break;
-            case "vip-theme":
-                document.documentElement.style.setProperty('--purple', 'gold');
-                document.documentElement.style.setProperty('--purple2', '#5a451d');
-                document.documentElement.style.setProperty('--purple-glow', 'rgba(238, 207, 34, 0.45)');
-                document.documentElement.style.setProperty('--back1', '#5a4c1d');
-                document.documentElement.style.setProperty('--back2', '#2c2510');
-                document.documentElement.style.setProperty('--back3', '#0d0d0d');
-                document.documentElement.style.setProperty('--back4', '#050505');
-                document.documentElement.style.setProperty('--backbox', 'rgba(255, 193, 60, 0.15)');
-                wp.className = "wallpaper";
-                break;
-            case "anime":
-                document.documentElement.style.setProperty('--purple', '#73f05a');
-                document.documentElement.style.setProperty('--purple2', '#225a1d');
-                wp.className = "wallpaper-img";
-                break;
-            default: // dark
-                document.documentElement.style.setProperty('--purple', '#7f5af0');
-                document.documentElement.style.setProperty('--purple2', '#3b1d5a');
-                document.documentElement.style.setProperty('--purple-glow', 'rgba(122, 34, 238, 0.45)');
-                document.documentElement.style.setProperty('--back1', '#3b1d5a');
-                document.documentElement.style.setProperty('--back2', '#1c102c');
-                document.documentElement.style.setProperty('--back3', '#0d0d0d');
-                document.documentElement.style.setProperty('--back4', '#050505');
-                document.documentElement.style.setProperty('--backbox', 'rgba(120, 60, 255, 0.15)');
-                wp.className = "wallpaper";
-                break;
-        }
-    }, [userData, isVIP]);
-
-    if (!userData) return <h2>Carregando...</h2>;
+    if (!userData) return <div className="loading">Carregando perfil...</div>;
 
     const xpTotal = userData?.xp ?? 0;
     const rank = calcularRankPorXp(xpTotal);
     const { xpAtual, xpMax, progresso, nivel } =
         calcularProgressoXp(xpTotal);
+    const temaAtual = resolveTheme(userData);
 
     // 🔥 Atualizar nome
     const handleUpdateName = async () => {
@@ -127,104 +87,106 @@ export default function PerfilCFG({ user }) {
         }
     };
 
+    // 🔥 Atualizar tema
+    const handleChangeTheme = async (selectedTheme) => {
+        if (!isVIP && THEMES_VIP.includes(selectedTheme)) {
+            return alert("Somente VIPs podem selecionar esse tema!");
+        }
+
+        try {
+            await updateDoc(doc(db, "usuarios", user.uid), {
+                theme: selectedTheme
+            });
+        } catch (err) {
+            console.error("Erro ao atualizar tema:", err);
+        }
+    };
+
     return (
-        <div className="perfil-container">
-            <h1>Perfil</h1>
-
-            {/* Avatar */}
-            <div className="perfil-avatar-section">
-                <div className="avatar-wrapper" onClick={handleChangePhoto}>
-                    <div className="avatar-hover-layer">
-                        <img
-                            src={
-                                userData?.photoURL ||
-                                "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg"
-                            }
-                            alt="Perfil"
-                            className="avatarusersidebarvip"
-                            loading="lazy"
-                        />
-                    </div>
-                    {isVIP && (
-                        <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />
-                    )}
+        <div className="page settings">
+            {/* Identidade */}
+            <section className="sys-panel identity">
+                <div className="sys-head">
+                    <span className="sys-mark">!</span>
+                    <span className="sys-title">Jogador</span>
                 </div>
-                <p className="cargo-text">
-                    Cargo:{" "}
-                    <strong style={{ color: isVIP ? "gold" : "#aaa" }}>
-                        {isVIP ? "VIP 👑" : "FREE"}
-                    </strong>
-                </p>
-            </div>
+                <div className="sys-body">
+                    <button className="avatar-edit" onClick={handleChangePhoto} aria-label="Alterar foto">
+                        <div className={`avatar ${isVIP ? "vip" : ""}`}>
+                            <img src={userData?.photoURL || DEFAULT_AVATAR} alt="Perfil" loading="lazy" onError={handleAvatarError} />
+                            {isVIP && <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />}
+                        </div>
+                        <span className="avatar-edit-hint">Alterar</span>
+                    </button>
 
+                    <div className={`identity-name ${isVIP ? "name-vip" : ""}`}>
+                        {userData.displayName || user.displayName}
+                    </div>
 
-            {/* Nome */}
-            <div className="perfil-section">
-                <label>Nome de exibição</label>
-                <input
-                    type="text"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                />
-                <button onClick={handleUpdateName} disabled={loading}>
-                    {loading ? "Salvando..." : "Salvar Nome"}
-                </button>
-            </div>
+                    <span className={`role-chip ${isVIP ? "vip" : ""}`}>{isVIP ? "VIP 👑" : "FREE"}</span>
 
-            {/* Tema */}
-            <div className="perfil-section">
-                <label>Escolher Tema</label>
-                <div className="select-wrapper">
-                    <select
-                        className={isVIP ? "vip" : ""}
-                        value={isVIP ? userData.theme || "vip-theme" : userData.theme || "dark"}
-                        onChange={async (e) => {
-                            const selectedTheme = e.target.value;
+                    <div className="xp-block">
+                        <div className="xp-row">
+                            <span className="lvl">
+                                <span className={`rank-text rank-${rank}`}>Rank {rank}</span>
+                                {" · "}
+                                {xpTotal === 7550 ? "Nível Max" : `Nível ${nivel}`}
+                            </span>
+                            <span className="xp">{xpAtual} / {xpMax} XP</span>
+                        </div>
+                        <div className="meter">
+                            <div className={`meter-fill rank-${rank}`} style={{ width: `${progresso}%` }} />
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                            if (!isVIP && THEMES_VIP.includes(selectedTheme)) {
-                                return alert("Somente VIPs podem selecionar esse tema!");
-                            }
+            <div className="settings-stack">
+                {/* Nome */}
+                <section className="sys-panel">
+                    <div className="sys-head">
+                        <span className="sys-mark">!</span>
+                        <span className="sys-title">Nome de exibição</span>
+                    </div>
+                    <div className="sys-body">
+                        <div className="form-row">
+                            <input
+                                className="input"
+                                type="text"
+                                value={newName}
+                                onChange={(e) => setNewName(e.target.value)}
+                            />
+                            <button className="btn btn-primary" onClick={handleUpdateName} disabled={loading}>
+                                {loading ? "Salvando..." : "Salvar"}
+                            </button>
+                        </div>
+                    </div>
+                </section>
 
-                            try {
-                                await updateDoc(doc(db, "usuarios", user.uid), {
-                                    theme: selectedTheme
-                                });
-                            } catch (err) {
-                                console.error("Erro ao atualizar tema:", err);
-                            }
-                        }}
-                    >
+                {/* Tema */}
+                <section className="sys-panel">
+                    <div className="sys-head">
+                        <span className="sys-mark">!</span>
+                        <span className="sys-title">Tema do Sistema</span>
+                        {!isVIP && <span className="sys-head-extra">+2 temas VIP</span>}
+                    </div>
+                    <div className="sys-body theme-grid">
                         {availableThemes.map((theme) => (
-                            <option key={theme} value={theme}>
-                                {theme.replace("-", " ").toUpperCase()}
-                            </option>
+                            <button
+                                key={theme}
+                                className={`theme-option ${temaAtual === theme ? "active" : ""}`}
+                                onClick={() => handleChangeTheme(theme)}
+                                aria-pressed={temaAtual === theme}
+                            >
+                                <span
+                                    className="theme-swatch"
+                                    style={{ color: THEME_SWATCH[theme], background: THEME_SWATCH[theme] }}
+                                />
+                                {THEME_LABELS[theme]}
+                            </button>
                         ))}
-                    </select>
-                    <span className="select-arrow">▼</span>
-                </div>
-            </div>
-
-            {/* XP e Rank */}
-            <div className="perfil-section">
-                <h3>Seu Progresso</h3>
-                <div className="xp-container">
-                    <div className="xp-info">
-                        {xpTotal === 7550
-                            ? <span className="nivel-text">Nível Max</span>
-                            : <span className="nivel-text">Nível {nivel}</span>
-                        }
-                        <span className="xp-text">
-                            {xpAtual} / {xpMax} XP
-                        </span>
                     </div>
-
-                    <div className="xp-bar">
-                        <div
-                            className={`xp-fill rank-${rank}`}
-                            style={{ width: `${progresso}%` }}
-                        />
-                    </div>
-                </div>
+                </section>
             </div>
         </div>
     );

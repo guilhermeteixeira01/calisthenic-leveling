@@ -14,8 +14,10 @@ import LOGOVIP from "../assets/img/vip.png";
 
 // 🔥 FUNÇÃO UNIFICADA
 import { calcularProgressoXp } from "../utils/rankUtils";
+import { DEFAULT_AVATAR, handleAvatarError } from "../utils/avatar";
 
 import { LEVELMAX } from "../constants/xpPorRank";
+import { IconClose } from "./Icons";
 
 const ATRIBUTOS = [
     { id: "forca", nome: "Força", Icon: ForcaIcon },
@@ -45,67 +47,55 @@ export default function UserProfileCard({ userId, onClose }) {
 
     const photoURL =
         user.photoURL ||
-        "https://i.pinimg.com/1200x/9f/2b/f9/9f2bf9418bf23ddafd13c3698043c05d.jpg";
+        DEFAULT_AVATAR;
 
     const { rankAtual, nivel, xpAtual, xpMax, progresso } = calcularProgressoXp(user.xp || 0);
 
     return (
-        <div className="profile-overlay" onClick={onClose}>
-            <div className={isVIP ? "profile-cardvip" : "profile-card"} onClick={e => e.stopPropagation()}>
-                <button className={isVIP ? "close-btnvip" : "close-btn"} onClick={onClose}>✕</button>
-
-                <div className="avatar-wrapperProfile">
-                    <img
-                        src={photoURL}
-                        alt={user.displayName}
-                        className={isVIP ? "profile-avatarvip" : "profile-avatar"} // ✅ Avatar VIP
-                        loading="lazy"
-                    />
-                    {isVIP && (
-                        <img src={LOGOVIP} alt="VIP" className="vip-badgeprofile" loading="lazy" /> // badge opcional
-                    )}
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="sys-panel modal" onClick={e => e.stopPropagation()}>
+                <div className="sys-head">
+                    <span className="sys-mark">!</span>
+                    <span className="sys-title">Perfil do Caçador</span>
+                    <button className="icon-btn" onClick={onClose} aria-label="Fechar"><IconClose /></button>
                 </div>
 
-                <h2 className={isVIP ? "user-name-vip-p" : "user-name-p"}>{user.displayName}</h2> {/* Nome VIP dourado */}
-
-                {/* 🔥 Rank / Nível */}
-                <div style={{ marginBottom: "12px" }}>
-                    <div>
-                        <strong className={`rank-${rankAtual}`}>Rank {rankAtual}</strong>
-                    </div>
-                    <div>
-                        <strong className={`rank-${rankAtual}`}>Nível {nivel}</strong>
-                    </div>
-                </div>
-
-                {/* 🔥 XP */}
-                <div className="xp-container">
-                    <div className="xp-info">
-                        <span>{xpAtual} / {xpMax} XP</span>
-                    </div>
-                    <div className="xp-bar">
-                        <div
-                            className={`xp-fill rank-${rankAtual}`}
-                            style={{ width: `${progresso}%` }}
-                        />
-                    </div>
-                </div>
-
-                <h3 style={{ marginTop: "16px" }}>⚡ Atributos</h3>
-
-                <div className="profile-atributos">
-                    {ATRIBUTOS.map(a => (
-                        <div key={a.id} className={isVIP ? "atributovip" : "atributo"}>
-                            <a.Icon />
-                            <span>{a.nome}</span>
-                            {user.atributos?.[a.id] === LEVELMAX
-                                ? <b className={isVIP ? "user-name-vip" : "user-name"}>
-                                    Nível Max {user.atributos?.[a.id] ?? 0}
-                                </b>
-                                : <b className={isVIP ? "user-name-vip-p" : "user-name-p"}>{user.atributos?.[a.id] ?? 0}</b>
-                            }
+                <div className="sys-body">
+                    <div className="profile-top">
+                        <div className={`avatar lg ${isVIP ? "vip" : ""}`}>
+                            <img src={photoURL} alt={user.displayName} loading="lazy" onError={handleAvatarError} />
+                            {isVIP && <img src={LOGOVIP} alt="VIP" className="vip-badge" loading="lazy" />}
                         </div>
-                    ))}
+
+                        <h2 className={`identity-name ${isVIP ? "name-vip" : ""}`}>{user.displayName}</h2>
+
+                        <div className="profile-rank">
+                            <span className={`rank-badge rank-${rankAtual}`}>{rankAtual}</span>
+                            <span className={`rank-text rank-${rankAtual}`}>Rank {rankAtual} · Nível {nivel}</span>
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: 18 }}>
+                        <div className="xp-row">
+                            <span className="lvl">Experiência</span>
+                            <span className="xp">{xpAtual} / {xpMax} XP</span>
+                        </div>
+                        <div className="meter">
+                            <div className={`meter-fill rank-${rankAtual}`} style={{ width: `${progresso}%` }} />
+                        </div>
+                    </div>
+
+                    <p className="eyebrow section-label">Atributos</p>
+
+                    <div className="attr-mini">
+                        {ATRIBUTOS.map(a => (
+                            <div key={a.id} className="attr-mini-item">
+                                <a.Icon />
+                                <span>{a.nome}</span>
+                                <b>{user.atributos?.[a.id] === LEVELMAX ? "MAX" : user.atributos?.[a.id] ?? 0}</b>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

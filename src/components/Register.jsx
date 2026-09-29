@@ -49,27 +49,50 @@ export default function Register() {
     };
 
     return (
-        <div className="auth-card">
-            <h2>Registrar</h2>
-            <input
-                type="text"
-                placeholder="Nome e Sobrenome"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button className="btnn" onClick={handleRegister}>Registrar</button>
-        </div>
+        <form className="sys-panel" onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
+            <div className="sys-head">
+                <span className="sys-mark">!</span>
+                <span className="sys-title">Despertar</span>
+            </div>
+
+            <div className="sys-body auth-form">
+                <p className="auth-lead">Você foi escolhido como <strong>Jogador</strong>.</p>
+
+                <label className="field">
+                    <span className="field-label">Nome e sobrenome</span>
+                    <input
+                        className="input"
+                        type="text"
+                        autoComplete="name"
+                        placeholder="Sung Jinwoo"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </label>
+                <label className="field">
+                    <span className="field-label">Email</span>
+                    <input
+                        className="input"
+                        type="email"
+                        autoComplete="email"
+                        placeholder="caçador@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+                <label className="field">
+                    <span className="field-label">Senha</span>
+                    <input
+                        className="input"
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="Mínimo de 6 caracteres"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </label>
+                <button className="btn btn-primary btn-block">Despertar · Registrar</button>
+            </div>
+        </form>
     );
 }

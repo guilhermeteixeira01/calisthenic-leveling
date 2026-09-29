@@ -10,6 +10,7 @@ import { ReactComponent as CarismaIcon } from "../assets/icons/carisma.svg";
 import { ReactComponent as SabedoriaIcon } from "../assets/icons/sabedoria.svg";
 
 import { LEVELMAX, XP_POR_PONTO } from "../constants/xpPorRank";
+import { IconPlus } from "./Icons";
 
 const ATRIBUTOS = [
     { id: "forca", nome: "Força", Icon: ForcaIcon },
@@ -76,44 +77,57 @@ export default function Upgrades({ user }) {
     }
 
     if (loading) {
-        return <div style={{ color: "#aaa" }}>Carregando upgrades...</div>;
+        return <div className="loading">Carregando status...</div>;
     }
 
     return (
-        <div className="upgrades-container">
-            <div className="upgrades-header">
-                <h2>⚡ Atributos</h2>
-                <span>
-                    XP Total: <b>{xp}</b> • Pontos: <b>{pontos}</b>
-                </span>
+        <div className="page">
+            <div className="status-summary">
+                <div className="stat points"><b>{pontos}</b><span>Pontos disponíveis</span></div>
+                <div className="stat"><b>{xp}</b><span>XP total</span></div>
+                <div className="stat"><b>{XP_POR_PONTO}</b><span>XP por ponto</span></div>
             </div>
 
-            <div className="upgrades-grid">
-                {ATRIBUTOS.map(a => (
-                    <div key={a.id} className="upgrade-card">
-                        <div className="upgrade-icon">
-                            <a.Icon />
-                        </div>
+            <section className="sys-panel">
+                <div className="sys-head">
+                    <span className="sys-mark">!</span>
+                    <span className="sys-title">Status</span>
+                    <span className="sys-head-extra">Máx. {LEVELMAX}</span>
+                </div>
 
-                        <h3>{a.nome}</h3>
+                <div className="attr-list">
+                    {ATRIBUTOS.map(a => {
+                        const nivel = atributos[a.id] ?? 0;
+                        const max = nivel === LEVELMAX;
+                        return (
+                            <div key={a.id} className="attr">
+                                <div className="attr-icon">
+                                    <a.Icon />
+                                </div>
 
-                        {atributos[a.id] === LEVELMAX
-                            ? <p>Nível Max</p>
-                            : <><p>Nível {atributos[a.id]}</p></>
-                        }
+                                <div>
+                                    <div className="attr-head">
+                                        <span className="attr-name">{a.nome}</span>
+                                        <span className="attr-level">{max ? "MAX" : nivel}</span>
+                                    </div>
+                                    <div className="meter">
+                                        <div className="meter-fill" style={{ width: `${Math.min(nivel / LEVELMAX, 1) * 100}%` }} />
+                                    </div>
+                                </div>
 
-                        <button
-                            type="button"
-                            className="upgrade-btn"
-                            disabled={pontos <= 0 || atributos[a.id] === LEVELMAX}
-                            onClick={() => upar(a.id)}
-                        >
-                            + Upgrade
-                        </button>
-                    </div>
-                ))}
-            </div>
-
-        </div >
+                                <button
+                                    type="button"
+                                    className="btn"
+                                    disabled={pontos <= 0 || max}
+                                    onClick={() => upar(a.id)}
+                                >
+                                    <IconPlus /> Upar
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+        </div>
     );
 }

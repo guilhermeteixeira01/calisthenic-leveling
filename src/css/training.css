@@ -1,0 +1,277 @@
+/* =========================================================
+   TREINO SEMANAL
+   ========================================================= */
+.training-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 24px;
+}
+
+/* formulário de quest */
+.quest-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.quest-form .span-2 {
+    grid-column: span 2;
+}
+
+.quest-form .btn {
+    grid-column: span 2;
+    margin-top: 4px;
+}
+
+/* progresso semanal */
+.progress-panel .sys-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    height: calc(100% - 55px);
+}
+
+.progress-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 24px rgba(var(--accent-rgb), 0.6);
+}
+
+.progress-value small {
+    font-size: 22px;
+    color: var(--accent);
+}
+
+.progress-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.stat {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(2, 6, 14, 0.4);
+}
+
+.stat b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--text);
+}
+
+.stat span {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.progress-note {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* grade da semana */
+.week {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.day {
+    display: flex;
+    flex-direction: column;
+}
+
+.day .sys-head {
+    padding: 12px 16px;
+}
+
+.day-name {
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.day-count {
+    margin-left: auto;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.day-tag {
+    padding: 2px 8px;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    color: var(--accent);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.35);
+}
+
+.day-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    flex: 1;
+}
+
+.day.today {
+    border-color: var(--line-strong);
+    box-shadow: var(--glow-strong);
+}
+
+.day.complete {
+    border-color: rgba(52, 224, 161, 0.5);
+}
+
+.day.complete::before,
+.day.complete::after {
+    border-color: var(--success);
+}
+
+.day.complete .day-tag,
+.day-tag.clear {
+    border-color: var(--success);
+    color: var(--success);
+    box-shadow: 0 0 10px rgba(52, 224, 161, 0.35);
+}
+
+/* item de quest */
+.quest {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(2, 6, 14, 0.45);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.quest:hover {
+    border-color: var(--line-strong);
+}
+
+.quest-check {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 3px;
+    background: transparent;
+    color: transparent;
+    transition: all 0.2s;
+}
+
+.quest-check svg {
+    width: 16px;
+    height: 16px;
+}
+
+.quest-check:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: rgba(var(--accent-rgb), 0.6);
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.5);
+}
+
+.quest-check:disabled {
+    cursor: not-allowed;
+    opacity: 0.35;
+}
+
+.quest-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.quest-name {
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.quest-meta {
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.quest-meta .sep {
+    margin: 0 6px;
+    opacity: 0.5;
+}
+
+.quest .icon-btn {
+    width: 30px;
+    height: 30px;
+    border-color: transparent;
+}
+
+.quest.done {
+    border-color: rgba(52, 224, 161, 0.35);
+    background: rgba(52, 224, 161, 0.05);
+}
+
+.quest.done .quest-check {
+    border-color: var(--success);
+    background: var(--success);
+    color: #02140c;
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(52, 224, 161, 0.55);
+}
+
+.quest.done .quest-name {
+    color: var(--text-2);
+    text-decoration: line-through;
+    text-decoration-color: rgba(52, 224, 161, 0.6);
+}
+
+@media (max-width: 1100px) {
+    .training-top {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .quest-form {
+        grid-template-columns: 1fr;
+    }
+
+    .quest-form .span-2,
+    .quest-form .btn {
+        grid-column: auto;
+    }
+
+    .progress-value {
+        font-size: 42px;
+    }
+
+    .week {
+        grid-template-columns: 1fr;
+    }
+}

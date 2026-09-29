@@ -1,0 +1,103 @@
+/* =========================================================
+   UPGRADES — "STATUS"
+   ========================================================= */
+.status-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.status-summary .stat b {
+    font-size: 24px;
+}
+
+.status-summary .stat.points b {
+    color: var(--accent);
+    text-shadow: 0 0 14px rgba(var(--accent-rgb), 0.7);
+}
+
+.attr-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.attr {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.attr:last-child {
+    border-bottom: 0;
+}
+
+.attr-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--accent);
+    background: rgba(var(--accent-rgb), 0.08);
+}
+
+.attr-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.attr-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.attr-name {
+    font-family: var(--font-ui);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.attr-level {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--accent-2);
+}
+
+.attr .btn {
+    min-height: 38px;
+    padding: 0 14px;
+}
+
+.attr .btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+@media (max-width: 560px) {
+    .status-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .status-summary .stat:last-child {
+        grid-column: span 2;
+    }
+
+    .attr {
+        grid-template-columns: 40px minmax(0, 1fr);
+        padding: 14px 16px;
+    }
+
+    .attr .btn {
+        grid-column: span 2;
+    }
+}
